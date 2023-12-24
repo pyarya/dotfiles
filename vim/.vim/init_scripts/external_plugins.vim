@@ -229,7 +229,7 @@ let RG_TEMPLATE = 'rg --hidden --no-ignore --follow '
 let $FZF_DEFAULT_COMMAND = RG_TEMPLATE . '--files '
 
     " Use ripgrep with fzf (from Jonhoo)
-noremap <leader>s :Rg<CR>
+noremap <leader>S :Rg<CR>
 command! -bang -nargs=* Rg
   \ call fzf#vim#grep(
   \   RG_TEMPLATE
@@ -238,6 +238,8 @@ command! -bang -nargs=* Rg
   \   <bang>0 ? fzf#vim#with_preview('up:60%')
   \           : fzf#vim#with_preview('right:50%:hidden', '?'),
   \   <bang>0)
+
+noremap <leader>s :BLines <CR>
 
     " FZF colors match vim colorscheme
 let g:fzf_colors =

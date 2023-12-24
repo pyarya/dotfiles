@@ -11,12 +11,18 @@ battery_charge() {
 }
 
 display_brightness() {
+  local x
+
   if command -v ddcutil &>/dev/null; then
-    ddcutil getvcp 10 | awk '
-        match($0, /[0-9]+,/) { printf "%s", substr($0, RSTART, RLENGTH - 1) }'
-  else
-    light -G | awk '{ split($0, a, "."); printf "%s", a[1] }'
+    x="$(ddcutil getvcp 10 2>/dev/null |\
+      awk 'match($0, /[0-9]+,/) { printf "%s", substr($0, RSTART, RLENGTH - 1) }')"
   fi
+
+  if [[ -z "$x" ]]; then
+    x="$(light -G | awk '{ split($0, a, "."); printf "%s", a[1] }')"
+  fi
+
+  printf "%s" "$x"
 }
 
 get_volume() {
