@@ -1,36 +1,33 @@
 #!/usr/bin/env bash
-# Read notes files from ~/.configs_pointer/notes
-if [[ $1 =~ '-h' ]]; then
-  printf 'Open notes files from ~/.configs_pointer/notes\n'
+print_help() {
+  cat <<HELP
+Quickly open notes files from ~/.configs_pointer/notes
+
+No arguments required
+HELP
+}
+
+if [[ -n "$1" ]]; then
+  print_help
   exit 0
 elif ! [[ -h ~/.configs_pointer ]]; then
-  cat <<ERR
-Pointer to configs not found
-Please set up a symlink ~/.config_pointer to the configs directory
-ERR
-  exit 1
-elif ! command -v fzf &>/dev/null; then
-  printf 'Requires fzf\n'
+  printf 'Please set up a symlink ~/.config_pointer to the configs directory\n'
   exit 1
 fi
 
-
-# Fzf for notes file
-if command -v fd &> /dev/null; then
-  notes_file=~/.configs_pointer/notes/"$(fd '.md' ~/.configs_pointer/notes -x basename | fzf)"
-else
-  notes_file="$(find ~/.configs_pointer/notes -type f | fzf)"
-fi
-
+cd ~/.configs_pointer/notes || exit 2
+declare -r notes_file="$(fd -e 'md' | fzf)"
 
 # Use best available pagenator
-if command -v nvim &>/dev/null; then
+if [[ -z "$notes_file" ]]; then
+  printf "No note file selected\n"
+  exit 1
+elif command -v nvim &>/dev/null; then
   nvim -R "${notes_file}"
 elif command -v vim &>/dev/null; then
-  vim -R "${notes_files}"
+  vim -R "${notes_file}"
 elif command -v bat &>/dev/null; then
   bat --paging=always "${notes_file}"
 else
   less "${notes_file}"
 fi
-
