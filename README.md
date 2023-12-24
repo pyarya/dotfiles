@@ -29,11 +29,16 @@ Official support is for the latest version of bash and EndeavourOS only. The
 MacOS dotfiles were working on Catalina (10.15) and likely mostly work on newer
 versions as well
 
-As of writing, EndeavourOS is on Linux **5.19.6** and bash is version **5.1.16**
+As of writing, [EndeavourOS](
+https://endeavouros.com/) is on Linux **6.0.8** and bash is version **5.1.16**
 
-For Linux, these dotfiles setup [sway](https://github.com/swaywm/sway) on
-[wayland](https://wayland.freedesktop.org/), a completely different compositor
-from xorg. Migration may be tricky
+For Linux, these dotfiles setup [Sway](https://github.com/swaywm/sway) on
+[Wayland](https://wayland.freedesktop.org/), a completely different display
+server from Xorg. [I3](https://i3wm.org/) is similar to Sway for Xorg
+
+I'm increasingly migrating my scripts from bash to python. Many require at least
+**python version 3.10** (match statements) to run properly. EndeavourOS and
+other Arch-based systems keep their python up to date, make sure you do too
 
 # Keybinding
 

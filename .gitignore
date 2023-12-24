@@ -1,5 +1,6 @@
 # Reference file for all alacritty options, found at;
 # https://github.com/alacritty/alacritty/releases
+__pycache__
 
 # Aerc
 aerc/accounts.conf

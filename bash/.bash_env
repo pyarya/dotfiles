@@ -87,7 +87,7 @@ export IGNOREEOF=8
   # Ripgrep needs this manually set
 export RIPGREP_CONFIG_PATH=~/.config/ripgrep/config
 
-  # Prevent __pycaches__ form forming
+  # Prevent __pycaches__ from forming
 export PYTHONDONTWRITEBYTECODE=1
 
 # Coloring ==========================================================
