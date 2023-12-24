@@ -497,12 +497,12 @@ def web_installs():
 
     for package in WEB_INSTALLS:
         if not os.path.exists(package["dest"]) and prompt_user(package["name"]):
-            subprocess.call(
+            subprocess.call([
                 "curl",
                 "--output",
                 package["dest"],
                 package["url"],
-            )
+            ])
 
 
 if __name__ == "__main__":
