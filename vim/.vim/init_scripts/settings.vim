@@ -139,15 +139,16 @@ command! Light3  :colo base16-atelier-estuary-light | FH
 command! Light4  :colo base16-atelier-plateau-light | FH
 
 " Switch theme to match terminal  ====
-if !has('termguicolors')
-    colo Default
+if !has('termguicolors') || !has('gui_running')
+    colo default
 elseif executable('colo.sh')
     exec 'colo ' . system('colo.sh --colorscheme')
+    call FixHighlights()
 elseif executable(expand('~/.configs_pointer/bin/colo.sh'))
     exec 'colo ' . system('~/.configs_pointer/bin/colo.sh --colorscheme')
+    call FixHighlights()
 else
     echom "Using fallback color scheme"
     Dark
+    call FixHighlights()
 endif
-
-call FixHighlights()
