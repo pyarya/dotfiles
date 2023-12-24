@@ -175,9 +175,15 @@ def archive_subcommand(args):
     sys.stdout.write(f'Progress: 0/{count}')
 
     for i, pic in enumerate(pics):
-        with Image.open(DIR/pic) as img:
-            img.save(TMP_DIR/pic.with_suffix(ext),
-                     quality=args.quality, method=6, optimize=True)
+        og = DIR/pic
+        out = TMP_DIR/pic.with_suffix(ext)
+
+        with Image.open(og) as img:
+            img.save(out, quality=args.quality, method=6, optimize=True)
+
+        stat = os.stat(og)
+        os.utime(out, times=(stat.st_atime, stat.st_mtime))
+
         sys.stdout.write(f'\rProgress: {i+1}/{count}' + ' ' * 40)
 
     sys.stdout.write('\nDone!\n')
