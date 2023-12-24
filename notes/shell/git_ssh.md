@@ -77,7 +77,8 @@ You can list your remotes and add new ones
 
 ```bash
 git remote -v
-git remote add berg ssh://codeberg.org:22/akemi/dotfiles.git
+git remote add ice 'ssh://git@codeberg.org:22/akemi/dotfiles.git'
+git remote set-url ice 'ssh://git@codeberg.org:22/akemi/dotfiles.git'
 git remote rename berg ice
 ```
 

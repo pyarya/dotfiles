@@ -56,8 +56,10 @@ case "$(echo "$1" | awk '{print tolower($0)}')" in
     echo "Switching to standard layout :: SUPER | ALT | SPACE"
     ;;
   *)
-    print_help
-    exit 0
+    if [[ -n "$1" ]]; then
+      print_help
+      exit 0
+    fi
     ;;
 esac
 

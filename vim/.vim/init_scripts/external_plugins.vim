@@ -155,6 +155,7 @@ nmap <leader>wz <Plug>(zoom-toggle)
 let g:catppuccin_flavour = "mocha"
 
 " Slime ==================================================
+function! SlimeStudio()
 let g:slime_target = "tmux"
 let g:slime_paste_file = "$HOME/.slime_paste"
 let g:slime_python_ipython = 1
@@ -184,6 +185,9 @@ nnoremap <leader>f :exe "SlimeSend1 " . g:slime_studio_command3<CR>
 nnoremap <leader><leader>f
     \ :let g:slime_studio_command3 =
     \ input("Slime Studio (3): ", g:slime_studio_command3)<CR>
+endfunction
+
+call SlimeStudio()
 
 " Gitgutter ==============================================
     " Disables git diff by default

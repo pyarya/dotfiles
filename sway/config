@@ -374,7 +374,7 @@ mode "mpv_global" {
 
     bindsym return mode "default"
     bindsym Ctrl+k mode "default"
-    bindsym Shift+End mode "default"  # In Browsers
+    bindsym Shift+End mode "default"
     bindsym Escape mode "default"
 }
 
