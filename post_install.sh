@@ -36,6 +36,7 @@ configs_pointer_is_setup() {
 swayland_checks() {
   check_sway_wallpaper
   check_swaylock_wallpaper
+  check_swaytree_compilation
 }
 
 check_sway_wallpaper() {
@@ -69,6 +70,25 @@ check_swaylock_wallpaper() {
   fi
 
   return $return_code
+}
+
+check_swaytree_compilation() {
+  local src=~/.configs_pointer/bin/sway_tree.rs
+  local exe="${src%.*}"
+
+  if [[ -x "$exe" ]]; then
+    return 0
+  elif command -v rustc &>/dev/null; then
+    rustc -C opt-level=3 "$src" -o "$exe"
+  fi
+
+  if ! [[ -x "$exe" ]]; then
+    printf "ERR: Uncompiled sway_tree.rs script\n"
+    printf "\tInstall a rust compiler and rerun this script\n"
+    return 1
+  fi
+
+  return 0
 }
 
 ####################

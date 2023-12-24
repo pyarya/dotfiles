@@ -23,42 +23,35 @@
 //     └───> [Alacritty]
 
 use std::io::{self, BufRead, BufReader};
-use std::process::{Command, Stdio, ChildStdout};
+use std::process::{Command, Stdio};
+use std::cmp::min;
 
 fn main() {
-    let sway_tree = match get_tree() {
-        Ok(tree) => BufReader::new(tree).lines().map(|l| l.unwrap()),
-        Err(e) => panic!("Failed to get sway tree: {}", e),
-    };
+    let sway_tree = get_tree().expect("Failed to get sway tree");
 
-    for (i, line) in sway_tree.enumerate() {
+    for (i, line) in sway_tree.iter().enumerate() {
         println!("Workspace {} :: {}", i+1, line);
-        println!("{}", ParserTree::from(&line).format());
+        println!("{}", ParserTree::from(line).format());
     }
 }
 
-fn get_tree() -> io::Result<ChildStdout> {
+fn get_tree() -> io::Result<Vec<String>> {
     let swaymsg = Command::new("swaymsg")
         .arg("-t")
         .arg("get_tree")
         .stdout(Stdio::piped())
         .spawn()?;
 
-    let jq = Command::new("jq")
-        .arg(".nodes[1].nodes[].representation")
-        .stdin(swaymsg.stdout.unwrap())
-        .stdout(Stdio::piped())
-        .spawn()
-        .expect("`jq` binary is not available");
+    let swaymsg_out = swaymsg.stdout.expect("Swaymsg didn't return window tree");
 
-    let tr = Command::new("tr")
-        .arg("-d")
-        .arg("\"")
-        .stdin(jq.stdout.unwrap())
-        .stdout(Stdio::piped())
-        .spawn()?;
+    let repr: Vec<String> = BufReader::new(swaymsg_out)
+        .lines()
+        .map(|l| l.unwrap().trim().to_string())
+        .filter(|l| &l[..min(16, l.len())] == "\"representation\"")
+        .map(|l| l[19..l.len()-1].to_string())
+        .collect();
 
-    Ok(tr.stdout.unwrap())
+    Ok(repr)
 }
 
 

@@ -13,14 +13,21 @@ Some key terms:
 
 The opens an ssh tunnel without obstructing the current terminal:
 ```bash
-    ssh -p10011 -NL 7000:localhost:8080 emiliko@localhost &
+    ssh -NL 8001:localhost:7000 emiliko@cs.ox.ac.uk &
     ssh -NL <client-port>:<url-from-host>:<host-port> <user>@<host-address> &
 ```
 
 # In config file
-The syntax in the config is quite similar
+The syntax in the `~/.ssh/config` is quite similar
 
 ```ssh
+Host mirrorside
+    User emiliko
+    Hostname cs.ox.ac.uk
     LocalForward 8001 localhost:7000
+```
+
+The general format looks like
+```ssh
     LocalForward <client-port> <host-address>:<host-port>
 ```
