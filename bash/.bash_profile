@@ -74,7 +74,9 @@ set_starting_dir () {
 # =============================================================================
 # Run script
 # =============================================================================
-source ~/.bashrc
+if [[ -z $VIMRUNTIME || -n $IS_VIFM_NEST ]]; then
+  source ~/.bashrc
+fi
 source ~/.bash_prompt
 
 [[ "$IS_VIFM_NEST" == 'T' ]] || print_welcome_message

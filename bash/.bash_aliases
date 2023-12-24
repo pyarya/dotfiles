@@ -109,6 +109,7 @@ fi
 # nVim
 if command -v nvim &> /dev/null; then
   alias vi='nvim' vih='nvim +Rooter'
+  alias vit='nvim +"tnoremap <C-k> <C-\><C-n>" +startinsert +terminal '
 elif command -v vim &> /dev/null; then
   alias vi='vim' vih='vim +Rooter'
 fi

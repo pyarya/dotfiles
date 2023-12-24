@@ -169,11 +169,16 @@ runk() {
 
   local calc_ver="($(echo "$@" | sed \
     -e 's#log2(\([^)]\+\))#(log(\1)/log(2))#g' \
+    -e 's#\([0-9]\+\)C\([0-9]\+\)#(\1! / ((\1-\2)! * (\2)!))#g' \
+    -e 's#(\([^)C]\+\))C(\([^)C]\+\))#((\1)! / ((\1-(\2))! * (\2)!))#g' \
   ))"
   local py_ver="$(echo "$@" | sed \
     -e 's#\^#**#g' \
     -e 's#\(log([^)]\+)\)#(\1/log(10))#g' \
     -e 's#ln(\([^)]\+\))#log(\1)#g' \
+    -e 's#\([0-9]\+\)C\([0-9]\+\)#(\1! / (factorial(\1-\2) * (\2)!))#g' \
+    -e 's#\([0-9]\+\)!#factorial(\1)#g' \
+    -e 's#(\([^)]\+\))!#factorial(\1)#g' \
   )"
   local awk_ver="$(echo "$@" | sed \
     -e 's#\*\*#^#g' \
@@ -192,7 +197,7 @@ runk() {
     calc "$calc_ver"
     if [[ $is_verbose -eq 1 ]]; then printf 'Using calc:  %s\n' "$calc_ver"; fi
   elif command -v python3 &>/dev/null && [[ -z "$override" ]] || [[ "$override" == p ]]; then
-    python3 -c "from math import *; print($py_ver)"
+    python3 -c "from math import *; print(f\"\\t{$py_ver}\")"
     if [[ $is_verbose -eq 1 ]]; then printf 'Using python:  %s\n' "$py_ver"; fi
   elif command -v gawk &>/dev/null && [[ -z "$override" ]] || [[ "$override" == a ]]; then
     gawk --bignum "BEGIN { print $awk_ver }"

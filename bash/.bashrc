@@ -10,6 +10,11 @@ source ~/.bash_functions
 source ~/.bash_aliases
 source ~/.bash_functions
 
+if [[ -n $VIMRUNTIME && -z $IS_VIFM_NEST ]]; then
+  # Prevent recursive sourcing
+  source ~/.bash_profile
+fi
+
 # shopt -s histappend
 
 # Suppress prompt warning when switching users
