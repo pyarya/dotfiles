@@ -1,4 +1,5 @@
-# Standard keyboard with alt key adjacent to spacebar
+# Standard keyboard with alt key adjacent to spacebar and no fn row at the top.
+# Retains ` and ~ in the top left, while moving esc to the bottom left key
 modmap:
   - name: Better-ctrl
     remap:
@@ -9,9 +10,10 @@ modmap:
       Super_l: Alt_l
       Alt_r: Super_r
       Super_r: Alt_r
-  - name: Closer-Esc
+  - name: No-fn-esc
     remap:
       Control_l: KEY_ESC
+      KEY_ESC: Grave  # Difference from standard/pc config
 
 keymap:
   - name: disable-sleep

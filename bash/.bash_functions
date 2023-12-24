@@ -43,6 +43,18 @@ vifmmv() {
   cd "$dst"
 }
 
+# Keyboard layout switching =========================================
+sww() {
+  if ! [[ -x ~/.configs_pointer/bin/switch_keyboards.sh ]]; then
+    echo 'No switch_keyboard.sh script found in ~.configs_pointer/bin'
+    exit 1
+  else
+    ~/.configs_pointer/bin/switch_keyboards.sh "$@"
+  fi
+}
+
+complete -W "console mac pc standard fn small mini" sww
+
 # Open command source code ==========================================
 # Only works for scripts and rust executables
 _viw_completions() {

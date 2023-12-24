@@ -5,6 +5,7 @@
 #   console    Loads the console version
 #   mac        Loads the Mac keyboard version
 #   pc         Loads the standard keyboard version
+#   fn         Loads the version for a standard keyboard without an fn row
 #
 # Explanation =========
 # Mac keyboards place their super key adjacent to the spacebar, while standard
@@ -32,6 +33,7 @@ USAGE: $(basename "$0") <ARG>
 ARGS:
   mac        Remaps assuming super is adjacent to the spacebar
   pc         Remaps assuming alt is adjacent to the spacebar
+  fn         Remaps assuming pc + no fn row
   console    Only remaps capslock to ctrl
   help       Print this message and exit
 HELP
@@ -51,9 +53,13 @@ case "$(echo "$1" | awk '{print tolower($0)}')" in
     ln -sf ~/.config/xremap/config_mac.yml ~/.config/xremap/config.yml
     echo "Switching to mac layout :: ALT | SUPER | SPACE"
     ;;
-  pc)
+  pc | standard)
     ln -sf ~/.config/xremap/config_standard.yml ~/.config/xremap/config.yml
     echo "Switching to standard layout :: SUPER | ALT | SPACE"
+    ;;
+  fn | small | mini)
+    ln -sf ~/.config/xremap/config_no_fn.yml ~/.config/xremap/config.yml
+    echo "Switching to no-fn row standard layout :: SUPER | ALT | SPACE"
     ;;
   *)
     if [[ -n "$1" ]]; then

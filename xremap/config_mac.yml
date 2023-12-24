@@ -3,6 +3,9 @@ modmap:
   - name: Better-ctrl
     remap:
       KEY_CAPSLOCK: Control_l
+  - name: Closer-Esc
+    remap:
+      Control_l: KEY_ESC
 
 keymap:
   - name: disable-sleep
