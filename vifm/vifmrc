@@ -1,0 +1,346 @@
+" [n]ormal, [v]isual, [d]ialogue, [q]uick view, [m]enu, [c]ommand
+" Ctrl+k as Esc
+nnoremap <C-k> <ESC>
+vnoremap <C-k> <ESC>
+dnoremap <C-k> <ESC>
+qnoremap <C-k> q
+mnoremap <C-k> <ESC>
+cnoremap <C-k> <C-c>
+
+" Quickly access command line
+nnoremap ; :
+vnoremap ; :
+mnoremap ; :
+    " Run external command
+nnoremap ! :!!
+
+" Invert sorting order
+nnoremap r :invert o<cr>
+
+" Special filters with ,
+nnoremap , z
+
+" Toggle explore
+qnoremap e q
+
+" Vifm unique mappings ==============================================
+" Open editor for command line
+nnoremap : q:
+
+" Toggle previewing "o[ther] viewer"
+nnoremap o :view<cr>
+qnoremap o :view<cr>
+vnoremap o :view<cr>gv
+
+" Open sorting menu
+nnoremap s :sort<cr>
+
+" Open bash shell in cwd
+nnoremap <C-l> :!/usr/bin/env IS_VIFM_NEST='T' bash -l<cr>
+nnoremap <C-f> :!/usr/bin/env IS_VIFM_NEST='T' bash -l<cr>
+
+" Open cwd in finder
+nnoremap <space>ofinder :!open .<cr>
+
+nnoremap <space>ogadd :!git add %c<cr>
+
+" Logical conflict mappings
+    " Navigate back from symlinks
+nnoremap H :cd -<cr>
+"nnoremap L l
+
+    " Open file in existing instance of macvim
+nnoremap O :!mvim --remote-tab-silent %f<cr>
+
+" Windows and buffers ===============================================
+" Window control with leader
+"nnoremap <space>w <C-w>
+
+" Open and switch to split, like in vim
+nnoremap <space>ws :split<cr><space>
+nnoremap <space>wv :vsplit<cr><space>
+
+" Expand current window
+nnoremap <space>wo :only<cr>
+
+" Close current window
+nnoremap <space>wc <space>:only<cr>
+
+" eXchange windows
+nnoremap <space>wx <C-w>x
+
+" Open a new tab
+nnoremap <space>wT :tabnew<cr>
+" Close tab
+nnoremap <space>wC :tabclose<cr>
+
+    " Quick window switching. [N]ormal and [Q]uick view modes
+nnoremap <space>l <C-w>l
+nnoremap <space>h <C-w>h
+nnoremap <space>j <C-w>j
+nnoremap <space>k <C-w>k
+
+qnoremap <space>l <C-w>l
+qnoremap <space>h <C-w>h
+qnoremap <space>j <C-w>j
+qnoremap <space>k <C-w>k
+
+    " Window movement
+nnoremap <space><space>h <C-w>H
+nnoremap <space><space>j <C-w>J
+nnoremap <space><space>k <C-w>K
+nnoremap <space><space>l <C-w>L
+
+" Window resizing
+    " < increases, > decreases
+nnoremap <space>, 4<C-w>>
+nnoremap <space>. 4<C-w><
+nnoremap <space><space>, 4<C-w>+
+nnoremap <space><space>. 4<C-w>-
+
+    " Set windows to be equally sized
+nnoremap <space><space>= <C-w>=
+
+" Emacs-like movements
+    " Move by character
+cnoremap <C-f> <right>
+cnoremap <C-j> <left>
+    " Delete by character. Note: <delete> not <del>
+cnoremap <C-d> <delete>
+cnoremap <C-h> <bs>
+    " Move by word
+cnoremap <C-b> <a-b>
+cnoremap <C-w> <a-f>
+    " Delete left word
+cnoremap <C-u> <C-w>
+    " Jump to end of line
+cnoremap <C-a> <home>
+cnoremap <C-e> <end>
+
+" Clipboard ==============================================
+" Copy file or directory paths to clipboard
+if executable('pbcopy')
+    nnoremap yd :!echo %d | pbcopy<cr>
+    nnoremap yf :!echo %c:p | pbcopy<cr>
+    nnoremap yp :!echo %c:p | sed 's#'"${HOME}"'#~#' | pbcopy<cr>
+elseif executable('wl-copy')
+    nnoremap yd :!echo %d | wl-copy<cr>
+    nnoremap yf :!echo %c:p | wl-copy<cr>
+    nnoremap yp :!echo %c:p | sed 's#'"${HOME}"'#~#' | wl-copy<cr>
+elseif executable('xclip')
+    nnoremap yd :!echo %d | xclip %i<cr>
+    nnoremap yf :!echo %c:p | xclip %i<cr>
+    nnoremap yp :!echo %c:p | sed 's#'"${HOME}"'#~#' | xclip %i<cr>
+elseif executable('xsel')
+    nnoremap yd :!echo -n %d | xsel --input --primary %i &&
+                \ echo -n %d | xsel --clipboard --input %i<cr>
+    nnoremap yf :!echo -n %c:p | xsel --input --primary %i &&
+                \ echo -n %c:p | xsel --clipboard --input %i<cr>
+endif
+
+" Experimental ===========================================
+nnoremap <space>m :sync %d<cr><space>
+    " Toggle dotfiles
+"nnoremap gh :set dotfiles!<cr>
+"nnoremap <space>. :set dotfiles!<cr>
+    " Smaller scrolling movements
+"nnoremap <C-u> 6k
+"vnoremap <C-u> 6k
+"nnoremap <C-d> 6j
+"vnoremap <C-d> 6j
+
+nnoremap <space>orestore :!git restore %c<cr>
+nnoremap <space>oadd :!git add %c<cr>
+
+"command! pngcopy :!osascript -e 'set the clipboard to (read (POSIX file "'.%c.'") as PNG picture)'
+
+" ===================================================================
+" Settings
+" ===================================================================
+    " Don't use this directly. <C-l> loads additional configs
+set shell='/usr/bin/env bash'
+set vicmd='nvim --'
+
+set syscalls  "nosyscalls for third party tools like `cp` instead
+
+set vifminfo=dhistory,savedirs,chistory,state,tui,shistory,
+    \phistory,fhistory,dirstack,registers,bookmarks,bmarks
+
+set trash           " Required for moving files with dd/p
+set history=1000    " Directory history scrollback
+set undolevels=1000 " Maximum undos stored
+
+set nofollowlinks
+set sortnumbers
+set timefmt=%m/%d\ %H:%M  " See `man date` or `man strftime` for details
+
+" Show list of matches on tab completion in command-line mode
+set wildmenu
+set wildstyle=popup
+
+set vimhelp     " Extra highlighting with vim's help file format
+set nohlsearch  " Don't highlight search results automatically
+set incsearch   " Incremental highlights while typing
+set scrolloff=2
+
+    " Backwards compatibility. Enables <C-i> without 't'
+set cpoptions="fs"
+
+set sort +size
+    " Resolve symlinked paths like cd -P
+set chaselinks
+
+set tablabel="%t"
+set statusline="%16A   %u:%-g   %s (%d) -> %T"
+
+command! Light :colorscheme gruvbox-light Default Default-256
+command! Dark  :colorscheme gruvbox-dark  Default Default-256
+
+if system('colo.sh --tone') == 'light'
+    Light
+else
+    Dark
+endif
+
+" ===================================================================
+" Preload defaults
+" ===================================================================
+" :mark mark /full/directory/path [filename]
+" Common directories
+mark h ~/
+mark c ~/.configs_pointer/
+mark d ~/Downloads/
+mark s ~/safe/
+mark v ~/.config/vifm/
+
+set millerview
+
+
+" ===================================================================
+" Commands
+" ===================================================================
+" Only 3 view modes are available. Full screen and 2 window splits
+" :only :split :vsplit
+command! hsplit :split
+
+command! duplicate :clone
+
+command! mview :set millerview!
+
+command! finder :!open .
+
+" Git-like shortcuts
+command! stash :norm! zR
+command! stashpop :norm! zM
+command! stashdrop :norm! zO
+
+" Vifm doesn't support escaping modfiers like `exe "norm! \<C-w>h"`, so we use
+" a remap ahead of time
+nnoremap + <C-w>h
+command! preview :tabnew | set nomillerview | vsplit | sync! | exe 'norm +' | exe ':24wincmd-' | view
+" i for image
+nnoremap <space>i :preview<cr>
+nnoremap <space><space>i :!~/.configs_pointer/bin/vii.sh &>/dev/null &<cr>
+
+" ===================================================================
+" Fzf intergration
+" https://github.com/vifm/vifm/issues/279#issuecomment-319980898
+" ===================================================================
+    " Write the current bookmarks to a file
+command! fzfreadbmarks :exe "normal! :bmarks\r:write ~/.config/vifm/fzf-read/bookmarks\rq"
+
+    " Automatically navigate into directories and symlinks to directories
+command! navigateIfDir :if system('[[ ! -d '.expand('%c').' ]] || printf "T"') == 'T' | exe 'norm l' | endif
+
+" Prefer to use popup window. Requires 90 $COLUMNS and tmux >=3.2. Yabai on
+" MacOS causes it to crash regardless. Use full-screen as a fallback
+command! fzfbmarks
+    \ :if $TMUX != '' && &columns > 90
+    \ | exe 'cd "'.system('cat ~/.config/vifm/fzf-read/bookmarks | fzf-tmux -p 90,30 | sed "s/:.*//" ').'"'
+    \ | else
+    \ | exe 'cd "'.term('cat ~/.config/vifm/fzf-read/bookmarks | fzf 2>/dev/tty | sed "s/:.*//" ').'"'
+    \ | endif
+
+command! fdcddir
+    \ :if $TMUX != '' && &columns > 90
+    \ | exe 'cd "'.system('fd -HE ''.git'' -t d . | fzf-tmux -p 90,30').'"'
+    \ | else
+    \ | exe 'cd "'.term('fd -HE ''.git'' -t d . | fzf 2>/dev/tty').'"'
+    \ | endif
+
+command! fdeditfiles
+    \ :if $TMUX != '' && &columns > 90
+    \ | exe 'edit "'.system('fd -HE ''.git'' -t f . | fzf-tmux -p 90,30').'"'
+    \ | else
+    \ | exe 'edit "'.term('fd -HE ''.git'' -t f . | fzf 2>/dev/tty').'"'
+    \ | endif
+
+command! fdmvcursor
+    \ :if $TMUX != '' && &columns > 90
+    \ | exe 'goto "'.system('fd --maxdepth=1 -HE ''.git'' . | fzf-tmux -p 90,30').'"' | navigateIfDir
+    \ | else
+    \ | exe 'goto "'.term('fd --maxdepth=1 -HE ''.git'' . | fzf 2>/dev/tty').'"' | navigateIfDir
+    \ | endif
+
+    " Read in latests bookmarks before fzfinding through them
+command! fzfmarks :fzfreadbmarks | fzfbmarks
+
+nnoremap <space>r :fzfmarks<cr>
+nnoremap <space>e :fdcddir<cr>
+nnoremap <space>f :fdeditfiles<cr>
+nnoremap <space>; :fdmvcursor<cr>
+
+
+" ===================================================================
+" Defaults
+" ===================================================================
+" Directory-local options, see :h vifm-'sort'
+autocmd DirEnter ~/Downloads setlocal sort=-mtime
+
+" Tmux won't work with sixel at all. Alacritty is currently very unstable with
+" it and flickers a lot. Set $TMUX for blurrier faster version. Quanity on
+" MacOS with viu seems to get worse the more images you preview
+if $TMUX == ''
+    fileviewer <video/*>
+        \ vifm-sixel video %pw %ph %c %pd
+        \ %pc
+        \ vifm-sixel clear
+
+    fileviewer <image/*>
+        \ montage %c -geometry "2000x1100" -background none sixel:- %pd
+        \ %pc
+        \ vifm-sixel clear
+else
+    fileviewer <video/*>
+        \ ffmpegthumbnailer -s 0 -i %c:p -o ~/.config/vifm/thumbnail_output.jpg &&
+        \ viu ~/.config/vifm/thumbnail_output.jpg -w %pw %v
+        \ viu ~/.config/vifm/thumbnail_output.jpg -h %ph %s
+
+    fileviewer <image/*>
+        \ viu %c:p -w %pw %v
+        \ viu %c:p -h %ph %s
+endif
+
+    " Bat as default previewer. Put it at the end since there's no way to
+    " overwrite this setting
+fileviewer *[^/] env -uCOLORTERM bat --color always --theme ansi --wrap never --pager never %c -p
+
+
+filetype *.mp4,*.mkv,*.mov,*.webm,*.mp3,*.flac mpv %c
+
+if system('uname') == 'Darwin'
+    filetype *.jpg,*.jpeg,*.png,*.icns open -a Preview.app %c:p
+    filetype *.pdf open -a 'skim' %c || open %c:p
+else
+    filetype *.pdf zathura %c
+    filetype *.epub foliate %c %i &
+
+    nnoremap L :! ~/.config/vifm/scripts/vifm_bg_open.sh "%c" &<cr>
+    vnoremap L :! ~/.config/vifm/scripts/vifm_bg_open.sh "%f" &<cr>
+
+    " Wayland only
+    filetype <image/*> imv %c:p
+endif
+
+
+" vim: set syn=vifm ft=vifm ff=unix:

@@ -1,0 +1,98 @@
+#!/usr/bin/env bash
+# PATH extensions ===================================================
+    # Cargo's binaries
+export PATH="${HOME}/bin:${HOME}/.cargo/bin:${PATH}"
+    # Scripts mostly intended for use with hotkeys
+export PATH="${HOME}/.configs_pointer/bin/hotkey_scripts:${PATH}"
+    # Custom scripts
+export PATH="${HOME}/.configs_pointer/bin:${HOME}/.configs_pointer/bin/one_shots:${PATH}"
+
+# History settings ==================================================
+# Ignore duplicates common commands in history
+export HISTCONTROL=ignoreboth
+export HISTIGNORE='history:pwd:exit:ll:ll -a: ls: tree:tty:pass *'
+
+# Infinite history size
+export HISTFILESIZE=
+export HISTSIZE=
+export HISTTIMEFORMAT="%F %T: "
+
+# Different history file to avoid truncation. Still truncates...
+export HISTFILE=~/.bash_eternal_history
+
+# Every prompt writes to history
+PROMPT_COMMAND="history -a; $PROMPT_COMMAND"
+
+# MacOS fixes =======================================================
+if [[ $(uname -s) == 'Darwin' ]]; then
+    # Use coreutils binaries when possible. Man pages still open MacOS binary
+    # by default. Prefix 'g' to open the coreutils manpage
+    export PATH="/usr/local/opt/coreutils/libexec/gnubin/:$PATH"
+
+    # Silence login warning about bash deprecation
+    export BASH_SILENCE_DEPRECATION_WARNING=1
+
+    # `ls --color` for BSD/MacOS
+    export CLICOLOR=1
+fi
+
+# Homebrew ==========================================================
+if [[ -x /home/linuxbrew/.linuxbrew/bin/brew ]]; then
+  eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+fi
+
+# Stop brew from upgrading all formula when installing something
+export HOMEBREW_NO_INSTALL_UPGRADE=1
+
+# Swayland ==========================================================
+if [[ "$(uname -s)" == "Linux" ]] && pidof sway &>/dev/null; then
+  export WAYLAND_DISPLAY=wayland-1
+
+  export SWAYSOCK="/run/user/$(id -u)/sway-ipc.$(id -u).$(pidof sway).sock"
+fi
+
+# Man pages =========================================================
+export MANWIDTH=90
+
+export GIT_PAGER=''  # Vim can't properly read git-diff colors
+
+if [[ "$(uname -s)" == "Linux" ]] && command -v nvim &>/dev/null; then
+  export PAGER="/bin/sh -c \"unset PAGER;col -b -x | \
+      nvim -R -c 'set ft=man nomod nolist' -c 'map q :q<CR>' \
+      -c 'silent! %s/\v[0-9]+;[0-9];[0-9]+;[0-9]+;[0-9]+m//g' \
+      -c 'silent! %s/0m//g' \
+      -c 'nmap K :Man <C-R>=expand(\\\"<cword>\\\")<CR><CR>' -\""
+fi
+
+# Config =============================================================
+export XDG_CONFIG_HOME=~/.config
+export XDG_CACHE_HOME=~/.cache
+export XDG_DATA_HOME=~/.local/share
+export XDG_STATE_HOME=~/.local/state
+export XDG_DATA_DIRS='/usr/local/share:/usr/share'
+export XDG_CONFIG_DIRS='/etc/xdg'
+
+  # Enter GPG password using terminal
+export GPG_TTY=$(tty)
+
+  # For pass -c
+export PASSWORD_STORE_CLIP_TIME=20
+
+  # Open git commits and <C-x><C-e>, now <C-g>, in nvim. Absolute path is better
+export EDITOR='nvim'
+
+  # Stop bash from exiting from ^d. 8 consecutive ^d will still exit
+export IGNOREEOF=8
+
+  # Ripgrep needs this manually set
+export RIPGREP_CONFIG_PATH=~/.config/ripgrep/config
+
+# Coloring ==========================================================
+# Truecolor support gives full rgb support. This looks something like:
+# \033[${bg};2;${red};${green};${blue};${special}m]
+#
+# For LS_COLORS and similar use:
+# 38;2;${red};${green};${blue};${special}:
+#
+# Special modes can be combined. `1` is bold, `4` is underlined, `1;4` is both
+# vim: set ft=bash ff=unix:

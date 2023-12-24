@@ -1,0 +1,58 @@
+#!/usr/bin/env bash
+# Greps file and directory names in given directory for a pattern. If no
+# directory is provided, the present working directory is used
+search_pattern="${1}"
+directory="${2:-$PWD}"
+
+print_help () {
+  local exe_name="$(basename "${0}")"
+
+  cat << HELP_MSG
+List file names matching matching the pattern in a directory
+USAGE:
+    ${exe_name} <pattern> [dir]
+
+EXAMPLES:
+    ${exe_name} bash ~
+    ${exe_name} rc
+HELP_MSG
+}
+
+is_help () {
+  [[ "${#}" -eq 0 ]] || [[ "${1}" == '--help' ]] || [[ "${1}" == '-h' ]]
+}
+
+#define_colors () {
+#  local colors
+#  IFS=: colors=(${EXA_COLORS})
+#
+#  for color in "${colors[@]}"; do
+#    case "${color}" in
+#      fi*)
+#        color_file='\033['"$(cut -c 4- <<<"${color}")"'' ;;
+#      ln*)
+#        color_link='\033['"$(cut -c 4- <<<"${color}")"'' ;;
+#    esac
+#  done
+#}
+
+
+if is_help "${@}"; then
+  print_help "${0}"
+
+elif command -v fd &> /dev/null; then
+  for match in $(fd -aIHd1 "${search_pattern}" "${directory}"); do
+    printf '%s' "$(basename "${match}")"
+
+    if [[ -h "${match}" ]]; then
+      printf ' -> %s'\
+        "$(readlink "${match}" | awk '{ sub("'"$HOME"'", "~"); print }')"
+    fi
+
+    printf '\n'
+  done
+else
+  listlong -a "${directory}" | grep -i --color=always "${search_pattern}"
+fi
+
+# ex: set syntax=bash ff=unix:

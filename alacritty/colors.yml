@@ -1,0 +1,231 @@
+schemes:
+  gruvbox_dark: &base16-gruvbox-dark-pale
+    primary:
+      background: '#282828'
+      foreground: '#ebdbb2'
+      bright_foreground: '#eaeaea'
+
+    # Normal colors
+    #normal:
+    #  black:   '#282828'
+    #  red:     '#cc241d'
+    #  green:   '#98971a'
+    #  yellow:  '#d79921'
+    #  blue:    '#458588'
+    #  magenta: '#b16286'
+    #  cyan:    '#689d6a'
+    #  white:   '#a89984'
+
+    # Brighter colors by default! May be too bright
+    normal:
+      black:   '#282828'
+      red:     '#fb4934'
+      green:   '#b8bb26'
+      yellow:  '#fabd2f'
+      blue:    '#83a598'
+      magenta: '#d3869b'
+      cyan:    '#8ec07c'
+      white:   '#ebdbb2'
+
+    # Bright colors
+    bright:
+      black:   '#928374'
+      red:     '#fb4934'
+      green:   '#b8bb26'
+      yellow:  '#fabd2f'
+      blue:    '#83a598'
+      magenta: '#d3869b'
+      cyan:    '#8ec07c'
+      white:   '#ebdbb2'
+
+  gruvbox_light: &base16-gruvbox-light-hard
+    # Light mode ====
+    # http://lawlesscreation.github.io/hex-color-visualiser/
+      #f9f5d7  # White 1
+      #ebdbb2  # White 2
+      #d5c4a1  # White 3
+      #bdae93  # White 4, light grey
+      #665c54  # Grey 1
+      #504945  # Grey 2
+      #3c3836  # Grey 3, light black
+      #282828  # Grey 4, black
+      #9d0006  # Cherry red
+      #af3a03  # Rust red
+      #b57614  # Yellow
+      #79740e  # Green
+      #427b58  # Teal
+      #076678  # Blue
+      #8f3f71  # Purple
+      #d65d0e  # Orange
+    primary:
+      background: '#FDFFD7'  # Linux "white"???
+      #background: '#f9f5d7'  # White 1 (brighter)
+      #background: '#fbf1c7'  # Sepia white
+      foreground: '#3c3836'  # Grey 3, light black
+      bright_foreground: '#282828'  # Grey 4, black
+
+    normal:
+      #black:   '#f9f5d7'  # White 1
+      black:   '#fbf1c7'  # Sepia white
+      red:     '#9d0006'  # Cherry red
+      green:   '#79740e'  # Green
+      yellow:  '#b57614'  # Yellow
+      cyan:    '#427b58'  # Teal
+      blue:    '#076678'  # Blue
+      magenta: '#8f3f71'  # Purple
+      white:   '#282828'  # Grey 4, black
+
+    bright:
+      black:   '#f9f5d7'  # White 1
+      red:     '#9d0006'  # Cherry red
+      green:   '#79740e'  # Green
+      yellow:  '#b57614'  # Yellow
+      cyan:    '#427b58'  # Teal
+      blue:    '#076678'  # Blue
+      magenta: '#8f3f71'  # Purple
+      white:   '#282828'  # Grey 4, black
+
+  # Catppuccin!
+  catppuccin: &catppuccin
+    # Default colors
+    primary:
+      background: '#1E1E28'
+      foreground: '#DADAE8'
+
+    # Colors the cursor will use if `custom_cursor_colors` is true
+    cursor:
+      text: '#1E1E28'
+      cursor: '#B1E3AD'
+
+    # Normal colors
+    normal:
+      black:   '#6E6C7E'
+      red:     '#E38C8F'
+      green:   '#B1E3AD'
+      yellow:  '#EBDDAA'
+      blue:    '#A4B9EF'
+      magenta: '#C6AAE8'
+      cyan:    '#E5B4E2'
+      white:   '#DADAE8'
+
+    # Bright colors
+    bright:
+      black:   '#6E6C7E'
+      red:     '#E38C8F'
+      green:   '#B1E3AD'
+      yellow:  '#EBDDAA'
+      blue:    '#A4B9EF'
+      magenta: '#C6AAE8'
+      cyan:    '#E5B4E2'
+      white:   '#DADAE8'
+
+    indexed_colors:
+      - { index: 16, color: '#F2CECF' }
+      - { index: 17, color: '#3E4058' }
+
+  palenight: &palenight
+    # Default colors
+    primary:
+      background: '0x292d3e'
+      foreground: '0x959dcb'
+
+    # Colors the cursor will use if `custom_cursor_colors` is true
+    cursor:
+      text: '0x292d3e'
+      cursor: '0x959dcb'
+
+    # Normal colors
+    normal:
+      black:   '0x292d3e'
+      red:     '0xf07178'
+      green:   '0xc3e88d'
+      yellow:  '0xffcb6b'
+      blue:    '0x82aaff'
+      magenta: '0xc792ea'
+      cyan:    '0x89ddff'
+      white:   '0x959dcb'
+
+    # Bright colors
+    bright:
+      black:   '0x676e95'
+      red:     '0xf07178'
+      green:   '0xc3e88d'
+      yellow:  '0xffcb6b'
+      blue:    '0x82aaff'
+      magenta: '0xc792ea'
+      cyan:    '0x89ddff'
+      white:   '0xffffff'
+
+    indexed_colors:
+      - { index: 16, color: '0xf78c6c' }
+      - { index: 17, color: '0xff5370' }
+      - { index: 18, color: '0x444267' }
+      - { index: 19, color: '0x32374d' }
+      - { index: 20, color: '0x8796b0' }
+      - { index: 21, color: '0x959dcb' }
+
+  dracula: &base16-dracula
+    # Default colors
+    primary:
+      background: '0x282a36'
+      foreground: '0xf8f8f2'
+
+    # Normal colors
+    normal:
+      black:   '0x000000'
+      red:     '0xff5555'
+      green:   '0x50fa7b'
+      yellow:  '0xf1fa8c'
+      blue:    '0xcaa9fa'
+      magenta: '0xff79c6'
+      cyan:    '0x8be9fd'
+      white:   '0xbfbfbf'
+
+    # Bright colors
+    bright:
+      black:   '0x282a35'
+      red:     '0xff6e67'
+      green:   '0x5af78e'
+      yellow:  '0xf4f99d'
+      blue:    '0xcaa9fa'
+      magenta: '0xff92d0'
+      cyan:    '0x9aedfe'
+      white:   '0xe6e6e6'
+
+  # Defman21
+  github: &base16-github
+    # Default colors
+    primary:
+      background: '0xffffff'
+      foreground: '0x333333'
+
+    # Colors the cursor will use if `custom_cursor_colors` is true
+    cursor:
+      text: '0xffffff'
+      cursor: '0x333333'
+
+    # Normal colors
+    normal:
+      black:   '0xffffff'
+      red:     '0xed6a43'
+      green:   '0x183691'
+      yellow:  '0x795da3'
+      blue:    '0x795da3'
+      magenta: '0xa71d5d'
+      cyan:    '0x183691'
+      white:   '0x333333'
+
+    # Bright colors
+    bright:
+      black:   '0x969896'
+      red:     '0x0086b3'
+      green:   '0xf5f5f5'
+      yellow:  '0xc8c8fa'
+      blue:    '0xe8e8e8'
+      magenta: '0xffffff'
+      cyan:    '0x333333'
+      white:   '0xffffff'
+
+draw_bold_text_with_bright_colors: false
+# This line is changed by `~/.bash_functions`'s `colo` function
+colors: *base16-gruvbox-dark-pale

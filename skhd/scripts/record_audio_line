@@ -1,0 +1,41 @@
+#!/bin/bash
+# Record a few seconds of system audio, and save. Intended to seamlessly record
+# audio for anki cards, while watching anime. MacOS only
+#
+# May require changing capture device. Find available options with:
+#   $ ffmpeg -f avfoundation -list_devices true -i ""
+# Change the number in the ffmpeg argument to desired device. BlackHole-2ch is
+# recommended for recording macos system audio. Make sure vlc's output device
+# is an aggregate of BlackHole-2ch and the speakers
+#
+# External dependencies: ffmepg, BlackHole-2ch
+
+if [[ $(uname) != 'Darwin' ]]; then
+    printf 'This is meant for MacOS\nAborting...\n'
+    exit 1
+fi
+
+recording_name="$(date +'%m_%d_%Y-%H_%M_%S' | awk '{printf("%s%s", $0, ".mp3")}')"
+
+mkdir -p ~/Desktop/anki_recordings
+
+ffmpeg \
+    -f avfoundation \
+    -i ":2" -filter:a "atempo=0.95" \
+    -t "${1:-6}" \
+    ~/"Desktop/anki_recordings/${recording_name}"
+
+unset recording_name
+
+# Further reference ====
+# Rec audio with ffmpeg
+# https://apple.stackexchange.com/questions/326388/terminal-command-to-record-audio-through-macbook-microphone
+#
+# With vlc? Wouldn't require BlackHole-2ch this way
+# https://forum.videolan.org/viewtopic.php?t=87923
+#
+# Trim on the fly? Save a unix timestamp in a file, then have ffmpeg trim the
+# recording based on the time in the file. Use a second hotkey to edit the
+# file's time with the current timestamp. Default should be +10s from start
+# https://unix.stackexchange.com/questions/182602/trim-audio-file-using-start-and-stop-times
+# ex: set syntax=bash:ff=unix:

@@ -1,0 +1,75 @@
+#!/usr/bin/env bash
+#
+# Print a directory listing with multiple default presets. Uses `exa` when
+# available
+#
+# WARNING: Many scripts and aliases in these dotfiles depend on this script. Do
+# not rename it or remove it from $PATH unnecessarily
+
+print_help () {
+    cat << EOF
+Directory listing with sensible defaults. Wraps around 'ls' and 'exa'
+
+USAGE: $(basename "$0") [listing-type] [pass-through-args] [dir]
+
+    [-h|--help]    Show this message
+
+    --ll-tree      Display a recursive tree hierarchy
+    --ll-git-tree  Display a tree following rules in .gitignore
+    --ll-dir-tree  Display a tree of directories only
+    --ll-all       Display extensive information about the current directory
+    --ll-links     List symlinks in the current directory
+    --ll-ls        Use of 'ls', even if 'exa' is available
+
+    *              Passed as argument to 'exa' or 'ls'
+EOF
+}
+
+declare PRESET PASS_THROUGH FORCE_LS
+
+for opt in "$@"; do
+  case "$opt" in
+    --ll-*)
+      [[ -z "${PRESET}" ]] || continue  # Only read first preset argument passed
+
+      case "$opt" in
+        --ll-tree) # Tree List Long - Recursively print a tree view
+          PRESET='-I ".git|target" --tree'
+          ;;
+        --ll-git-tree) # Git List Long - Recursively print a tree view following .gitignore
+          PRESET='--git-ignore --tree'
+          ;;
+        --ll-dir-tree) # Directories List Long - List the directory hierarchy
+          PRESET='--only-dirs --tree'
+          ;;
+        --ll-all) # All List Long - Detailed information for files in current working dir
+          PRESET='--all --header --links --blocks --group --modified --created --accessed'
+          ;;
+        --ll-ls) # Use ls instead of exa. Solves odd exa bugs
+          FORCE_LS='T'
+          ;;
+        --ll-links) # List symlinks
+          PRESET='--color=always | awk "/->/"'
+          ;;
+      esac
+      ;;
+    -h | --help)
+      print_help
+      exit 0
+      ;;
+    *)
+      PASS_THROUGH+="$opt "
+      ;;
+  esac
+done
+
+
+if command -v exa &> /dev/null && [[ "${FORCE_LS}" != 'T' ]]; then
+  eval "exa --long --sort=size --git --group-directories-first ${PRESET} ${PASS_THROUGH}"
+elif ! ls --color &> /dev/null; then
+  # MacOS default ls
+  eval "ls -lhSrG ${PASS_THROUGH}"
+else
+  # GNU ls or similar
+  eval "ls -lhSrG --color --group-directories-first ${PASS_THROUGH}"
+fi

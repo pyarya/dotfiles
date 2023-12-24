@@ -1,0 +1,10 @@
+font=noto-sans
+background-color=#F4A66EFF
+text-color=#000000
+padding=10
+border-size=4
+border-color=#000000
+border-radius=6
+progress-color=over #000000
+default-timeout=5000
+max-visible=6

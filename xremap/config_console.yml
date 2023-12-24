@@ -1,0 +1,13 @@
+# Small modmap for graphical console
+modmap:
+  - name: Better-ctrl
+    remap:
+      KEY_CAPSLOCK:
+        held: Control_l
+        alone: Control_l
+  - name: Mac-keyboard-layout-for-pc
+    remap:
+      Alt_l: Super_l
+      Super_l: Alt_l
+      Alt_r: Super_r
+      Super_r: Alt_r

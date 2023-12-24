@@ -1,0 +1,22 @@
+# History selection in reverse search
+#"\e[A": history-search-backward
+#"\e[B": history-search-forward
+
+# These keybinds work in readline repls like python
+"\C-p": history-search-backward
+"\C-n": history-search-forward
+
+"\C-f": forward-char
+"\C-j": backward-char
+
+"\C-w": forward-word
+"\C-b": backward-word
+
+"\C-u": backward-kill-word
+
+"\C-l": complete
+
+set colored-stats On
+set completion-ignore-case
+
+# vim: set ff=unix ft=sh:

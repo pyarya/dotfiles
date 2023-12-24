@@ -1,0 +1,27 @@
+#!/usr/bin/env bash
+# $ shrink_screenshot_clipboard [resize-percent]
+#
+# Resize the image on the clipboard and save as
+# ~/Desktop/shrink_screenshot_out.png. Intended for use with the MacOS
+# screenshot tool
+#
+# External dependencies: pngpaste, convert (ImageMagick)
+
+if [[ $(uname) != 'Darwin' ]]; then
+    printf 'This is meant for MacOS\nAborting...\n'
+    exit 1
+fi
+
+    # Random seed at the end to avoid conflicts
+screenshot=$(mktemp)
+
+if pngpaste - > "$screenshot"; then
+    convert "$screenshot" -resize "${1:-50}%" ~/Desktop/shrink_screenshot_out.png
+else
+    # Play error sound to notify script failing
+    play_error_sound
+    osascript -e 'display notification "Failed to resize clipboard" with title "Skhd"'
+fi
+
+unset screenshot
+# vim: set syn=bash ff=unix:

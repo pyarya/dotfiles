@@ -1,0 +1,26 @@
+#!/bin/bash
+# $ shrink_screenshot_desktop [resize-percent]
+#
+# Half the size of the lastest screenshot on the desktop. Saves as
+# ~/Desktop/shrink_screenshot_out.png. Intended for use with the MacOS
+# screenshot tool
+#
+# External dependencies: fd, convert (ImageMagick)
+
+if [[ $(uname) != 'Darwin' ]]; then
+    printf 'This is meant for MacOS\nAborting...\n'
+    exit 1
+fi
+
+#fd 'Screen Shot' --extension 'png' ~/Desktop | awk 'END { gsub(/ /, " ", $0); print }'
+#screenshot=~/"Desktop/$(ls -tr ~/Desktop | grep 'Screen Shot .*\.png$' | tail -n 1)"
+screenshot="$(ls -tr ~/Desktop/*"Screen Shot"*".png" | tail -n 1)"
+
+if [[ $screenshot != '' ]]; then
+    convert "$screenshot" -resize "${1:-50}%" ~/Desktop/shrink_screenshot_out.png
+else
+    # Play error sound to notify script failing
+    play_error_sound
+fi
+unset screenshot
+# ex: set syntax=bash:ff=unix:

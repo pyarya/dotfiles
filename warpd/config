@@ -1,0 +1,32 @@
+repeat_interval: 20
+speed: 220
+max_speed: 1600
+decelerator_speed: 50
+acceleration: 700
+accelerator_acceleration: 2900
+buttons: m , .
+oneshot_buttons: n - =
+oneshot_timeout: 300
+grid_exit: C-k
+hint_exit: C-k
+exit: C-k
+drag: v
+copy_and_exit: C-c
+hint: C-M-f
+left: h
+down: j
+up: k
+right: l
+cursor_color: #f4a66e
+cursor_size: 7
+hist_back: C-o
+hist_forward: C-i
+hint_size: 71
+hint_fgcolor: #222222
+hint_bgcolor: #f4a66e
+hint_border_radius: 0
+hint_chars: abcdefghijklmnopqrstuvwxyz
+hint_font: NotoMono
+indicator: bottomright
+indicator_color: #f4a66e
+indicator_size: 40

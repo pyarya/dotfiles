@@ -1,0 +1,8 @@
+--glob
+!git/*
+
+--glob
+!node_modules
+
+--glob
+!target

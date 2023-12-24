@@ -1,0 +1,119 @@
+#======================
+# Fonts and colors
+#======================
+# Fonts
+font:
+  normal:
+    family: Menlo  # Default fallback font
+    # Alternative monospace fallback fonts
+    #family: Monaco
+    #family: Source Code Pro
+
+    family: MesloLGM Nerd Font  # Use a Nerd-Font for pretty vim statusline
+    #family: NotoSans Mono  # Use a Nerd-Font for pretty vim statusline
+    #family: MesloLGL Nerd Font  # Use a Nerd-Font for pretty vim statusline
+  size: 11.5
+
+  offset:
+    x: 1
+    y: 1
+  glyph_offset:  # Aligns powerline fonts
+    x: 0
+    y: 1
+
+  use_thin_strokes: true
+
+draw_bold_text_with_bright_colors: false
+
+# Colors (Gruvbox dark)
+colors:
+  # Cursor colors
+  cursor:
+    text: CellBackground
+    cursor: CellForeground
+
+  # Vi mode colors
+  search:
+    matches:
+      foreground: '#000000'
+      background: '#ffffff'
+    focused_match:
+      foreground: CellBackground
+      background: CellForeground
+    bar:
+      background: '#c5c8c6'
+      foreground: '#1d1f21'
+
+  selection:
+    text: '#000000'
+    background: '#e69f67'
+
+import:
+  - ~/.config/alacritty/colors.yml
+
+#==========================
+# Window GUI
+#==========================
+window:
+  title: JoJo
+  position:
+    x: 536
+    y: 164
+  dimensions:
+    columns: 134   # 16 size font
+    lines: 36
+    #columns: 150  # 14 size font
+    #lines: 40
+  padding:
+    x: 4
+    y: 0
+
+  decorations: None
+  startup_mode: Windowed
+  opacity: 1
+
+  title: Alacritty
+  dynamic_title: true
+
+scrolling:
+  history: 10000
+  multiplier: 3
+
+bell:
+  duration: 0
+  color: '#ffff99'
+  command: None
+
+selection:
+  save_to_clipboard: true
+
+cursor:
+  style:
+    shape: Block
+    blinking: Always
+  vi_mode_style: Block
+  blink_interval: 400
+  unfocused_hollow: true
+  thickness: 0.15
+
+live_config_reload: true
+
+shell:
+  program: /bin/bash
+  args:
+    - --login
+
+working_directory: None
+
+mouse:
+  double_click: { threshold: 300 }
+  triple_click: { threshold: 300 }
+  hide_when_typing: true
+
+key_bindings:
+  - { key: LBracket, mods: Control,    action: ToggleViMode}
+  - { key: I,                mode: Vi, action: ToggleViMode}
+  - { key: N, mods: Alt,           action: SpawnNewInstance}
+  - { key: K, mods: Command,           chars: "\x08k"}
+  # let tmux see C-Space
+  - { key: Space, mods: Control, chars: "\x00" }

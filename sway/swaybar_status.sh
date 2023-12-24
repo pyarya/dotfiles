@@ -1,0 +1,53 @@
+#!/usr/bin/env bash
+battery_charge() {
+  if [[ -r /sys/class/power_supply/BAT0/uevent ]]; then
+    cat /sys/class/power_supply/BAT0/uevent | awk '
+      /CHARGE_NOW/   { split($0, a, "="); curr = a[2]; n++ }
+      /CHARGE_FULL=/ { split($0, a, "="); full = a[2]; n++ }
+
+      END { if (n == 2) printf "%.1f", curr / full * 100 }
+    '
+  fi
+}
+
+display_brightness() {
+  if command -v ddcutil &>/dev/null; then
+    ddcutil getvcp 10 | awk '
+        match($0, /[0-9]+,/) { printf "%s", substr($0, RSTART, RLENGTH - 1) }'
+  else
+    light -G | awk '{ split($0, a, "."); printf "%s", a[1] }'
+  fi
+}
+
+get_volume() {
+  pactl get-sink-volume @DEFAULT_SINK@ | awk '
+    match($0, /[0-9]+%/) { printf "%s", substr($0, RSTART, RLENGTH - 1) }'
+}
+
+remaining_ram() {
+  free --mega | awk '/Mem/ {
+    split($0, a, " ")
+
+    used = a[3] / 1000
+    shared = a[5] / 1000
+    available = a[7] / 1000
+
+    printf "%0.1fG / %.1fG", used + shared, available
+  }'
+}
+
+ramu="$(remaining_ram)"
+brightness="$(display_brightness)"
+volume="$(get_volume)"
+charge="$(battery_charge)"
+time="$(date +'%d %a %l:%M %p' | awk '{ gsub(/ +/, " "); print }')"
+
+output=''
+
+[[ -z "$brightness" ]] || output+="${brightness}cd | "
+[[ -z "$volume" ]] || output+="${volume}dB | "
+[[ -z "$charge" ]] || output+="[${charge}%] | "
+[[ -z "$ramu" ]] || output+="${ramu} | "
+[[ -z "$time" ]] || output+="$time"
+
+printf "%s" "$output"

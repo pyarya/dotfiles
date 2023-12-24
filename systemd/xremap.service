@@ -1,0 +1,9 @@
+[Unit]
+Description=xRemap keyboard remapper
+
+[Service]
+Type=simple
+ExecStart=/usr/local/bin/xremap /etc/xremap/config.yml
+
+[Install]
+WantedBy=default.target

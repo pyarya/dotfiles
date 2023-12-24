@@ -1,0 +1,66 @@
+# Reference file for all alacritty options, found at;
+# https://github.com/alacritty/alacritty/releases
+
+# Aerc
+aerc/accounts.conf
+
+# Bin
+bin/sway_tree
+
+# Mpv
+mpv/watch_later
+
+# Other
+other/com.warpd.launcher.plist
+
+# Qutebrowser
+qutebrowser/*
+qutebrowser/config.py
+qutebrowser/gruvbox_qutebrowser.py
+
+# Skhd
+skhd/com.skhd.launcher.plist
+
+# Sketchybar
+sketchybar/com.sketchybar.launcher.plist
+
+# Sway
+sway/toggle_mute_data
+sway/*.avif
+sway/*.jepg
+sway/*.jpg
+sway/*.mp3
+sway/*.png
+
+# Swaylock
+swaylock/*
+!swaylock/config
+
+# Tmux
+tmux/plugins
+
+# Vifm
+vifm/scripts/README
+vifm/fzf-read/bookmarks
+vifm/vifm-help.txt
+vifm/vifminfo.json
+vifm/*.jpg
+
+# Vim
+vim/.vim/plugged
+vim/.vim/autoload/plug.vim
+vim/.vim/vim_notepad.md
+vim/.vim/colors
+vim/nvim/colors
+
+# Vimiv
+vimiv/styles/default
+
+# Warpd
+warpd/com.warpd.launcher.plist
+
+# Xremap
+xremap/config.yml
+
+# Yabai
+yabai/pinned_windows.json

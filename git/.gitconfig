@@ -1,0 +1,29 @@
+[filter "lfs"]
+clean = git-lfs clean -- %f
+smudge = git-lfs smudge -- %f
+process = git-lfs filter-process
+required = true
+
+[user]
+name = Emiliko Mirror
+email = emiliko@mami2.moe
+signingkey = ABCD1234LONGER
+
+[core]
+editor = nvim
+excludesfile = ~/.gitignore_global
+
+[color]
+ui = true
+
+[merge]
+tool = vimdiff
+
+[alias]
+praise = blame
+
+[commit]
+gpgsign = true
+
+[init]
+defaultBranch = main

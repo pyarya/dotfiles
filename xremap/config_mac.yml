@@ -1,0 +1,69 @@
+# Mac-like keyboard, with super adjacent to the spacebar
+modmap:
+  - name: Better-ctrl
+    remap:
+      KEY_CAPSLOCK: Control_l
+
+keymap:
+  - name: disable-sleep
+    remap:
+      sleep: l
+  - name: Emacs-ish
+    application:
+      not: [Alacritty, zathura, org.pwmt.zathura, vimiv]
+    remap:
+      C-j: left
+      C-f: right
+      C-p: up
+      C-n: down
+
+      C-b: C-left
+      C-w: C-right
+
+      C-a: home
+      C-e: end
+
+      C-u: { with_mark: Shift-C-Left }
+
+      C-h: [backspace, { set_mark: false}]
+      C-d: [delete, { set_mark: false}]
+
+      # bracketleft, according to wev
+      C-leftbrace: esc
+      #C-space: { set_mark: true }
+
+  - name: Mac-Compatiblity
+    application:
+      not: [Alacritty]
+    remap:
+      Super_l-a: C-a
+
+  - name: Browsers
+    # Similar-ish to MacOS. We bind to Alt instead of Super, since Ctrl is
+    # already used by the emacs bindings. Alt and Super are switched for PC
+    # keyboards to mimic MacOS
+    application:
+      only: [chromium, google-chrome, firefox]
+    remap:
+      Alt_l-w: Control_r-w
+      Alt_l-n: C-n
+        # For searchbar focusing. L/R to prevent recursion
+      Control_l-l: Alt_r-l
+      Alt_l-l: Control_r-l
+        # Extended emacs for discord and online editors
+      C-k: Shift-end
+        # Stop getting stuck in tabs without vimium
+      Alt_l-j: Control_r-Shift-Tab
+      Alt_l-k: Control_r-Tab
+        # Prevent 12am discord calls
+      Ctrl-apostrophe: Apostrophe
+  - name: Chromium
+    application:
+      only: [chromium, google-chrome]
+    remap:
+      Alt_l-Shift-n: C-Shift-n
+  - name: Firefox
+    application:
+      only: [firefox]
+    remap:
+      Alt_l-Shift-n: C-Shift-p

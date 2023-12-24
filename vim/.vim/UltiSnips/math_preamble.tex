@@ -1,0 +1,83 @@
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{textcomp}
+\usepackage[dutch]{babel}
+\usepackage{amsmath, amssymb, amsthm}
+%\usepackage{libertine, newtxmath}  % conflicts with lmodern remove sigmas
+\usepackage[dvipsnames]{xcolor} % For background colors
+
+\definecolor{gruv-box-background}{RGB}{34, 34, 34}  % Backwards compatibility
+\definecolor{gruv-box-dark-bg}{RGB}{34, 34, 34}
+\definecolor{gruv-box-light-bg}{RGB}{235, 219, 178}
+\definecolor{gruv-box-yellow}{RGB}{255, 175, 0}
+
+    % Sans-serif font. Clarifies distinction between math and text
+\usepackage{helvet}
+
+% Number sets
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\C}{\mathbb{C}}
+\newcommand{\Deriv}[1]{\frac{\text{d}}{\text{d}#1}}
+\newcommand{\Part}[1]{\frac{\partial}{\partial #1}}
+
+% Boxes
+\usepackage[dvipsnames]{xcolor}
+\usepackage{tikz,lipsum,lmodern}
+%\usepackage{lmodern}
+\usepackage[most]{tcolorbox}
+\usepackage{tabularx}
+
+% Code
+\usepackage{listings}
+\usepackage[hashEnumerators,smartEllipses]{markdown}  % Doesn't work
+
+% Fancy letters using \mathbcal{letter}
+\DeclareFontFamily{U}{BOONDOX-calo}{\skewchar\font=45 }
+\DeclareFontShape{U}{BOONDOX-calo}{m}{n}{
+  <-> s*[1.05] BOONDOX-r-calo}{}
+\DeclareFontShape{U}{BOONDOX-calo}{b}{n}{
+  <-> s*[1.05] BOONDOX-b-calo}{}
+\DeclareMathAlphabet{\mathbcal}{U}{BOONDOX-calo}{m}{n}
+\SetMathAlphabet{\mathbcal}{bold}{U}{BOONDOX-calo}{b}{n}
+\DeclareMathAlphabet{\mathbcal}{U}{BOONDOX-calo}{b}{n}
+
+\lstset{frame=tb,
+  language=Python,
+  aboveskip=3mm,
+  belowskip=3mm,
+  showstringspaces=false,
+  columns=flexible,
+  basicstyle={\small\ttfamily},
+  numbers=none,
+  numberstyle=\tiny\color{gray},
+  keywordstyle=\color{blue},
+  commentstyle=\color{orange},
+  stringstyle=\color{mauve},
+  breaklines=true,
+  breakatwhitespace=true,
+  tabsize=3
+}
+
+%\usepackage{geometry}
+%\geometry{
+%    paper=letterpaper,  % Paper size, change to letterpaper for US letter size
+%    top=1in,            % Top margin
+%    bottom=1in,         % Bottom margin
+%    left=1in,           % Left margin
+%    right=1in,          % Right margin
+%    headheight=1in,     % Header height
+%    footskip=1.4cm,     % Space from the bottom margin to the baseline of the footer
+%    headsep=10pt        % Space from the top margin to the baseline of the header
+%}
+
+\pdfsuppresswarningpagegroup=1
+
+\usepackage{lipsum}
+\newenvironment{myindent}
+{\par\leftskip4cm\relax\rightskip1cm\relax}
+{\par\leftskip0cm\relax\rightskip0cm\relax}
+
+\def\changemargin#1#2{\list{}{\rightmargin#2\leftmargin#1}\item[]}
+\let\endchangemargin=\endlist

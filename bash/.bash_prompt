@@ -1,0 +1,112 @@
+#!/usr/bin/env bash
+export PS1
+
+function print_help () {
+  local invoke_name='change_bash_prompt'
+
+  cat << EOF
+Change the current bash prompt
+
+USAGE: $invoke_name [--help] [color-mode] [components ...]
+
+    [-h|--help]    Show this message
+
+    host | hostname  Hostname of system
+    tty              Terminal's name
+    pwd | dir        Present working directory
+    user             Username
+    git              Git branch
+    space | tab      4 white space characters
+    exit | code      Last non-zero exit code
+
+EXAMPLES:
+    $invoke_name  # Reset prompt
+    $invoke_name tty pwd git exit   # Default prompt
+    $invoke_name tab tab user exit  # Very minimal
+EOF
+}
+
+# Select color mode =================================================
+function is_default_prompt () {
+  [[ "$#" -eq 0 ]]
+}
+
+function exit_code () {
+  local code="$?"
+
+  if [[ "$code" != "0" ]]; then
+    printf " [%d]" "$code"
+  fi
+}
+
+function change_bash_prompt () {
+  # Set colors ======================================================
+  local purple='\[\033[0;35;1m\]'
+  local yellow='\[\033[0;33;1m\]'
+  local red='\[\033[0;31;1m\]'
+
+  # Prompt components ===============================================
+  local hostname="${purple}"'[\h]'
+  local tty="${purple}$(tty | cut -c6-12)"
+  local cwd="${yellow}"'\W'
+  local user="${red}"'\u'
+  local git="${user}"
+  local exit="${red}"'$(exit_code)'
+  local prompt_end='\[\e[m\]\$ ' # Trailing nbsp (u00A0) for tmux reverse search
+
+  if [ -f ~/.git-prompt.bash ]; then
+    local git="${red}"'$(__git_ps1 "(%s)")'
+  fi
+
+  local prompt=''
+
+  [[ "$IS_VIFM_NEST" != 'T' ]] || prompt+="<VIFM>"  # Alert when nested in vifm
+
+  # Default prompts =================================================
+  if is_default_prompt "$@"; then
+    if [[ -n $SSH_TTY ]] || [[ -n $SSH_CLIENT ]] || [[ -n $SSH_CONNECTION ]]; then
+      prompt+="${hostname}:${cwd} ${git}${exit}"
+    else
+      prompt+="${tty}:${cwd} ${git}${exit}"
+    fi
+  fi
+
+  # Build customized prompts ========================================
+  local seperator=':'
+
+  for opt in "$@"; do
+    case "$opt" in
+      host | hostname) prompt+="$hostname" ;;
+      tty)             prompt+="$tty" ;;
+      cwd | pwd | dir) prompt+="$cwd" ;;
+      user)            prompt+="$user" ;;
+      exit | code)     prompt+="$exit" ;;
+      git)
+        prompt+="$git"
+        seperator=''
+        ;;
+      space | tab)
+        prompt+="    "
+        seperator=''
+        ;;
+      -h | --help)
+        print_help "$@"
+        return 0
+        ;;
+      *)
+        printf 'Unrecognized option `%s`\n' "$opt"
+        printf 'Rerun with --help for more information\n'
+        return 1
+        ;;
+    esac
+
+    prompt+="$seperator"
+    seperator=' '
+  done
+
+  PS1="${prompt}${prompt_end}"
+}
+
+change_bash_prompt "$@"
+
+# vim: set ft=bash ff=unix:

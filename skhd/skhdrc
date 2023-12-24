@@ -1,0 +1,460 @@
+# Reference:
+#     https://github.com/koekeishiya/skhd/blob/master/examples/skhdrc
+#     https://github.com/koekeishiya/skhd/issues/1
+
+# Applications without hotkeys
+.blacklist [
+    #"iTerm2"
+    "Terminal"
+    "MacVim"
+    "Parallels Desktop"
+    #"qutebrowser"
+    #"cool-retro-term"
+]
+
+# Match Firefox's incognito shortcut to Chrome's
+cmd + shift - n [
+    "Firefox" : skhd -k "cmd + shift - p"
+    * ~
+]
+
+cmd + ctrl - n [
+    "Google Chrome" : skhd -k "cmd + shift - n" \
+                      && skhd -t "~/Documents/other_stuff/canvas/Konachan.com - 320663 book dampi elaina_(majo_no_tabitabi) flowers gray_eyes gray_hair long_hair majo_no_tabitabi stairs witch.jpg" \
+                      && skhd -k "return"
+    * ~
+]
+
+# Prevent full quit
+cmd - q [
+    "Google Chrome": play_error_sound
+    "Preview": play_error_sound
+    * ~
+]
+
+cmd + ctrl - y : skhd -k "alt - left"\
+              && skhd -t "~~"\
+              && skhd -k "alt - right"\
+              && skhd -t "~~"
+
+cmd + ctrl - r : skhd -t "AsExpectedOfRust"
+
+cmd + ctrl - a : open -na "Chromium" --args --incognito \
+                 --window-size=1250,800 --window-position=200,140
+
+# Rofi menu
+#cmd + shift - space : ~/.configs_pointer/skhd/scripts/rofi_macos
+
+#0x35 : skhd -k "0x32"
+
+#cmd - r : skhd -t "step"; skhd -k "0x24"
+#ctrl - h : skhd -k "backspace"
+
+
+#default < escape : skhd -k "0x32"
+#default < cmd - escape : skhd -k "cmd - 0x32"
+#default < 0x35 : skhd -k "~"
+
+#[ Never Quit ]
+#@PassThroughOther
+#@Include Google Chrome
+#@Include Preview
+#
+#<M-q> :: play_error_sound
+
+#╔─────────────────────────────────────────────────────────────────────────────╗
+#│ Kεybδαrd δvεrr𝓲dεs                                                          |
+#╚─────────────────────────────────────────────────────────────────────────────╝
+# By letter ====
+ctrl - j [
+    "Alacritty" ~
+    * : skhd -k "left"
+]
+ctrl - f [
+    "Alacritty" ~
+    * : skhd -k "right"
+]
+ctrl - h [
+    "Alacritty" ~
+    * : skhd -k "backspace"
+]
+ctrl - d [
+    "Alacritty" ~
+    "qutebrowser" ~
+    * : skhd -k "delete"
+]
+# Vertically ====
+ctrl - p [
+    "Alacritty" ~
+    * : skhd -k "up"
+]
+ctrl - n [
+    "Alacritty" ~
+    * : skhd -k "down"
+]
+# By word ====
+ctrl - b [
+    "Alacritty" ~
+    * : skhd -k "alt - left"
+]
+ctrl - w [
+    "Alacritty" ~
+    * : skhd -k "alt - right"
+]
+ctrl - u [
+    "Alacritty" ~
+    "qutebrowser" ~
+    * : skhd -k "alt + shift - left"
+]
+ctrl - r [
+    "Alacritty" ~
+    * : skhd -k "alt + shift - right"
+]
+# By line ====
+ctrl - a [
+    "Alacritty" ~
+    * : skhd -k "cmd - left"
+]
+ctrl - e [
+    "Alacritty" ~
+    * : skhd -k "cmd - right"
+]
+ctrl - k [
+    "Alacritty" ~
+    "qutebrowser" ~
+    * : skhd -k "cmd + shift - right"
+]
+# Other ====
+ctrl - 0x21 [ # <C-[>
+    "Alacritty" ~
+    * : skhd -k "escape"
+]
+ctrl - y [
+    "Alacritty" ~
+    * : skhd -k "cmd - c"
+]
+
+
+#╔─────────────────────────────────────────────────────────────────────────────╗
+#│ Gεnεrαl cδmmαnd mδdε                                                        |
+#╚─────────────────────────────────────────────────────────────────────────────╝
+:: general @ : sketchybar -m --bar color=0xFFFF8700 # \
+            #ffplay -t '1000' -nodisp -autoexit -loglevel error \
+            #~/.config/skhd/stutter-woosh.wav
+
+# Toggle general mode ====
+default < cmd - g ; general
+general < escape       ; default
+general < ctrl - 0x21  : sketchybar -m --bar color=0x44000000; \
+                         skhd -k "escape"
+
+# Shrink screenshot and save to desktop ====
+general < 0 : skhd -k "ctrl - 0x21"; shrink_screenshot_clipboard 100 # Save clipboard to desktop
+general < 9 : skhd -k "ctrl - 0x21"; shrink_screenshot_clipboard 90  # Shrink from clipboard
+general < 8 : skhd -k "ctrl - 0x21"; shrink_screenshot_clipboard 80
+general < 7 : skhd -k "ctrl - 0x21"; shrink_screenshot_clipboard 70
+general < 6 : skhd -k "ctrl - 0x21"; shrink_screenshot_clipboard 60
+general < 5 : skhd -k "ctrl - 0x21"; shrink_screenshot_clipboard 50
+general < 4 : skhd -k "ctrl - 0x21"; shrink_screenshot_clipboard 40
+general < 3 : skhd -k "ctrl - 0x21"; shrink_screenshot_clipboard 30
+#general < d : skhd -k "ctrl - 0x21"; shrink_screenshot_desktop    # Lastest screenshot on ~/Desktop
+
+# Vi-like scrolling for browsers ====
+general <        g : skhd -k "ctrl - 0x21"; skhd -k "cmd - up";   skhd -k "cmd + ctrl - g"
+general < shift- g : skhd -k "ctrl - 0x21"; skhd -k "cmd - down"; skhd -k "cmd + ctrl - g"
+general < ctrl - u : skhd -k "ctrl - 0x21"; skhd -k "alt - up";   skhd -k "cmd + ctrl - g"
+general < ctrl - d : skhd -k "ctrl - 0x21"; skhd -k "alt - down"; skhd -k "cmd + ctrl - g"
+general <        k : skhd -k "ctrl - 0x21"; skhd -k "up";         skhd -k "cmd + ctrl - g"
+general <        j : skhd -k "ctrl - 0x21"; skhd -k "down";       skhd -k "cmd + ctrl - g"
+general < shift- h : skhd -k "ctrl - 0x21"; skhd -k "cmd - left"; skhd -k "cmd + ctrl - g"
+general < shift- l : skhd -k "ctrl - 0x21"; skhd -k "cmd - right";skhd -k "cmd + ctrl - g"
+general < shift- j : skhd -k "ctrl - 0x21"; skhd -k "cmd + alt - left"; skhd -k "cmd + ctrl - g"
+general < shift- k : skhd -k "ctrl - 0x21"; skhd -k "cmd + alt - right";skhd -k "cmd + ctrl - g"
+
+
+cmd + ctrl - q : record_audio_line 10  # Audio capture while watching on vlc
+
+
+# Other convenience tools ====
+### Upload clipboard to pastebin
+cmd + ctrl - x : pbpaste | ix
+
+### Backup and restore chrome incognito windows
+cmd + ctrl - e : chrome_session close \
+    ~/.config/skhd/last_incognito_window.chrome \
+    && osascript -e \
+        'display notification "Chrome window backed up" with title "Skhd"'
+
+cmd + ctrl - r : chrome_session restore \
+    ~/.config/skhd/last_incognito_window.chrome
+
+
+#╔─────────────────────────────────────────────────────────────────────────────╗
+#│ Yαbαi ωiηdδω mαηαgεr                                                        |
+#╚─────────────────────────────────────────────────────────────────────────────╝
+# Keybind methodology:
+# In general
+#   Spaces use gamer-style `wasd`
+#   Windows use vim-style  `hjkl`
+#
+# <<Default mode>>:
+# All default mode bindings are indentically available in yabai mode
+# cmd shift {a,d}  : switches to adjacent space
+# cmd shift {h,j,k,l} : switches to window in that direction
+# cmd {[, ]}       : move window onto left or right stack
+# cmd shift {[, ]} : move window onto top or bottom stack
+# cmd tab : cycle across stacks clockwise
+# cmd `   : cycle within stack
+#
+#
+# <<Yabai mode>>:
+# Prefix : cmd e
+# Escape : esc, enter, <M-[>
+#
+# x : close window
+#
+# = : Balance bsp tree on y axis
+#
+# === Stacks
+#
+# === Resize window
+# {q,w,e,r} : Resize window on horizontally. qw resize left, er resize right
+# lcmd {q,w,e,r} : Resize window on vertically. qw resize top, er resize bottom
+# Add shift to the above for a smaller increment
+#
+# === Spaces
+# shift {a,d} : Move window to adjacent space, and switch to that space
+# ctrl {a,d} : Reorder space
+# n : Create new space on right, move current window and switch to it
+# ctrl q : Close space
+#
+# === Floating
+# ctrl [0-9] : Set numpad position of floating window TODO
+#
+# === Pinning
+# m : Swap to pinning mode
+# c : From pinning mode, clears pin list
+# [0-9] : From pinning mode, pins current window to specified number
+# alt [0-9] : From default mode, switch to pinned window
+# shift cmd space : From default mode pulls up rofi menu for pinned windows
+#
+# Oneshots
+default < cmd + shift - a : yabai -m space --focus prev
+default < cmd + shift - d : yabai -m space --focus next
+#default < cmd - h : # Stop accidentally hiding windows
+## Switching windows
+default < lcmd - h : yabai -m window --focus west
+default < lcmd - j : yabai -m window --focus south
+default < lcmd - k : yabai -m window --focus north
+default < lcmd - l : yabai -m window --focus east
+
+# Moving windows onto stacks <M-{[,]}>
+default <         lcmd - 0x21 : ~/.config/yabai/move_to_stack.sh 'west'
+default <         lcmd - 0x1E : ~/.config/yabai/move_to_stack.sh 'east'
+default < shift + lcmd - 0x21 : ~/.config/yabai/move_to_stack.sh 'north'
+default < shift + lcmd - 0x1E : ~/.config/yabai/move_to_stack.sh 'south'
+
+# Cycle within stack with  <M-`>  <M-S-`>
+#default < lcmd         - 0x32 : yabai -m window --focus stack.prev\
+#                             || yabai -m window --focus stack.last
+#default < lcmd + shift - 0x32 : yabai -m window --focus stack.next\
+#                             || yabai -m window --focus stack.first
+## Cycle between stacks with  <M-Tab>
+#default < cmd - 0x30 : yabai -m window --focus \
+#    "$(yabai -m query --windows --space | ~/.config/yabai/cycle_stack.js)"
+
+
+# Pop out window
+cmd + ctrl - p : yabai -m window --toggle float && \
+                 yabai -m window --grid 40:40:0:2:33:38
+# Center window
+cmd + ctrl - c : yabai -m window --toggle float && \
+                 yabai -m window --grid 80:80:11:2:58:71
+
+# Yabai Mode ========================================================
+# Assumes enter and exit sounds are set up
+:: yabai @ : sketchybar -m --bar color=0xFFC8CB36; #\
+             #ffplay -nodisp -autoexit -t "1000" \
+             #~/.config/skhd/slow_air_woosh.wav &>/dev/null
+
+default < lcmd - e ; yabai
+yabai < escape     ; default
+yabai < return : sketchybar -m --bar color=0x44000000; \
+                 skhd -k "escape" #&&\
+                 #ffplay -nodisp -autoexit -t "700"\
+                 #~/.config/skhd/correct_ping.wav &>/dev/null
+yabai < ctrl - k    : sketchybar -m --bar color=0x44000000; skhd -k "escape"
+yabai < ctrl - 0x21 : sketchybar -m --bar color=0x44000000; skhd -k "escape"
+                 #ffplay -nodisp -autoexit -t "700"\
+                 #~/.config/skhd/correct_ping.wav &>/dev/null
+
+
+#╔─────────────────────────────────────────────────────────────────────╗
+#│ Wiηdδωs                                                             |
+#╚─────────────────────────────────────────────────────────────────────╝
+# Window switching
+yabai < lcmd - h : yabai -m window --focus west
+yabai < lcmd - j : yabai -m window --focus south
+yabai < lcmd - k : yabai -m window --focus north
+yabai < lcmd - l : yabai -m window --focus east
+
+# Move windows within a space
+# Lcmd: Move   |   Rcmd: Swap
+yabai < lcmd + shift - h : yabai -m window --warp west
+yabai < lcmd + shift - j : yabai -m window --warp south
+yabai < lcmd + shift - k : yabai -m window --warp north
+yabai < lcmd + shift - l : yabai -m window --warp east
+
+yabai < rcmd - h : yabai -m window --swap west
+yabai < rcmd - j : yabai -m window --swap south
+yabai < rcmd - k : yabai -m window --swap north
+yabai < rcmd - l : yabai -m window --swap east
+
+# Manipulate bsp
+yabai < ctrl - b : yabai -m space --layout bsp; ~/.config/yabai/toggle_outline.bash
+yabai < ctrl - f : yabai -m space --layout float
+yabai < ctrl - y : yabai -m space --mirror y-axis
+yabai < ctrl - x : yabai -m space --mirror x-axis
+yabai < ctrl - r : yabai -m space --rotate 270
+yabai < ctrl - s : yabai -m window --toggle split
+yabai < ctrl - o : ~/.config/yabai/toggle_border.bash
+yabai < 0x18 : yabai -m space --balance  # = sign
+
+# Swapping stacks <M-S-[> <M-]>
+# --swap moves target window onto current window. We want the opposite
+yabai <         cmd - 0x21 : ~/.config/yabai/move_to_stack.sh 'west'
+yabai <         cmd - 0x1E : ~/.config/yabai/move_to_stack.sh 'east'
+yabai < shift + cmd - 0x21 : ~/.config/yabai/move_to_stack.sh 'north'
+yabai < shift + cmd - 0x1E : ~/.config/yabai/move_to_stack.sh 'south'
+
+# Cycle within stack with  <M-`>  <M-S-`>
+yabai < lcmd         - 0x32 : yabai -m window --focus stack.prev\
+                           || yabai -m window --focus stack.last
+yabai < lcmd + shift - 0x32 : yabai -m window --focus stack.next\
+                           || yabai -m window --focus stack.first
+# Cycle between stacks with  <M-Tab>
+#TODO: Depreciate or fix
+#yabai < cmd - 0x30 : yabai -m window --focus \
+#    "$(yabai -m query --windows --space | ~/.config/yabai/cycle_stack.js)"
+
+yabai < x : yabai -m window --close
+yabai < 0x1B : yabai -m window --minimize  # Uses -
+
+# Rofi select windows with ;
+yabai < 0x29 : skhd -k "return" && ~/.config/yabai/rofi_window.js
+
+# Move window between spaces
+yabai < shift - a : yabai -m window --space prev && \
+                    yabai -m space --focus prev
+yabai < shift - d : yabai -m window --space next && \
+                    yabai -m space --focus next
+
+# Resize window
+    # Horizontal
+yabai <        q : yabai -m window --resize  left:-30:0
+yabai <        w : yabai -m window --resize   left:30:0
+yabai <        e : yabai -m window --resize right:-30:0
+yabai <        r : yabai -m window --resize  right:30:0
+    # Vertical
+yabai < lcmd - q : yabai -m window --resize    top:0:-30
+yabai < lcmd - w : yabai -m window --resize     top:0:30
+yabai < lcmd - e : yabai -m window --resize bottom:0:-30
+yabai < lcmd - r : yabai -m window --resize  bottom:0:30
+    # Horizontal - fine
+yabai < shift - q : yabai -m window --resize  left:-10:0
+yabai < shift - w : yabai -m window --resize   left:10:0
+yabai < shift - e : yabai -m window --resize right:-10:0
+yabai < shift - r : yabai -m window --resize  right:10:0
+    # Vertical - fine
+yabai < lcmd + shift - q : yabai -m window --resize    top:0:-10
+yabai < lcmd + shift - w : yabai -m window --resize     top:0:10
+yabai < lcmd + shift - e : yabai -m window --resize bottom:0:-10
+yabai < lcmd + shift - r : yabai -m window --resize  bottom:0:10
+
+# Pinning windows ===
+:: pinning @ : sketchybar -m --bar color=0xFFB8BB26
+yabai < m ; pinning
+pinning < escape      ; default
+pinning < ctrl - 0x21 ; yabai
+
+pinning < c : ~/.config/yabai/pin_window.js --clear; skhd -k "ctrl - 0x21"
+
+pinning < 1 : ~/.config/yabai/pin_window.js --set 1 \
+            $(yabai -m query --windows --space | jq '.[0]["id"]'); \
+            skhd -k "ctrl - 0x21"
+pinning < 2 : ~/.config/yabai/pin_window.js --set 2 \
+            $(yabai -m query --windows --space | jq '.[0]["id"]'); \
+            skhd -k "ctrl - 0x21"
+pinning < 3 : ~/.config/yabai/pin_window.js --set 3 \
+            $(yabai -m query --windows --space | jq '.[0]["id"]'); \
+            skhd -k "ctrl - 0x21"
+pinning < 4 : ~/.config/yabai/pin_window.js --set 4 \
+            $(yabai -m query --windows --space | jq '.[0]["id"]'); \
+            skhd -k "ctrl - 0x21"
+pinning < 5 : ~/.config/yabai/pin_window.js --set 5 \
+            $(yabai -m query --windows --space | jq '.[0]["id"]'); \
+            skhd -k "ctrl - 0x21"
+pinning < 6 : ~/.config/yabai/pin_window.js --set 6 \
+            $(yabai -m query --windows --space | jq '.[0]["id"]'); \
+            skhd -k "ctrl - 0x21"
+pinning < 7 : ~/.config/yabai/pin_window.js --set 7 \
+            $(yabai -m query --windows --space | jq '.[0]["id"]'); \
+            skhd -k "ctrl - 0x21"
+pinning < 8 : ~/.config/yabai/pin_window.js --set 8 \
+            $(yabai -m query --windows --space | jq '.[0]["id"]'); \
+            skhd -k "ctrl - 0x21"
+pinning < 9 : ~/.config/yabai/pin_window.js --set 9 \
+            $(yabai -m query --windows --space | jq '.[0]["id"]'); \
+            skhd -k "ctrl - 0x21"
+
+# Focuses pinned window
+yabai < alt - 1 : ~/.config/yabai/pin_window.js --focus 1
+yabai < alt - 2 : ~/.config/yabai/pin_window.js --focus 2
+yabai < alt - 3 : ~/.config/yabai/pin_window.js --focus 3
+yabai < alt - 4 : ~/.config/yabai/pin_window.js --focus 4
+yabai < alt - 5 : ~/.config/yabai/pin_window.js --focus 5
+yabai < alt - 6 : ~/.config/yabai/pin_window.js --focus 6
+yabai < alt - 7 : ~/.config/yabai/pin_window.js --focus 7
+yabai < alt - 8 : ~/.config/yabai/pin_window.js --focus 8
+yabai < alt - 9 : ~/.config/yabai/pin_window.js --focus 9
+
+default < alt - 1 : ~/.config/yabai/pin_window.js --focus 1
+default < alt - 2 : ~/.config/yabai/pin_window.js --focus 2
+default < alt - 3 : ~/.config/yabai/pin_window.js --focus 3
+default < alt - 4 : ~/.config/yabai/pin_window.js --focus 4
+default < alt - 5 : ~/.config/yabai/pin_window.js --focus 5
+default < alt - 6 : ~/.config/yabai/pin_window.js --focus 6
+default < alt - 7 : ~/.config/yabai/pin_window.js --focus 7
+default < alt - 8 : ~/.config/yabai/pin_window.js --focus 8
+default < alt - 9 : ~/.config/yabai/pin_window.js --focus 9
+
+default < cmd + shift - space : ~/.config/yabai/pin_window.js --rofi
+
+yabai < f : yabai -m window --toggle float
+
+# Spaces ====
+# Switch space
+yabai < cmd + shift - a : yabai -m space --focus prev && yabai -m window --focus
+yabai < cmd + shift - d : yabai -m space --focus next && yabai -m window --focus
+
+default < cmd + shift - 1 : yabai -m space --focus 1 && yabai -m window --focus
+default < cmd + shift - 2 : yabai -m space --focus 2 && yabai -m window --focus
+default < cmd + shift - 3 : yabai -m space --focus 3 && yabai -m window --focus
+default < cmd + shift - 4 : yabai -m space --focus 4 && yabai -m window --focus
+default < cmd + shift - 9 : yabai -m space --focus last && yabai -m window --focus
+
+# Reorder space
+yabai < ctrl - a : yabai -m space --move prev && ~/.config/sketchybar/plugins/yabai_spaces.js --update
+yabai < ctrl - d : yabai -m space --move next && ~/.config/sketchybar/plugins/yabai_spaces.js --update
+yabai < n        : ~/.config/yabai/new_space.js && ~/.config/sketchybar/plugins/yabai_spaces.js --update
+yabai < ctrl - q : ~/.config/yabai/close_space.js && ~/.config/sketchybar/plugins/yabai_spaces.js --update
+
+# Float ====
+# Center window
+yabai < c : yabai -m window --toggle float && \
+           yabai -m window --grid 80:80:11:2:58:71
+
+# Picture in picture
+yabai < p : yabai -m window --toggle sticky && \
+            yabai -m window --toggle pip
+
