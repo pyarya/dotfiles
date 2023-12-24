@@ -116,4 +116,6 @@ key_bindings:
   - { key: N, mods: Alt,           action: SpawnNewInstance}
   - { key: K, mods: Command,           chars: "\x08k"}
   # let tmux see C-Space
-  - { key: Space, mods: Control, chars: "\x00" }
+  - { key: Space,  mods: Control, chars: "\x00" }
+  - { key: Equals, mods: Control, chars: "+"    }
+  - { key: Minus,  mods: Control, chars: "-"    }
