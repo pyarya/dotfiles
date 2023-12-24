@@ -56,6 +56,8 @@ Plug 'jpalardy/vim-slime'
 Plug 'hanschen/vim-ipython-cell'
     " Jupyter notebooks intergration
 Plug 'jupyter-vim/jupyter-vim'
+    " Live-editing notebooks in vim
+Plug 'untitled-ai/jupyter_ascending.vim'
 
 " Language specific =================================================
 " Syntax support ====
