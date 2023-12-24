@@ -57,6 +57,38 @@ viw() {
   fi
 }
 
+# Ronald's Universal Number Kruncher, standardized syntax for unix calculators
+# Syntax features:
+#   ^ and ** both work for exponentiation
+#   log()  is base 10
+#   ln()   is base e
+#   log2() is base 2
+# Careful when changing order or sed might sed itself!
+runk() {
+  local calc_ver="$(echo "$@" | sed \
+    -e 's#log2(\([^)]\+\))#(log(\1)/log(2))#g' \
+  )"
+  local py_ver="$(echo "$@" | sed \
+    -e 's#\^#**#g' \
+    -e 's#\(log([^)]\+)\)#(\1/log(10))#g' \
+    -e 's#ln(\([^)]\+\))#log(\1)#g' \
+  )"
+  local bc_ver="$(echo "$@" | sed \
+    -e 's#\*\*#^#g' \
+    -e 's#ln(\([^)]\+\))#l(\1)#g' \
+    -e 's#log(\([^)]\+\))#(l(\1)/l(10))#g' \
+    -e 's#log2(\([^)]\+\))#(l(\1)/l(2))#g' \
+  )"
+
+  if command -v calc &>/dev/null; then
+    calc "$calc_ver"
+  elif command -v python3 &>/dev/null; then
+    python3 -c "from math import *; print($py_ver)"
+  else
+    echo "$bc_ver" | bc --mathlib
+  fi
+}
+
 # Better exiting ====================================================
 # Don't exit with background jobs still running. Particularly for Qemu
 function exit () {
