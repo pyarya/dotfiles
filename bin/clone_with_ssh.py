@@ -14,6 +14,13 @@ parser = argparse.ArgumentParser(
 )
 
 parser.add_argument(
+    "--depth",
+    type=int,
+    required=False,
+    help="Max depth to clone",
+)
+
+parser.add_argument(
     "url",
     type=str,
     help="HTTP or ssh url to use",
@@ -39,7 +46,10 @@ else:
 if "git.sr.ht" not in args.url and not ssh_url.endswith(".git"):
     ssh_url += ".git"
 
-git_cmd = ["git", "clone", ssh_url]
+if args.depth is not None:
+    git_cmd = ["git", "clone", "--depth", str(args.depth), ssh_url]
+else:
+    git_cmd = ["git", "clone", ssh_url]
 
 if args.out_name is not None:
     git_cmd.append(args.out_name)
