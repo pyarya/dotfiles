@@ -57,11 +57,7 @@ export MANWIDTH=90
 export GIT_PAGER=''  # Vim can't properly read git-diff colors
 
 if [[ "$(uname -s)" == "Linux" ]] && command -v nvim &>/dev/null; then
-  export PAGER="/bin/sh -c \"unset PAGER;col -b -x | \
-      nvim -R -c 'set ft=man nomod nolist' -c 'map q :q<CR>' \
-      -c 'silent! %s/\v[0-9]+;[0-9];[0-9]+;[0-9]+;[0-9]+m//g' \
-      -c 'silent! %s/0m//g' \
-      -c 'nmap K :Man <C-R>=expand(\\\"<cword>\\\")<CR><CR>' -\""
+  export MANPAGER='nvim +Man!'
 fi
 
 # Config =============================================================

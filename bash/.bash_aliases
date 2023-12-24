@@ -33,6 +33,7 @@ alias ra='rg --no-ignore -.'
 alias ee='exit'
 alias ffprobe='ffprobe -hide_banner'
 alias shm='cd /dev/shm'
+alias ip='ip -color'
 
 
 # ===================================================================
@@ -109,7 +110,7 @@ fi
 # nVim
 if command -v nvim &> /dev/null; then
   alias vi='nvim' vih='nvim +Rooter'
-  alias vit='nvim +"tnoremap <C-k> <C-\><C-n>" +startinsert +terminal '
+  alias vit='nvim +startinsert +terminal '
 elif command -v vim &> /dev/null; then
   alias vi='vim' vih='vim +Rooter'
 fi
