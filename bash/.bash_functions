@@ -55,7 +55,7 @@ sww() {
 
 # Proper manpages ===================================================
 man() {
-  local command="$1"
+  local command=$(IFS=-, ; echo "$*")
 
   if [[ "$command" =~ \. ]]; then
     ~/.configs_pointer/bin/man_py.sh "$command"
@@ -63,6 +63,8 @@ man() {
     /usr/bin/man "$command"
   elif command -v "$command" &>/dev/null; then
     "$command" --help | nvim -R -c 'set syn=man' --
+  elif command -v "$@" &>/dev/null; then
+    "$@" --help | nvim -R -c 'set syn=man' --
   else
     echo "Error: No man page for \`$command\`"
   fi
