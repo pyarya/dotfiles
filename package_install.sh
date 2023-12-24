@@ -12,6 +12,7 @@ declare -r \
     'aerc'         'aerc'
     'alacritty'    'alacritty'
     'bat'          'bat'
+    'bash-completion'   'bash-completion'
     'calc'         'calc'
     'dust'         'dust'
     'exa'          'exa'
