@@ -429,6 +429,8 @@ bindswitch --reload --locked lid:on exec \
 bindswitch --reload --locked lid:off exec \
     swaymsg output $laptop dpms on
 
+exec swayidle -w timeout 1200 '~/.config/sway/suspend_system.sh'
+
 #bindswitch --reload --locked lid:on exec swaymsg output $laptop_screen disable
 
 #bindswitch --reload --locked lid:on exec '[ $(swaymsg -t get_outputs | grep name | wc -l) == 1 ] && ($sleep) || ($notify "Clamshell mode" "Laptop screen off" && swaymsg output $laptop_screen disable)'

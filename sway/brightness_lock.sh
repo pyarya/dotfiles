@@ -6,7 +6,7 @@ if ! command -v ddcutil &>/dev/null && command -v light &>/dev/null; then
   lvl="$(light -G)"
 
   (swaylock; light -S "$lvl") &
-  light -S 3
+  light -S 1
 elif command -v ddcutil &>/dev/null; then
   lvl="$(ddcutil getvcp 10 | awk '{
     gsub(" ","");  # Remove spaces
