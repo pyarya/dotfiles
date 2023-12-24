@@ -1,0 +1,8 @@
+[Match]
+Name = myonlyether
+
+[Network]
+Address = 192.168.0.98/24
+Gateway = 192.168.0.1
+# Cloudflare dns
+DNS = 1.1.1.1
