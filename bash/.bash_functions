@@ -53,6 +53,21 @@ sww() {
   fi
 }
 
+# Proper manpages ===================================================
+man() {
+  local command="$1"
+
+  if [[ "$command" =~ \. ]]; then
+    ~/.configs_pointer/bin/man_py.sh "$command"
+  elif /usr/bin/man "$command" >/dev/null 2>&1; then
+    /usr/bin/man "$command"
+  elif command -v "$command" &>/dev/null; then
+    "$command" --help | nvim -R -c 'set syn=man' --
+  else
+    echo "Error: No man page for \`$command\`"
+  fi
+}
+
 complete -W "console mac pc standard fn small mini" sww
 
 # Open command source code ==========================================
