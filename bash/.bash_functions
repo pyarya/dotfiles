@@ -57,8 +57,21 @@ sww() {
 man() {
   local command=$(IFS=-, ; echo "$*")
 
-  if [[ "$command" =~ \. ]]; then
-    ~/.configs_pointer/bin/man_py.sh "$command"
+  # When section is specified,override
+  if [[ "$1" =~ ^[1-7]$ ]]; then
+    local -ri section="$1"
+
+    shift
+    command=$(IFS=-, ; echo "$*")
+
+    /usr/bin/man "$section" "$command"
+    return $?
+  fi
+
+  local manpy=~/.configs_pointer/bin/man_py.sh
+
+  if [[ "$command" =~ \. ]] && "$manpy" "$command" &>/dev/null; then
+    "$manpy" "$command"
   elif /usr/bin/man "$command" >/dev/null 2>&1; then
     /usr/bin/man "$command"
   elif command -v "$command" &>/dev/null; then
