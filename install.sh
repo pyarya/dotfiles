@@ -35,6 +35,7 @@ declare -r UNIX_CONFIGS=(\
   ) \
   LINUX_ONLY=(\
     # Swayland
+    i3          ~/.config/i3
     sway        ~/.config/sway
     swaylock    ~/.config/swaylock
     xremap      ~/.config/xremap

@@ -6,32 +6,36 @@
 # The printed dimensions will match the slup regex below:
 #   /[0-9]+,[0-9]+ [0-9]+x[0-9]+/
 import json
+import os
 from subprocess import run, PIPE
 from typing import Optional
 
+
 def get_sway_tree() -> dict:
-    swaymsg = run(["swaymsg", "-t", "get_tree"], stdout=PIPE)
+    swaymsg = run([MSG_COMMAND, "-t", "get_tree"], stdout=PIPE)
     swaymsg.check_returncode()
     return json.loads(swaymsg.stdout)
 
+
 def format_window_coords(window: dict, rect: dict) -> str:
     if sum(window.values()) == 0:  # Multiple windows selected
-        x = rect['x']
-        y = rect['y']
-        w = rect['width']
-        h = rect['height']
-    elif window['y'] + window['height'] == rect['height']:  # Account for border
-        x = rect['x'] + window['x']
-        y = rect['y']
-        w = window['width']
-        h = window['height'] - window['y']
+        x = rect["x"]
+        y = rect["y"]
+        w = rect["width"]
+        h = rect["height"]
+    elif window["y"] + window["height"] == rect["height"]:  # Account for border
+        x = rect["x"] + window["x"]
+        y = rect["y"]
+        w = window["width"]
+        h = window["height"] - window["y"]
     else:
-        x = rect['x'] + window['x']
-        y = rect['y'] + window['y']
-        w = window['width']
-        h = window['height']
+        x = rect["x"] + window["x"]
+        y = rect["y"] + window["y"]
+        w = window["width"]
+        h = window["height"]
 
     return f"{x},{y} {w}x{h}"
+
 
 # Return dict indexing path to the first entry with "key" matching "val"
 # For example, it may return
@@ -57,17 +61,27 @@ def trace_json_path(js, find_key, find_val) -> Optional[list]:
 
     return None
 
+
 def focused_sway_area():
     tree = get_sway_tree()
-    trace = trace_json_path(tree, 'focused', True)
+    trace = trace_json_path(tree, "focused", True)
 
     if trace is None:
-        print('No focused window was found')
+        print("No focused window was found")
         exit(1)
 
     for i in trace:
         tree = tree[i]
-    return format_window_coords(tree['window_rect'], tree['rect'])
+    return format_window_coords(tree["window_rect"], tree["rect"])
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
+    try:
+        if "wayland" in os.environ["XDG_SESSION_TYPE"]:
+            MSG_COMMAND = "swaymsg"
+        else:
+            MSG_COMMAND = "i3-msg"
+    except KeyError:
+        MSG_COMMAND = "i3-msg"
+
     print(focused_sway_area())
