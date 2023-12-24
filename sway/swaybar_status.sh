@@ -25,15 +25,15 @@ get_volume() {
 }
 
 remaining_ram() {
-  free --mega | awk '/Mem/ {
-    split($0, a, " ")
+  awk '
+  /MemTotal:/     { memtotal   = $2 / 1024**2 }
+  /MemAvailable:/ { mavailable = $2 / 1024**2 }
 
-    used = a[3] / 1000
-    shared = a[5] / 1000
-    available = a[7] / 1000
-
-    printf "%0.1fG / %.1fG", used + shared, available
-  }'
+  END {
+    used = memtotal - mavailable
+    printf "%0.1fG / %.1fG", used, memtotal
+  }
+' /proc/meminfo
 }
 
 ramu="$(remaining_ram)"
