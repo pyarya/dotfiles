@@ -58,6 +58,7 @@ viw() {
 }
 
 # Ronald's Universal Number Kounter, standardized syntax for unix calculators
+# Use v as the first argument for verbosity/debugging
 # Syntax features:
 #   ^ and ** both work for exponentiation
 #   log()  is base 10
@@ -65,6 +66,12 @@ viw() {
 #   log2() is base 2
 # Careful when changing order or sed might sed itself!
 runk() {
+  local -i is_verbose=0
+  if [[ "$1" == v ]]; then
+    shift 1
+    is_verbose=1
+  fi
+
   local calc_ver="$(echo "$@" | sed \
     -e 's#log2(\([^)]\+\))#(log(\1)/log(2))#g' \
   )"
@@ -79,6 +86,16 @@ runk() {
     -e 's#log(\([^)]\+\))#(l(\1)/l(10))#g' \
     -e 's#log2(\([^)]\+\))#(l(\1)/l(2))#g' \
   )"
+
+  if [[ $is_verbose -eq 1 ]]; then
+    if command -v calc &>/dev/null; then
+      printf 'Using calc:  %s\n' "$calc_ver"
+    elif command -v python3 &>/dev/null; then
+      printf 'Using python:  %s\n' "$py_ver"
+    else
+      printf 'Using benchcalc:  %s\n' "$bc_ver"
+    fi
+  fi
 
   if command -v calc &>/dev/null; then
     calc "$calc_ver"
