@@ -87,6 +87,9 @@ export IGNOREEOF=8
   # Ripgrep needs this manually set
 export RIPGREP_CONFIG_PATH=~/.config/ripgrep/config
 
+  # Prevent __pycaches__ form forming
+export PYTHONDONTWRITEBYTECODE=1
+
 # Coloring ==========================================================
 # Truecolor support gives full rgb support. This looks something like:
 # \033[${bg};2;${red};${green};${blue};${special}m]
