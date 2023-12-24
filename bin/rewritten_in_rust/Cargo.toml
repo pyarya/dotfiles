@@ -10,6 +10,10 @@ authors = ["Akemi Izuko"]
 name = "prettify_bash_history"
 path = "src/prettify_bash_history.rs"
 
+[[bin]]
+name = "sway_tree"
+path = "src/sway_tree.rs"
+
 [dependencies]
 clap = { version = "4", features = ["derive"] }
 chrono = "0.4"

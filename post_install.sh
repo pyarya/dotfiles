@@ -417,9 +417,11 @@ russy_checks() {
 
 check_for_russy_bins() {
   local -i return_code=0
-
   local -a bin_names
-  bin_names=($(awk '/name =/ { split($0, a, "\""); print a[2] }' ~/.configs_pointer/bin/rewritten_in_rust/Cargo.toml))
+
+  while IFS='' read -r line; do
+    bin_names+=("$line")
+  done < <(awk '/name =/ { split($0, a, "\""); print a[2] }' ~/.configs_pointer/bin/rewritten_in_rust/Cargo.toml)
 
   if [[ $? -eq 0 ]]; then
     for (( i = 1; i < "${#bin_names[@]}"; i++ )); do
@@ -443,15 +445,22 @@ check_for_russy_bins() {
 russy_build() {
   if command -v cargo &>/dev/null; then
     if cargo build --release --manifest-path="$HOME/.configs_pointer/bin/rewritten_in_rust/Cargo.toml"; then
+      local -a bin_names
+
+      while IFS='' read -r line; do
+        bin_names+=("$line")
+      done < <(awk '/name =/ { split($0, a, "\""); print a[2] }' ~/.configs_pointer/bin/rewritten_in_rust/Cargo.toml)
+
       local name
 
-      for exe in $(fd -d1 -tx . ~/.configs_pointer/bin/rewritten_in_rust/target/release); do
-        name="$(basename "$exe")"
+      for (( i = 1; i < "${#bin_names[@]}"; i++ )); do
+        name="$(basename "${bin_names[i]}")"
         (
           cd ~/.configs_pointer/bin || return 1
 
           if ! [[ -e "$name" ]]; then
             ln -s "./rewritten_in_rust/target/release/$name" "./$name"
+            echo "$name" >> ~/.configs_pointer/bin/.gitignore
           elif ! [[ -L "$name" ]]; then
             printf 'ERR: Failed to link rust binary \`%s\`\n' "$name"
             printf '\tRemove the conflicting file\n'
@@ -470,8 +479,11 @@ russy_build() {
   fi
 }
 
+if [[ "$1" == 'build' ]]; then
+  russy_build || exit 1
+fi
 
-if [[ "$1" == 'status' && "$(uname -s)" == 'Linux' ]]; then
+if [[ "$(uname -s)" == 'Linux' ]] && [[ "$1" == 'status' || "$1" == 'build' ]]; then
   configs_pointer_is_setup || exit 1
 
   swayland_checks
@@ -485,8 +497,6 @@ if [[ "$1" == 'status' && "$(uname -s)" == 'Linux' ]]; then
   git_checks
   ssh_checks
   russy_checks
-elif [[ "$1" == 'build' ]]; then
-  russy_build
 else
   print_help
 fi
