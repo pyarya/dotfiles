@@ -18,8 +18,13 @@ path = "src/sway_tree.rs"
 name = "rename_for_unix"
 path = "src/rename_for_unix.rs"
 
+[[bin]]
+name = "random_password"
+path = "src/random_password.rs"
+
 [dependencies]
-clap = { version = "4", features = ["derive"] }
 chrono = "0.4"
+clap = { version = "4", features = ["derive"] }
+rand = "0.8"
 regex = "1"
 termion = "2"
