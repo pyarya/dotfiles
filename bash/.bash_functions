@@ -43,6 +43,16 @@ vifmmv() {
   cd "$dst"
 }
 
+# Fancy sudo
+_please()
+{
+    local cur prev opts
+    local cur="${COMP_WORDS[COMP_CWORD]}"
+    COMPREPLY=( $(compgen -c "${cur}") )
+    return 0
+}
+complete -F _please please
+
 # Keyboard layout switching =========================================
 sww() {
   if ! [[ -x ~/.configs_pointer/bin/switch_keyboards.sh ]]; then
