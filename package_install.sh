@@ -110,10 +110,8 @@ main() {
     exit 0
   fi
 
-  if [[ "$1" == "install" ]]; then
-    install_web_packages
-    install_cargo_packages
-  fi
+  install_web_packages
+  install_cargo_packages
 
   printf 'Done\n'
 }

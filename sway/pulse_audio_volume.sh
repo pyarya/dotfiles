@@ -8,7 +8,7 @@
 declare -r ADJUST="$1"
 declare -r NOTIFY_SOUND="$2"
 
-declare -r MAX_VOLUME="100"
+declare -ir MAX_VOLUME=100
 
 set_volume() {
   if ! pactl set-sink-volume @DEFAULT_SINK@ "${1}%"; then
@@ -25,7 +25,7 @@ play_notify_sound() {
     exit 1
   fi
 
-  if command -v ffmpeg &>/dev/null; then
+  if command -v ffplay &>/dev/null; then
     ffplay -nodisp -autoexit -v error "$1"
   elif command -v afplay &>/dev/null; then
     afplay "$1"
@@ -44,15 +44,16 @@ readonly curr_volume=$(pactl get-sink-volume @DEFAULT_SINK@ | awk '
 
 if ! [[ "$curr_volume" =~ ^[0-9]+$ ]]; then
   printf "Failed to find default sink's volume: %s\n" "$curr_volume" >&2
+  exit 1
 fi
 
-declare -ir new_volume=$(($curr_volume + $ADJUST))
+declare -ir new_volume=$((curr_volume + ADJUST))
 
 printf "Changing volumes from %d -> %d\n" "$curr_volume" "$new_volume" >&2
-if [[ "$new_volume" -gt "$MAX_VOLUME" ]]; then
-  set_volume "$MAX_VOLUME"
-elif [[ "$new_volume" -lt "0" ]]; then
-  set_volume "0"
+if [[ $new_volume -gt $MAX_VOLUME ]]; then
+  set_volume $MAX_VOLUME
+elif [[ $new_volume -lt 0 ]]; then
+  set_volume 0
 else
-  set_volume "$new_volume"
+  set_volume $new_volume
 fi

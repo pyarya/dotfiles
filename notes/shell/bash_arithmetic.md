@@ -29,6 +29,10 @@ declare -i a=2 b=3  # Multiple on the same line are fine
 (( a = 4 + b )) # Spacing is optional, same as above
 
 declare -i c=$((a**b + 4))  # c == 7**3 + 4 == 347
+
+declare -ia arr=(0 1 2 3)
+(( arr[a] = 3 ))   # Array indexing also no longer needs $
+(( arr[100] = 3 )) # Array is acc an integer hashmap, so over-indexing works
 ```
 
 ## Using numbers

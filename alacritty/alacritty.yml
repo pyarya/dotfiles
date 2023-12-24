@@ -21,8 +21,6 @@ font:
     x: 0
     y: 1
 
-  use_thin_strokes: true
-
 draw_bold_text_with_bright_colors: false
 
 # Colors (Gruvbox dark)
@@ -40,9 +38,6 @@ colors:
     focused_match:
       foreground: CellBackground
       background: CellForeground
-    bar:
-      background: '#c5c8c6'
-      foreground: '#1d1f21'
 
   selection:
     text: '#000000'
@@ -55,33 +50,21 @@ import:
 # Window GUI
 #==========================
 window:
-  title: JoJo
-  position:
-    x: 536
-    y: 164
-  dimensions:
-    columns: 134   # 16 size font
-    lines: 36
-    #columns: 150  # 14 size font
-    #lines: 40
   padding:
     x: 4
     y: 0
 
   decorations: None
   startup_mode: Windowed
+  dynamic_title: false
   opacity: 1
-
-  title: Alacritty
-  dynamic_title: true
 
 scrolling:
   history: 10000
-  multiplier: 3
+  multiplier: 1
 
 bell:
-  duration: 0
-  color: '#ffff99'
+  duration: 0  # Disable
   command: None
 
 selection:
@@ -93,6 +76,7 @@ cursor:
     blinking: Always
   vi_mode_style: Block
   blink_interval: 400
+  blink_timeout: 0  # Stop cursor from freezing
   unfocused_hollow: true
   thickness: 0.15
 
