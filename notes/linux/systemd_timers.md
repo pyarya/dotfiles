@@ -17,6 +17,9 @@ Time is in the format:
 
 ```
 DayOfWeek Year-Month-Day Hour:Minute:Second
+
+Fri *-*-* 00/1:00:00    # Every hour on fridays
+*-*-* 2:15,45:0/3       # At 2am, fire it on ever third second at 15 and 45mins
 ```
 
 To find suitable targets for things like `Wants` and `After`, see
@@ -55,7 +58,6 @@ service file and put it in the same `/etc/systemd/system`
 ```systemd
 [Unit]
 Description = Sends current ip address to uni servers
-Requires = broadcast_ip.service
 
 [Timer]
 Unit = broadcast_ip.service
@@ -64,3 +66,11 @@ OnCalendar = *-*-* *:15,45:00
 [Install]
 WantedBy = timers.target
 ```
+
+To make sure your unit doesn't always fire on boot, remove the `[Install]` from
+the service and don't put a `Requires` line in the timer
+
+## Further reading
+
+ - [Not firing timers on every
+   boot](https://superuser.com/questions/1559221/have-systemd-timer-not-run-on-boot-only-on-schedule)
