@@ -1,3 +1,20 @@
+## Table of Contents
+ 1. [Bash](#bash)
+     * [Process priority](#process-priority)
+     * [Job Control in Bash](#job-control-in-bash)
+     * [Vim editing for Bash](#vim-editing-for-bash)
+     * [Stop yourself from deleting files](#stop-yourself-from-deleting-files)
+     * [Reusing commands](#reusing-commands)
+     * [Automated interactive input](#automated-interactive-input)
+     * [Bash scripting](#bash-scripting)
+     * [Other Bash uses](#other-bash-uses)
+ 2. [Ed for terminal file editing](#ed-for-terminal-file-editing)
+ 3. [Awk the programming language](#awk-the-programming-language)
+  - [Built in variables](#built-in-variables)
+  - [Regular expression](#regular-expression)
+  - [Recipes](#recipes)
+  - [Advanced examples](#advanced-examples)
+
 # Bash
 ###### Process priority
 Since the processor must decide priority, it uses a scale from -20 through 20 to
@@ -317,6 +334,3 @@ to check if an element with the string's index has been initialized in the array
     $ awk '!unique[$0]++' duplicates.txt > uniques.txt
 Removes duplicate lines. This exploits awk's automatic initialization of
 variables with falsey values, 0 here, then turns that index truthy with `++`
-
-
-<!-- ex: set ft=markdown tw=80: -->

@@ -1,3 +1,11 @@
+## Table of Contents
+ 1. [Git + SSH = :rocket:](#git-ssh-rocket)
+ 2. [Generating ssh keys for git remotes](#generating-ssh-keys-for-git-remotes)
+ 3. [User keys](#user-keys)
+ 4. [Deployment keys](#deployment-keys)
+ 5. [Managing multiple remotes](#managing-multiple-remotes)
+ 6. [Further reading](#further-reading)
+
 # Git + SSH = :rocket:
 Most git remotes, codeberg and github for example, encourage the use of SSH
 keys. These are extra-secure ways to manage your project. There are generally
