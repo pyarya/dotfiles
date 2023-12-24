@@ -67,10 +67,6 @@ html_template_bottom = lambda title, url : f"""
   </body>
 """ + """
   <script>
-    function sleep(ms) {
-      return new Promise(resolve => setTimeout(resolve, ms));
-    }
-
     let style = document.createElement("style");
 
     style.textContent= `
@@ -103,25 +99,17 @@ html_template_bottom = lambda title, url : f"""
         font-size: 16px ;
       }`;
 
-    let loadtimes = [
-      100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100,
-      200, 200, 200, 200, 200, 200, 200, 200, 200, 200, 200, 200,
-      400, 400, 400, 400, 400, 400, 400, 400, 400, 400, 400, 400,
-    ];
-
-    (async function () {
-      for (let i = 0; true; i++) {
-        try {
-          document.querySelector('#rikaichan-window').shadowRoot.appendChild(style);
-          break;
-        } catch {
-          if (i < loadtimes.length)
-            await sleep(loadtimes[i]);
-          else
-            await sleep(2000);
-        }
-      }
-    })()
+    if (!document.querySelector("#rikaichan-window")?.shadowRoot?.appendChild(style)) {
+        const observer = new MutationObserver(() => {
+            if (document.querySelector("#rikaichan-window")?.shadowRoot?.appendChild(style)) {
+                observer.disconnect();
+            }
+        });
+        observer.observe(document.body, {
+            childList: true,
+            subtree: true, // remove if the parent is a direct parent
+        });
+    }
   </script>
 </html>
 """
