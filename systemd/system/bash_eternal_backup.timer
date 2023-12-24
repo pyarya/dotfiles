@@ -1,0 +1,11 @@
+[Unit]
+Description=Backing up bash history
+Requires=bash_eternal_backup.service
+
+[Timer]
+Unit=bash_eternal_backup.service
+OnCalendar=*-*-* *:00/3
+RandomizedDelaySec=3min
+
+[Install]
+WantedBy=timers.target
