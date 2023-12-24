@@ -78,6 +78,8 @@ runk() {
       override="c"
     elif [[ "$1" =~ p ]]; then
       override="p"
+    elif [[ "$1" =~ a ]]; then
+      override="a"
     elif [[ "$1" =~ b ]]; then
       override="b"
     fi
@@ -90,6 +92,12 @@ runk() {
   local py_ver="$(echo "$@" | sed \
     -e 's#\^#**#g' \
     -e 's#\(log([^)]\+)\)#(\1/log(10))#g' \
+    -e 's#ln(\([^)]\+\))#log(\1)#g' \
+  )"
+  local awk_ver="$(echo "$@" | sed \
+    -e 's#\*\*#^#g' \
+    -e 's#log(\([^)]\+\))#(log(\1)/log(10))#g' \
+    -e 's#log2(\([^)]\+\))#(log(\1)/log(2))#g' \
     -e 's#ln(\([^)]\+\))#log(\1)#g' \
   )"
   local bc_ver="$(echo "$@" | sed \
@@ -105,6 +113,9 @@ runk() {
   elif command -v python3 &>/dev/null && [[ -z "$override" ]] || [[ "$override" == p ]]; then
     python3 -c "from math import *; print($py_ver)"
     if [[ $is_verbose -eq 1 ]]; then printf 'Using python:  %s\n' "$py_ver"; fi
+  elif command -v gawk &>/dev/null && [[ -z "$override" ]] || [[ "$override" == a ]]; then
+    gawk --bignum "BEGIN { print $awk_ver }"
+    if [[ $is_verbose -eq 1 ]]; then printf 'Using gawk:  %s\n' "$awk_ver"; fi
   else
     echo "$bc_ver" | bc --mathlib
     if [[ $is_verbose -eq 1 ]]; then printf 'Using benchcalc:  %s\n' "$bc_ver"; fi
@@ -121,6 +132,11 @@ function exit () {
   fi
 
   builtin exit
+}
+
+# Quick way to glance at recent git history
+gitllog() {
+  git log -n "${1:-6}" --all --oneline --graph --decorate --color=always
 }
 
 # Necessary alias ===================================================

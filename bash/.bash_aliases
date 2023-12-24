@@ -90,10 +90,8 @@ fi
 # ===================================================================
 if command -v git &> /dev/null; then
   alias gitst='git status -s'
-  alias gitllog='git log --graph --all --oneline --decorate --color=always | sed -n 1,5p'
   alias gitlloga='git log --graph --all --oneline --decorate --color=always | less -R'
   alias gitllogw='git log --graph --all --date=relative --color=always --pretty="format:%C(auto,yellow)%h%C(auto,magenta) %C(auto,blue)%>(14,trunc)%ad %C(auto,green)%<(13,trunc) %aN%C(auto,red)%gD% D %C(auto,reset)%s" | less -R'
-  alias gitdesk='github .'
   alias gitcontrib='
   git ls-files |
   while read f

@@ -120,6 +120,9 @@ nnoremap <leader><leader>. 10<C-w>-
     " Set interior window width to 80 columns
 nnoremap <leader><leader>= :vertical resize 84<CR>
 
+    " Show full file path
+nnoremap <C-g> 1<C-g>
+
 " Editing remaps ========================================
 " Uppercase previous word from Insert mode
 inoremap <C-y> <ESC>vbU`>a

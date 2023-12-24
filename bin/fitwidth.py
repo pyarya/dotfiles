@@ -4,14 +4,25 @@ import argparse, sys
 # Parse args
 parser = argparse.ArgumentParser(prog="FitWidth v1.0.0",
     description='Fit text (stdin|file) to a given character width');
-parser.add_argument('-t', '--truncate', action='store_true',
-    help='Truncate longer lines with a "..."');
-parser.add_argument('-w', '--wrap', action='store_true',
-    help='Wrap longer lines across two lines with a ">" at the end');
-parser.add_argument('width', type=int,
-    help='Wrap longer lines across two lines with a ">" at the end');
-parser.add_argument('file', type=argparse.FileType('r'), nargs='?',
-    help="File to read from, instead of stdin");
+parser.add_argument(
+    '-t', '--truncate',
+    action='store_true',
+    help='Truncate longer lines with a "..."',
+);
+parser.add_argument(
+    '-w', '--wrap',
+    action='store_true',
+    help='Wrap longer lines across two lines with a ">" at the end',
+);
+parser.add_argument(
+    'width', type=int,
+    help='Wrap longer lines across two lines with a ">" at the end',
+);
+parser.add_argument(
+    'file', nargs='?',
+    type=argparse.FileType('r'),
+    help="File to read from, instead of stdin",
+);
 args = parser.parse_args();
 
 # Validate args
