@@ -100,6 +100,11 @@ bindsym $mod2+tab exec ~/.config/sway/cycle_windows.py previous
   # Important rust jerk
 bindsym $mod1+ctrl+r exec wtype "asExpectedOfRust"
 
+  # Automatic upload image to discord
+bindsym $mod1+ctrl+u exec sudo -u emiliko ~/.configs_pointer/bin/auto_image_upload_discord.sh
+  # Paste by typing
+bindsym Mod4+Ctrl+v exec ~/.configs_pointer/bin/wpastetype.py
+
 # rEsize containers ====
 bindsym $mod1+e mode "resize"
 

@@ -44,6 +44,7 @@ declare -r \
     'viu'          'viu'
     'wl-clipboard' 'wl-paste'
     'wtype'        'wtype'
+    'ydotool'      'ydotool'
     'zathura-pdf-mupdf' 'zathura'
     'zathura'      'zathura'
   ) \

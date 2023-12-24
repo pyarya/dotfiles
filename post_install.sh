@@ -146,6 +146,7 @@ xremap_checks() {
   check_xremap_executable
   check_xremap_systemd
   check_xremap_sudoer
+  check_ydotool_sudoer
 }
 
 check_xremap_config() {
@@ -213,7 +214,19 @@ check_xremap_sudoer() {
 
   if ! sudo -l | grep -Eq 'NOPASSWD:[[:space:]]+/usr/bin/systemctl restart xremap.service'; then
     printf "ERR: xremap.service not passwordless for sudoers\n"
-    printf "\t $ please bash -c 'echo \"%s\" >> /etc/sudoers.d/xremap'\n" '%wheel ALL=NOPASSWD: /usr/bin/systemctl restart xremap.service'
+    printf '\t $ please bash -c "cp $HOME/.configs_pointer/sudoers.d/xremap /etc/sudoers.d/xremap"\n'
+    return_code=1
+  fi
+
+  return $return_code
+}
+
+check_ydotool_sudoer() {
+  local return_code=0
+
+  if ! sudo -l | grep -Eq 'NOPASSWD:[[:space:]]+/usr/bin/ydotool \*'; then
+    printf "ERR: ydotool not passwordless for sudoers\n"
+    printf '\t $ please bash -c "cp $HOME/.configs_pointer/sudoers.d/ydotool /etc/sudoers.d/ydotool"\n'
     return_code=1
   fi
 
