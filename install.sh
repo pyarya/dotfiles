@@ -241,7 +241,7 @@ print_install_completion_msg() {
 
 Dotfile installation complete.
 
-To install packages, run: \`./package_install.sh help\`
+To install packages, run: \`./package_install.py help\`
 To check additional options, run: \`./post_install.sh help\`
 END
 }

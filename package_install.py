@@ -469,7 +469,7 @@ def install_package(apt, package):
 
     install = subprocess.call(install_cmd)
 
-    return install.returncode == 0
+    return install == 0
 
 
 def install_packages(apt):
