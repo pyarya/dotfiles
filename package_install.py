@@ -9,6 +9,11 @@ import shutil
 import subprocess
 
 PACKAGE_MANAGERS = {
+    "apk": {
+        "name": "apk",
+        "install_cmd": ["apk", "add"],
+        "check_installed": ["apk", "info", "--installed"],
+    },
     "apt": {
         "name": "apt",
         "install_cmd": ["apt", "install"],
@@ -30,6 +35,7 @@ PACKAGES = [
     {
         "global_name": "alacritty",
         "executable_name": "alacritty",
+        "apk": "alacritty",
         "apt": "alacritty",
         "dnf": "alacritty",
         "pacman": "alacritty",
@@ -37,6 +43,7 @@ PACKAGES = [
     {
         "global_name": "bat",
         "executable_name": "bat",
+        "apk": "bat",
         "apt": "bat",
         "dnf": "bat",
         "pacman": "bat",
@@ -44,6 +51,7 @@ PACKAGES = [
     {
         "global_name": "bash",
         "executable_name": "bash",
+        "apk": "bash",
         "apt": "bash",
         "dnf": "bash",
         "pacman": "bash",
@@ -64,6 +72,7 @@ PACKAGES = [
     {
         "global_name": "curl",
         "executable_name": "curl",
+        "apk": "curl",
         "apt": "curl",
         "dnf": "curl",
         "pacman": "curl",
@@ -71,11 +80,13 @@ PACKAGES = [
     {
         "global_name": "dust",
         "executable_name": "dust",
+        "apk": "dust",
         "pacman": "dust",
     },
     {
         "global_name": "exa -> eza",
         "executable_name": "exa",
+        "apk": "exa",
         "apt": "exa",
         "dnf": "eza",
         "pacman": "eza",
@@ -83,6 +94,7 @@ PACKAGES = [
     {
         "global_name": "fd-find",
         "executable_name": "fd",
+        "apk": "fd",
         "apt": "fd-find",
         "dnf": "fd-find",
         "pacman": "fd",
@@ -90,6 +102,7 @@ PACKAGES = [
     {
         "global_name": "foliate",
         "executable_name": "foliate",
+        "apk": "foliate",
         "apt": "foliate",
         "dnf": "foliate",
         "pacman": "foliate",
@@ -97,6 +110,7 @@ PACKAGES = [
     {
         "global_name": "fuzzel",
         "executable_name": "fuzzel",
+        "apk": "fuzzel",
         "apt": "fuzzel",
         "dnf": "fuzzel",
         "pacman": "fuzzel",
@@ -104,6 +118,7 @@ PACKAGES = [
     {
         "global_name": "fzf",
         "executable_name": "fzf",
+        "apk": "fzf",
         "apt": "fzf",
         "dnf": "fzf",
         "pacman": "fzf",
@@ -111,6 +126,7 @@ PACKAGES = [
     {
         "global_name": "gawk",
         "executable_name": "gawk",
+        "apk": "gawk",
         "apt": "gawk",
         "dnf": "gawk",
         "pacman": "gawk",
@@ -118,6 +134,7 @@ PACKAGES = [
     {
         "global_name": "git",
         "executable_name": "git",
+        "apk": "git",
         "apt": "git",
         "dnf": "git",
         "pacman": "git",
@@ -125,6 +142,7 @@ PACKAGES = [
     {
         "global_name": "git-lfs",
         "executable_name": "git-lfs",
+        "apk": "git-lfs",
         "apt": "git-lfs",
         "dnf": "git-lfs",
         "pacman": "git-lfs",
@@ -132,6 +150,7 @@ PACKAGES = [
     {
         "global_name": "grim",
         "executable_name": "grim",
+        "apk": "grim",
         "apt": "grim",
         "dnf": "grim",
         "pacman": "grim",
@@ -139,6 +158,7 @@ PACKAGES = [
     {
         "global_name": "pass",
         "executable_name": "pass",
+        "apk": "pass",
         "apt": "pass",
         "dnf": "pass",
         "pacman": "pass",
@@ -146,6 +166,7 @@ PACKAGES = [
     {
         "global_name": "slurp",
         "executable_name": "slurp",
+        "apk": "slurp",
         "apt": "slurp",
         "dnf": "slurp",
         "pacman": "slurp",
@@ -159,6 +180,7 @@ PACKAGES = [
     {
         "global_name": "imv",
         "executable_name": "imv",
+        "apk": "imv",
         "apt": "imv",
         "dnf": "imv",
         "pacman": "imv",
@@ -166,12 +188,14 @@ PACKAGES = [
     {
         "global_name": "jq",
         "executable_name": "jq",
+        "apk": "jq",
         "apt": "jq",
         "dnf": "jq",
         "pacman": "jq",
     },
     {
         "global_name": "Meslo Nerd font",
+        "apk": "font-meslo-nerd",
         "pacman": "ttf-meslo-nerd",
     },
     {
@@ -183,6 +207,7 @@ PACKAGES = [
     {
         "global_name": "mpv",
         "executable_name": "mpv",
+        "apk": "mpv",
         "apt": "mpv",
         "dnf": "mpv",
         "pacman": "mpv",
@@ -190,6 +215,7 @@ PACKAGES = [
     {
         "global_name": "neofetch",
         "executable_name": "neofetch",
+        "apk": "neofetch",
         "apt": "neofetch",
         "dnf": "neofetch",
         "pacman": "neofetch",
@@ -197,12 +223,14 @@ PACKAGES = [
     {
         "global_name": "neovim",
         "executable_name": "nvim",
+        "apk": "neovim",
         "apt": "neovim",
         "dnf": "neovim",
         "pacman": "neovim",
     },
     {
         "global_name": "pynvim",
+        "apk": "py3-pynvim",
         "apt": "python3-pynvim",
         "dnf": "python3-neovim",
         "pacman": "python-pynvim",
@@ -210,6 +238,7 @@ PACKAGES = [
     {
         "global_name": "ripgrep",
         "executable_name": "rg",
+        "apk": "ripgrep",
         "apt": "ripgrep",
         "dnf": "ripgrep",
         "pacman": "ripgrep",
@@ -217,6 +246,7 @@ PACKAGES = [
     {
         "global_name": "socat",
         "executable_name": "socat",
+        "apk": "socat",
         "apt": "socat",
         "dnf": "socat",
         "pacman": "socat",
@@ -224,6 +254,7 @@ PACKAGES = [
     {
         "global_name": "sway",
         "executable_name": "sway",
+        "apk": "sway",
         "apt": "sway",
         "dnf": "sway",
         "pacman": "sway",
@@ -231,6 +262,7 @@ PACKAGES = [
     {
         "global_name": "swaybg",
         "executable_name": "swaybg",
+        "apk": "swaybg",
         "apt": "swaybg",
         "dnf": "swaybg",
         "pacman": "swaybg",
@@ -238,6 +270,7 @@ PACKAGES = [
     {
         "global_name": "swaylock",
         "executable_name": "swaylock",
+        "apk": "swaylock",
         "apt": "swaylock",
         "dnf": "swaylock",
         "pacman": "swaylock",
@@ -252,6 +285,7 @@ PACKAGES = [
     {
         "global_name": "tmux",
         "executable_name": "tmux",
+        "apk": "tmux",
         "apt": "tmux",
         "dnf": "tmux",
         "pacman": "tmux",
@@ -259,6 +293,7 @@ PACKAGES = [
     {
         "global_name": "udisks2",
         "executable_name": "udisksctl",
+        "apk": "udisks2",
         "apt": "udisks2",
         "dnf": "udisks2",
         "pacman": "udisks2",
@@ -266,6 +301,7 @@ PACKAGES = [
     {
         "global_name": "vifm",
         "executable_name": "vifm",
+        "apk": "vifm",
         "apt": "vifm",
         "dnf": "vifm",
         "pacman": "vifm",
@@ -273,11 +309,13 @@ PACKAGES = [
     {
         "global_name": "viu",
         "executable_name": "viu",
+        "apk": "viu",
         "pacman": "viu",
     },
     {
         "global_name": "wl-clipboard",
         "executable_name": "wl-copy",
+        "apk": "wl-clipboard",
         "apt": "wl-clipboard",
         "dnf": "wl-clipboard",
         "pacman": "wl-clipboard",
@@ -285,6 +323,7 @@ PACKAGES = [
     {
         "global_name": "wlsunset",
         "executable_name": "wlsunset",
+        "apk": "wlsunset",
         "apt": "wlsunset",
         "dnf": "wlsunset",
         "pacman": "wlsunset",
@@ -292,6 +331,7 @@ PACKAGES = [
     {
         "global_name": "wtype",
         "executable_name": "wtype",
+        "apk": "wtype",
         "apt": "wtype",
         "dnf": "wtype",
         "pacman": "wtype",
@@ -305,12 +345,14 @@ PACKAGES = [
     },
     {
         "global_name": "zathura-pdf-mupdf",
+        "apk": "zathura-pdf-mupdf",
         "dnf": "zathura-pdf-mupdf",
         "pacman": "zathura-pdf-mupdf",
     },
     {
         "global_name": "zathura",
         "executable_name": "zathura",
+        "apk": "zathura",
         "apt": "zathura",
         "dnf": "zathura",
         "pacman": "zathura",
@@ -376,7 +418,9 @@ def extra_installs():
 def find_package_manager():
     global PACKAGE_MANAGERS
 
-    if shutil.which("apt"):
+    if shutil.which("apk"):
+        return PACKAGE_MANAGERS["apk"]
+    elif shutil.which("apt"):
         return PACKAGE_MANAGERS["apt"]
     elif shutil.which("dnf"):
         return PACKAGE_MANAGERS["dnf"]
