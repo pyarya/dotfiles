@@ -13,15 +13,24 @@ from PIL.ImageFilter import GaussianBlur
 from pathlib import Path
 from typing import *
 
+# Global constants
 DIR = Path(f"{os.environ['HOME']}/Desktop/screenshots_tmp") # Default
+
+EXTENSION_REGEX = "\.([A-z0-9]+)$"
+ORIGINAL_REGEX = "([0-9]+(_[0-9]{0,3})?)\.png"
+EDIT_REGEX = "([0-9]+(_[0-9]{0,3})?)_edit_([0-9])+" + EXTENSION_REGEX
+
+DS_BG_LIGHT = 'white'
+DS_SHADOW_LIGHT = 'black'
+DS_BG_DARK = '#d3869b'
+DS_SHADOW_DARK = 'black'
 
 # Returns the path of the latest screenshot
 def get_latest_sceenshot_path() -> Path:
     pics = [f for f in os.listdir(DIR) if os.path.isfile(DIR / f)]
     pngs = [p for p in pics if re.fullmatch("[0-9_]+\.png", p)]
     pngs.sort()
-    return Path(pngs[-1])
-    return pngs[-1]
+    return DIR / pngs[-1]
 
 # Returns a path to an unused screenshot in DIR
 def get_sceenshot_path() -> Path:
@@ -90,9 +99,9 @@ def take_subcommand(args):
 
     match args.drop_shadow:
         case "light":
-            add_drop_shadow(save_path, save_path, 'white', 'black')
+            add_drop_shadow(save_path, save_path, DS_BG_LIGHT, DS_SHADOW_LIGHT)
         case "dark":
-            add_drop_shadow(save_path, save_path, '#d3869b', 'black')
+            add_drop_shadow(save_path, save_path, DS_BG_DARK, DS_SHADOW_DARK)
 
     if args.clipboard:
         copy_to_clipboard(save_path)
