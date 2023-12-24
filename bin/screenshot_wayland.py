@@ -213,14 +213,32 @@ subcommands = parser.add_subparsers(dest='subcommand', required=True);
 take_subcmd = subcommands.add_parser(
     "take", help="Takes a screenshot. (Default is full screen)");
 
+take_common = argparse.ArgumentParser(add_help=False);
+take_common.add_argument(
+    '-c', '--clipboard',
+    action='store_true',
+    help='Save the screenshot to your clipboard',
+);
+
+take_common.add_argument(
+    "file", nargs='?', type=Path,
+    help="Save the screenshot to this file name"
+);
+
 # Different possible screenshot regions
 region = take_subcmd.add_subparsers(dest='region', required=True);
 full = region.add_parser(
-    'full', help='Take a screenshot of the entire screen');
+    'full', parents=[take_common],
+    help='Take a screenshot of the entire screen'
+);
 exact = region.add_parser(
-    'exact', help="Exact dimensions of screenshot: 'x,y width,height'");
+    'exact', parents=[take_common],
+    help="Exact dimensions of screenshot: 'x,y width,height'"
+);
 select = region.add_parser(
-    'select', help="Use `slurp` to select a region with your mouse");
+    'select', parents=[take_common],
+    help="Use `slurp` to select a region with your mouse"
+);
 exact.add_argument(
     'dimensions',
     type=parse_dimensions,
@@ -228,34 +246,6 @@ exact.add_argument(
     help="Exact dimensions of screenshot: 'x,y width,height'"
 );
 
-full.add_argument(
-    '-c', '--clipboard',
-    action='store_true',
-    help='Save the screenshot to your clipboard',
-);
-exact.add_argument(
-    '-c', '--clipboard',
-    action='store_true',
-    help='Save the screenshot to your clipboard',
-);
-select.add_argument(
-    '-c', '--clipboard',
-    action='store_true',
-    help='Save the screenshot to your clipboard',
-);
-
-full.add_argument(
-    "file", nargs='?', type=Path,
-    help="Save the screenshot to this file name"
-);
-exact.add_argument(
-    "file", nargs='?', type=Path,
-    help="Save the screenshot to this file name"
-);
-select.add_argument(
-    "file", nargs='?', type=Path,
-    help="Save the screenshot to this file name"
-);
 # Edit ====
 edit_subcmd = subcommands.add_parser(
     "edit", help="Apply an edit to the latest screenshot");
