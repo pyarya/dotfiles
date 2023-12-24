@@ -1,0 +1,9 @@
+[Unit]
+Description=Log the current battery charge
+Wants=log_battery.timer
+
+[Service]
+User=root
+Group=root
+Type=oneshot
+ExecStart=/usr/local/bin/log_battery.sh /org/freedesktop/UPower/devices/battery_BAT0 /home/emiliko/safe/loggers/battery/battery.csv

@@ -1,0 +1,11 @@
+[Unit]
+Description=Log the current battery charge
+Requires=log_battery.service
+
+[Timer]
+Unit=log_battery.service
+OnCalendar=*-*-* *:00/1:00
+RandomizedDelaySec=10s
+
+[Install]
+WantedBy=timers.target
