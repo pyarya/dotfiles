@@ -33,6 +33,7 @@ declare -r \
     'neovim'       'nvim'
     'paru'         'paru'
     'ripgrep'      'rg'
+    'socat'        'socat'
     'sway'         'sway'
     'swaybg'       'swaybg'
     'swaylock'     'swaylock'
