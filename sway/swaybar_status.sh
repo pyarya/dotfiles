@@ -31,7 +31,7 @@ remaining_ram() {
 
   END {
     used = memtotal - mavailable
-    printf "%0.1fG / %.1fG", used, memtotal
+    printf "%0.1fG / %.1fG", used, memtotal - used
   }
 ' /proc/meminfo
 }
