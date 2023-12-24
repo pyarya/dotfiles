@@ -16,9 +16,10 @@ from typing import *
 # Global constants
 DIR = Path(f"{os.environ['HOME']}/Desktop/screenshots_tmp") # Default
 
+DIMENSIONS_REGEX = "([0-9]+),([0-9]+) ([0-9]+)x([0-9]+)"
 EXTENSION_REGEX = "\.([A-z0-9]+)$"
 ORIGINAL_REGEX = "([0-9]+(_[0-9]{0,3})?)\.png"
-EDIT_REGEX = "([0-9]+(_[0-9]{0,3})?)_edit_([0-9])+" + EXTENSION_REGEX
+EDIT_REGEX = "([0-9]+(_[0-9]{0,3})?)_edit_([0-9]+)" + EXTENSION_REGEX
 
 DS_BG_LIGHT = 'white'
 DS_SHADOW_LIGHT = 'black'
@@ -54,7 +55,7 @@ def get_edit_path(ext: str) -> (Path, Path):
     originals.sort()
 
     latest = re.split(EXTENSION_REGEX, originals[-1])[0]
-    edits = [p for p in pics if re.fullmatch(f"{latest}_edit_[0-9]\.[A-z0-9]+", p)]
+    edits = [p for p in pics if re.fullmatch(f"{latest}_edit_[0-9]+\.[A-z0-9]+", p)]
     edits_nums = [re.fullmatch(EDIT_REGEX, e)[3] for e in edits]
     new_index = max([int(n) for n in edits_nums] + [0]) + 1
 
@@ -148,14 +149,27 @@ def parser_dir(s: str):
     else:
         raise NotADirectoryError(f"`{s}` is not a directory")
 
-def slurp_regex(s: str) -> str:
+def parse_dimensions(s: str) -> str:
     s = s.strip()
 
-    if re.fullmatch('[0-9]+,[0-9]+ [0-9]+x[0-9]+', s):
+    if re.fullmatch(DIMENSIONS_REGEX, s):
         return s
-    else:
-        raise Exception(
-            f"`{s}` does not match pattern /[0-9]+,[0-9]+ [0-9]+x[0-9]+/")
+    raise Exception(f"`{s}` does not match pattern {DIMENSIONS_REGEX}")
+
+def parse_percent(s: str) -> int:
+    s = s.strip()
+    try:
+        return int(re.fullmatch('([0-9]+)%?', s)[1])
+    except IndexError:
+        raise Exception(f"{s} is not a valid percent. Does not match /[0-9]+%?/")
+
+def parse_size(s: str) -> (int, int):
+    s = s.strip()
+    try:
+        m = re.fullmatch("([0-9]+)[x ]([0-9]+)", s)
+        return int(m[1]), int(m[2])
+    except:
+        raise Exception(f"{s} does not match size regex /[0-9]+[x ][0-9]+/")
 
 parser = argparse.ArgumentParser(
     prog="Screenshot Wayland v1.0.0",
@@ -195,7 +209,7 @@ select = region.add_parser(
     'select', help="Use `slurp` to select a region with your mouse");
 exact.add_argument(
     'dimensions',
-    type=slurp_regex,
+    type=parse_dimensions,
     metavar="'N,N NxN'",
     help="Exact dimensions of screenshot: 'x,y width,height'"
 );
@@ -216,16 +230,16 @@ select.add_argument(
 edit_subcmd = subcommands.add_parser(
     "edit", help="Apply an edit to the latest screenshot");
 edit_subcmd.add_argument(
-    '-r', '--resize',
-    type=int,
+    '-r', '--rescale',
+    type=parse_percent,
     metavar="<percent>",
-    help='Resize the latest screenshot instead of taking a new one',
+    help='Rescale the latest screenshot to <precent> of the original',
 );
 edit_subcmd.add_argument(
     '-s', '--size',
-    type=int,
+    type=parse_size,
     metavar="<dims>",
-    help='Exact dimensions of screenshot',
+    help='Set the dimensions of the latest screenshot',
 );
 edit_subcmd.add_argument(
     '-c', '--clipboard',
@@ -240,9 +254,9 @@ edit_subcmd.add_argument(
 );
 edit_subcmd.add_argument(
     '-e', '--extension',
-    type=int,
+    type=str,
     metavar="<ext>",
-    help='Change image extension and type saved',
+    help='Change image extension and image type saved',
 );
 edit_subcmd.add_argument(
     "file", nargs='?', type=Path,
