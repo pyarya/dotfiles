@@ -14,7 +14,12 @@ path = "src/prettify_bash_history.rs"
 name = "sway_tree"
 path = "src/sway_tree.rs"
 
+[[bin]]
+name = "rename_for_unix"
+path = "src/rename_for_unix.rs"
+
 [dependencies]
 clap = { version = "4", features = ["derive"] }
 chrono = "0.4"
 regex = "1"
+termion = "2"
