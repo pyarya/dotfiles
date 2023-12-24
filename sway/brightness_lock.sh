@@ -12,7 +12,7 @@ declare -ri ddc_dim=1
 get_brightness() {
   local lvl
 
-  if command light &>/dev/null; then
+  if command -v light &>/dev/null; then
     lvl="$(light -G)"
 
     if [[ $lvl =~ ^[0-9]+(\.[0-9]+)?$ ]]; then
@@ -20,12 +20,11 @@ get_brightness() {
     fi
   fi
 
-  if command ddcutil &>/dev/null; then
+  if command -v ddcutil &>/dev/null; then
     lvl="$(ddcutil getvcp 10 | awk '{
       gsub(" ","");  # Remove spaces
       split($0, a, "=");
-      split(a[2], a, ",");
-      print a[1]
+      split(a[2], a, ","); print a[1]
     }')"
 
     if [[ $lvl =~ ^[0-9]+$ ]]; then
@@ -38,15 +37,19 @@ set_brightness() {
   local -r light_lvl="$1"
   local -r ddc_lvl="$2"
 
-  if command light &>/dev/null; then
+  if command -v light &>/dev/null; then
     light -S "$light_lvl"
   fi
 
-  if command ddcutil &>/dev/null; then
+  if command -v ddcutil &>/dev/null; then
     ddcutil setvcp 10 "$ddc_lvl"
   fi
 }
 
+swaylock &
+
 get_brightness
-(swaylock; set_brightness $light_restore $ddc_restore) &
 set_brightness $light_dim $ddc_dim
+
+wait %swaylock
+set_brightness $light_restore $ddc_restore
