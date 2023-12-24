@@ -22,15 +22,43 @@
 //     ├───> [Chromium-browser]
 //     └───> [Alacritty]
 
-use std::io::{self, BufRead};
+use std::io::{self, BufRead, BufReader};
+use std::process::{Command, Stdio, ChildStdout};
 
 fn main() {
-    let stdin = io::stdin();
-    let sway_representation = stdin.lock().lines().next()
-        .expect("Could not read from stdin")
-        .expect("Stdio error");
+    let sway_tree = match get_tree() {
+        Ok(tree) => BufReader::new(tree).lines().map(|l| l.unwrap()),
+        Err(e) => panic!("Failed to get sway tree: {}", e),
+    };
 
-    println!("{}", ParserTree::from(&sway_representation).format());
+    for (i, line) in sway_tree.enumerate() {
+        println!("Workspace {} :: {}", i+1, line);
+        println!("{}", ParserTree::from(&line).format());
+    }
+}
+
+fn get_tree() -> io::Result<ChildStdout> {
+    let swaymsg = Command::new("swaymsg")
+        .arg("-t")
+        .arg("get_tree")
+        .stdout(Stdio::piped())
+        .spawn()?;
+
+    let jq = Command::new("jq")
+        .arg(".nodes[1].nodes[].representation")
+        .stdin(swaymsg.stdout.unwrap())
+        .stdout(Stdio::piped())
+        .spawn()
+        .expect("`jq` binary is not available");
+
+    let tr = Command::new("tr")
+        .arg("-d")
+        .arg("\"")
+        .stdin(jq.stdout.unwrap())
+        .stdout(Stdio::piped())
+        .spawn()?;
+
+    Ok(tr.stdout.unwrap())
 }
 
 
@@ -162,7 +190,7 @@ fn parse_sway_tree(rep: &str) -> ParserTree {
                         return child
                     }
 
-                    eprintln!("PushLeaf:    {:?}", &container_stack);
+                    //eprintln!("PushLeaf:    {:?}", &container_stack);
 
                     state = State::ExitContainer;
                 } else if c == ' ' {
@@ -171,7 +199,7 @@ fn parse_sway_tree(rep: &str) -> ParserTree {
                     let container = container_stack.last_mut().unwrap();
                     container.1.push(leaf);
 
-                    eprintln!("PushLeaf:    {:?}", &container_stack);
+                    //eprintln!("PushLeaf:    {:?}", &container_stack);
 
                     state = State::EnterContainer;
                 } else {
@@ -184,7 +212,7 @@ fn parse_sway_tree(rep: &str) -> ParserTree {
 
                 if (c == 'H' || c == 'V' || c == 'T' || c == 'S') && c1 == '[' {
                     container_stack.push(init_container(c));
-                    eprintln!("AppendChild: {:?}", &container_stack);
+                    //eprintln!("AppendChild: {:?}", &container_stack);
 
                     i += 2;
                 } else {
@@ -193,7 +221,7 @@ fn parse_sway_tree(rep: &str) -> ParserTree {
             }
             State::ExitContainer => {
                 if c == ']' {
-                    eprintln!("AppendParent:{:?}", &container_stack);
+                    //eprintln!("AppendParent:{:?}", &container_stack);
                     let container = container_stack.pop().unwrap();
                     let child = ParserTree::container(container.0, container.1);
 
@@ -206,7 +234,7 @@ fn parse_sway_tree(rep: &str) -> ParserTree {
 
                     i += 1;
                 } else {
-                    eprintln!("NextChild:   {:?}", &container_stack);
+                    //eprintln!("NextChild:   {:?}", &container_stack);
                     state = State::EnterContainer;
                     i += 1;
                 }
