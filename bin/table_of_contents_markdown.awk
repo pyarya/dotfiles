@@ -17,7 +17,7 @@
 #  HERE
 #
 # EXAMPLE OUTPUT:
-#   # Table of Contents
+#   ## Table of Contents
 #    1. [Main](#main)
 #     - [Hello](#hello)
 #      * [Deep header](#deep-header)
@@ -76,8 +76,7 @@ BEGIN { if (heading == 0) heading = 1;  }
 { file[lines++] = $0 }
 
 END {
-    for (i = 0; i < heading; i++) printf "#";
-    print " Table of Contents"
+    print "## Table of Contents"
     for (t in table_of_contents)
         print table_of_contents[t]
 

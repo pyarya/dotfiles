@@ -155,6 +155,9 @@ nnoremap <space>oadd :!git add %c<cr>
   " Make and navigate to a directory in the other pane
 command! cddir :sync! | exe 'wincmd w' | mkdir "%d/%a" | cd "%d/%a" | exe 'wincmd w'
 
+nnoremap <space>bf :!~/.configs_pointer/bin/open_in_browser.sh %f &<cr>
+nnoremap <space>br :!~/.configs_pointer/bin/open_in_browser.sh %d &<cr>
+
 "command! pngcopy :!osascript -e 'set the clipboard to (read (POSIX file "'.%c.'") as PNG picture)'
 
 " ===================================================================
