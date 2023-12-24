@@ -19,7 +19,7 @@ else
   swaynag -t warning \
     -m 'Are you sure you want to exit sway?' \
     -Z 'Yes, exit sway' \
-    "swaymsg exit; rm $CNT_FILE"
+    "swaymsg exit"
 fi
 
-rm ~/.config/sway/sway_exit_counter &>/dev/null
+rm "$CNT_FILE" &>/dev/null
