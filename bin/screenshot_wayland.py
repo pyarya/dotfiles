@@ -26,7 +26,8 @@ DS_SHADOW_LIGHT = 'black'
 DS_BG_DARK = '#d3869b'
 DS_SHADOW_DARK = 'black'
 
-EDIT_QUALITY = 50
+DEFAULT_EDIT_QUALITY = 50
+DEFAULT_EDIT_EXTENSION = 'avif'
 
 # Returns the path of the latest screenshot
 def get_latest_sceenshot_path() -> Path:
@@ -126,7 +127,9 @@ def take_subcommand(args):
 
 # Applies an edit to the latest screenshot
 def edit_subcommand(args):
-    ext = args.extension if args.extension else 'avif'
+    ext = args.extension if args.extension else DEFAULT_EDIT_EXTENSION
+    quality = args.quality if args.quality is not None else DEFAULT_EDIT_QUALITY
+
     og_path, edit_path = get_edit_path(ext)
 
     if args.overwrite:
@@ -145,7 +148,7 @@ def edit_subcommand(args):
             img = img.resize(args.size)
         elif args.rescale:
             img = img.reduce(int(1 / (args.rescale / 100)))
-        img.save(edit_path, quality=EDIT_QUALITY, method=6)
+        img.save(edit_path, quality=quality, method=6)
 
     if args.clipboard:
         copy_to_clipboard(edit_path)
@@ -252,7 +255,7 @@ edit_subcmd = subcommands.add_parser(
 edit_subcmd.add_argument(
     '-r', '--rescale',
     type=parse_percent,
-    metavar="<percent>",
+    metavar="<N%>",
     help='Rescale the latest screenshot to <precent> of the original',
 );
 edit_subcmd.add_argument(
@@ -279,13 +282,19 @@ edit_subcmd.add_argument(
     help='Change image extension and image type saved',
 );
 edit_subcmd.add_argument(
+    '-q', '--quality',
+    type=parse_percent,
+    metavar='<N%>',
+    help='Set quality of new image. [0, 100], higher means bigger file',
+);
+edit_subcmd.add_argument(
     '--overwrite',
     action='store_true',
     help='Overwrite original image with the edited image',
 );
 edit_subcmd.add_argument(
     "file", nargs='?', type=Path,
-    help="Save the screenshot to this file name"
+    help="Save the edited screenshot to this file name"
 );
 # Markup ====
 markup_subcmd = subcommands.add_parser(

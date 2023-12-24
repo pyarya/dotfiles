@@ -298,7 +298,7 @@ bindsym $mod2+Escape exec ~/.config/sway/sway_exit.sh
 bindsym $mod2+6 mode "screenshots"
 bindsym $mod2+5 mode "screenshots"; exec $screenshot_script take select -c $screenshot_tmp && $screenshot_sound
 bindsym $mod2+4 mode "screenshots"; exec $screenshot_script take exact "$(~/.config/sway/window_dimensions.py)" && \
-      $screenshot_script edit -c --overwrite -d "$(colo.sh -t)" -e png $screenshot_tmp && $screenshot_sound
+      $screenshot_script edit -c -q 100 -d "$(colo.sh -t)" -e png --overwrite $screenshot_tmp && $screenshot_sound
 
 mode "screenshots" {
     # Screenshooting in processing "steps"
