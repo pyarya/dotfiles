@@ -22,9 +22,9 @@ path = "src/rename_for_unix.rs"
 name = "random_password"
 path = "src/random_password.rs"
 
-[[bin]]
-name = "prettify_markdown_notes"
-path = "src/prettify_markdown_notes.rs"
+#[[bin]]
+#name = "prettify_markdown_notes"
+#path = "src/prettify_markdown_notes.rs"
 
 [dependencies]
 chrono = "0.4.23"

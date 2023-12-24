@@ -43,7 +43,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     for line in lines {
         if timestamp.is_match(&line) {
             let unix_utc: i64 = line[1..].parse()?;
-            let time = NaiveDateTime::from_timestamp_opt(millis, 0).unwrap();
+            let time = NaiveDateTime::from_timestamp_opt(unix_utc, 0).unwrap();
             let local_time = Local.from_utc_datetime(&time);
 
             let fmttime = local_time.format("%a %b %e %T %Y").to_string();
