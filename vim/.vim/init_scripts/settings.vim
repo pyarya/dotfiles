@@ -22,7 +22,7 @@ set hidden
 au BufWritePre [:;']* throw 'Forbidden file name: ' . expand('<afile>')
 
 " Embedded code in markdown
-let g:markdown_fenced_languages = ['bash', 'rust', 'javascript', 'c', 'toml']
+let g:markdown_fenced_languages = ['bash', 'rust', 'javascript', 'c', 'toml', 'css']
 
 " ===================================================================
 " Human-facing settings
