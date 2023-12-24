@@ -43,7 +43,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     for line in lines {
         if timestamp.is_match(&line) {
             let time = NaiveDateTime::from_timestamp_opt(line[1..].parse()?, 0).unwrap();
-            let fmttime = format!("{}", time);
+            let fmttime = time.format("%a %b %e %T %Y").to_string();
 
             let start_line = starting_for_command_line(args.style);
             let time_line = format_time_line(&fmttime, args.style);
