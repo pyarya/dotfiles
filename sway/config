@@ -48,7 +48,7 @@ set $menu fuzzel -fmonospace:size=14 -l10 -w40 \
 
 # Sound effects and additional features
 set $volume_command ~/.config/sway/pulse_audio_volume.sh
-set $volume_notify_sound  ~/.config/sway/pop_sound.mp3
+set $volume_change_sound  ~/.config/sway/volume_change_sound.mp3
 
 set $screenshot_sound ffplay -nodisp -autoexit -v error \
     ~/.config/sway/screenshot_sound.mp3
@@ -247,10 +247,10 @@ default_border pixel 2
 exec wlsunset -t 6499 -T 6500 -g 0.9
 
 # Volume controls
-bindsym XF86AudioRaiseVolume exec $volume_command 4 $volume_notify_sound
-bindsym XF86AudioLowerVolume exec $volume_command -4 $volume_notify_sound
-bindsym shift+XF86AudioRaiseVolume exec $volume_command 1 $volume_notify_sound
-bindsym shift+XF86AudioLowerVolume exec $volume_command -1 $volume_notify_sound
+bindsym XF86AudioRaiseVolume exec $volume_command 4 $volume_change_sound
+bindsym XF86AudioLowerVolume exec $volume_command -4 $volume_change_sound
+bindsym shift+XF86AudioRaiseVolume exec $volume_command 1 $volume_change_sound
+bindsym shift+XF86AudioLowerVolume exec $volume_command -1 $volume_change_sound
 bindsym XF86AudioMute exec ~/.config/sway/toggle_mute.sh
 
 # External brightness control

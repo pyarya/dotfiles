@@ -40,4 +40,4 @@ case "$1" in
     ;;
 esac
 
-ffplay -nodisp -autoexit -v error ~/.config/sway/pop_sound.mp3
+ffplay -nodisp -autoexit -v error ~/.config/sway/volume_change_sound.mp3

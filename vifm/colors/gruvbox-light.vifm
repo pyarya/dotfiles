@@ -66,7 +66,7 @@ highlight {*.aac,*.anx,*.asf,*.au,*.avi,*.ts,*.axa,*.axv,*.divx,*.flac,*.m2a,
           \*.m2v,*.m4a,*.m4p,*.m4v,*.mid,*.midi,*.mka,*.mkv,*.mov,*.mp3,*.mp4,
           \*.flv,*.mp4v,*.mpc,*.mpeg,*.mpg,*.nuv,*.oga,*.ogg,*.ogv,*.ogx,*.pbm,
           \*.pgm,*.qt,*.ra,*.ram,*.rm,*.spx,*.vob,*.wav,*.wma,*.wmv,*.xvid,
-          \*.ac3,*.webm} cterm=bold
+          \*.ac3,*.webm,*.aiff} cterm=bold
           \ ctermfg=5 ctermbg=default
 
     " Same darkish purple for pictures

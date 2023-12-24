@@ -37,6 +37,7 @@ swayland_checks() {
   check_sway_wallpaper
   check_swaylock_wallpaper
   check_swaytree_compilation
+  check_sway_sounds
 }
 
 check_sway_wallpaper() {
@@ -89,6 +90,26 @@ check_swaytree_compilation() {
   fi
 
   return 0
+}
+
+check_sway_sounds() {
+  local return_code=0
+  local -ra a=(\
+    ~/.configs_pointer/sway screenshot_sound.mp3 'screenshot sound'
+    ~/.configs_pointer/sway volume_change_sound.mp3 'volume change sound'
+    ~/.configs_pointer/sway error_sound.mp3 'error sound'
+  )
+
+  for ((i=0; i < ${#a[@]}; i += 3)); do
+    if ! [[ -r "${a[i]}/${a[i+1]}" ]]; then
+      printf "ERR: Missing %s for sway\n" "${a[i+2]}"
+      printf '\tAdd a playable sound file to %s\n' "${a[i]}/${a[i+1]}"
+      printf "\tIt doesn't have to be an mp3 file, just make the extension .mp3\n"
+      return_code=1
+    fi
+  done
+
+  return $return_code
 }
 
 ####################
