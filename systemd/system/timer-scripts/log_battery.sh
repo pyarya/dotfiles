@@ -7,9 +7,9 @@ declare -r write_path="$2"
 
 if [[ $# -ne 2 ]]; then
   cat <<HELP
-log_battery systemd.timer v2.0
+log_battery systemd.timer v2.1
 
-USAGE: $(basename "$0") <battery-name> <csv-path>"
+USAGE: $(basename "$0") <battery-name> <csv-path>
 
 EXAMPLES:
     $(basename "$0") BAT0 /home/emiliko/loggers/battery.csv

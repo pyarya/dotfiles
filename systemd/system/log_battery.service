@@ -6,4 +6,4 @@ Wants=log_battery.timer
 User=root
 Group=root
 Type=oneshot
-ExecStart=/usr/local/bin/log_battery.sh /org/freedesktop/UPower/devices/battery_BAT0 /home/emiliko/safe/loggers/battery/battery.csv
+ExecStart=/usr/local/bin/log_battery.sh BAT0 /home/emiliko/safe/loggers/battery/battery.csv
