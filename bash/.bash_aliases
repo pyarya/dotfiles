@@ -30,6 +30,7 @@ alias ed="ed -p '> :'"
 alias ra='rg --no-ignore -.'
 alias ee='exit'
 alias ffprobe='ffprobe -hide_banner'
+alias shm='cd /dev/shm'
 
 
 # ===================================================================

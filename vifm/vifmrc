@@ -152,6 +152,9 @@ nnoremap <space>m :sync %d<cr><space>
 nnoremap <space>orestore :!git restore %c<cr>
 nnoremap <space>oadd :!git add %c<cr>
 
+  " Make and navigate to a directory in the other pane
+command! cddir :sync! | exe 'wincmd w' | mkdir "%d/%a" | cd "%d/%a" | exe 'wincmd w'
+
 "command! pngcopy :!osascript -e 'set the clipboard to (read (POSIX file "'.%c.'") as PNG picture)'
 
 " ===================================================================
