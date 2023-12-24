@@ -1,0 +1,18 @@
+# vim: set ft=sshdconfig:
+
+# Security - Not optional.
+PasswordAuthentication no
+AuthenticationMethods publickey
+PermitRootLogin no
+PermitEmptyPasswords no
+# Ipv4 only. Use inet6 for ipv6 only
+AddressFamily inet
+
+# Server setup
+    # Not port 22, to avoid clogging up journalctl from bots
+Port 29800
+    # Prone to spoofing, use ClientAlive* instead
+TCPKeepAlive no
+    # Send a message every 30s, disconnect after an (30s * 120) = 1 hour
+ClientAliveInterval 30
+ClientAliveCountMax 120

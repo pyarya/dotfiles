@@ -360,6 +360,55 @@ check_gitconfig() {
   return $return_code
 }
 
+####################
+# SSH
+####################
+ssh_checks() {
+  check_sshconfig
+  check_sshdconfig
+}
+
+check_sshconfig() {
+  local return_code=0
+
+  if ! [[ -r ~/.ssh/config ]]; then
+    printf 'ERR: Missing ssh config at ~/.ssh/config\n'
+    printf '\tSee ./ssh/template.config for an example\n'
+    return_code=1
+  elif ! grep -Eq 'Host (codeberg.org|github.com|\*sr.ht)' ~/.ssh/config; then
+    printf 'ERR: No hosts in ~/.ssh/config\n'
+    printf '\tSee ./ssh/template.config for an example\n'
+    return_code=1
+  fi
+
+  return $return_code
+}
+
+check_sshdconfig() {
+  local return_code=0
+
+  if ! grep -q 'PasswordAuthentication no' /etc/ssh/sshd_config; then
+    printf 'ERR: Password authentication permitted in /etc/ssh/sshd_config\n'
+    printf '\tSee ./ssh/template.sshd_config for an example\n'
+    return_code=1
+  fi
+
+  if ! grep -q 'PermitRootLogin no' /etc/ssh/sshd_config; then
+    printf 'ERR: Root login permitted in /etc/ssh/sshd_config\n'
+    printf '\tSee ./ssh/template.sshd_config for an example\n'
+    return_code=1
+  fi
+
+  if grep -q 'Port 22' /etc/ssh/sshd_config || ! grep -q 'Port' /etc/ssh/sshd_config; then
+    printf 'ERR: Still using port 22 for sshd\n'
+    printf '\tSee ./ssh/template.sshd_config for an example\n'
+    return_code=1
+  fi
+
+  return $return_code
+}
+
+
 if [[ "$1" == 'status' && "$(uname -s)" == 'Linux' ]]; then
   configs_pointer_is_setup || exit 1
 
@@ -372,6 +421,7 @@ if [[ "$1" == 'status' && "$(uname -s)" == 'Linux' ]]; then
   tmux_check
   aerc_checks
   git_checks
+  ssh_checks
 else
   print_help
 fi
