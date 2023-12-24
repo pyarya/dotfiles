@@ -39,10 +39,8 @@ nnoremap s :sort<cr>
 nnoremap <C-l> :!/usr/bin/env IS_VIFM_NEST='T' bash -l<cr>
 nnoremap <C-f> :!/usr/bin/env IS_VIFM_NEST='T' bash -l<cr>
 
-" Open cwd in finder
-nnoremap <space>ofinder :!open .<cr>
-
-nnoremap <space>ogadd :!git add %c<cr>
+" Rename file/dir under cursor to unix standards Ore[name]
+nnoremap <space>ore :exe 'goto "'.system("~/.configs_pointer/vifm/scripts/vifm_rename_and_move_file.sh ".expand('%c')).'"'<cr>
 
 " Logical conflict mappings
     " Navigate back from symlinks
@@ -148,9 +146,6 @@ nnoremap <space>m :sync %d<cr><space>
 "vnoremap <C-u> 6k
 "nnoremap <C-d> 6j
 "vnoremap <C-d> 6j
-
-nnoremap <space>orestore :!git restore %c<cr>
-nnoremap <space>oadd :!git add %c<cr>
 
   " Make and navigate to a directory in the other pane
 command! cddir :sync! | exe 'wincmd w' | mkdir "%d/%a" | cd "%d/%a" | exe 'wincmd w'

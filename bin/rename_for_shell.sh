@@ -22,7 +22,7 @@ else
 
       if (!length(name) && c == "-")
         continue;
-      else if (c ~ /[0-9A-Za-z_.-\/]/)
+      else if (c ~ /[0-9A-Za-z_.\-\/]/)
         name = name c
       else if (c == " ")
         name = name "_"

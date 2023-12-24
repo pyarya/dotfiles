@@ -16,7 +16,7 @@ requires_gui_error() {
 }
 
 open_pdf() {
-  zathura "$1" &
+  zathura "$1" &>/dev/null &
 }
 
 open_image() {
