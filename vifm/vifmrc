@@ -40,7 +40,7 @@ nnoremap <C-l> :!/usr/bin/env IS_VIFM_NEST='T' bash -l<cr>
 nnoremap <C-f> :!/usr/bin/env IS_VIFM_NEST='T' bash -l<cr>
 
 " Rename file/dir under cursor to unix standards Ore[name]
-nnoremap <space>ore :exe 'goto "'.system("~/.configs_pointer/vifm/scripts/vifm_rename_and_move_file.sh ".expand('%c')).'"'<cr>
+nnoremap <space>ore :exe 'goto "'.system("~/.configs_pointer/bin/rename_for_unix ".expand('%c')).'"'<cr>
 
 " Logical conflict mappings
     " Navigate back from symlinks

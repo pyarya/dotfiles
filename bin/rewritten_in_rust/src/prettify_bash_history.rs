@@ -1,4 +1,4 @@
-use chrono::NaiveDateTime;
+use chrono::{NaiveDateTime, offset::{Local, TimeZone}};
 use clap::{Parser, ValueEnum};
 use regex::Regex;
 use std::fs::File;
@@ -42,8 +42,11 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     for line in lines {
         if timestamp.is_match(&line) {
-            let time = NaiveDateTime::from_timestamp_opt(line[1..].parse()?, 0).unwrap();
-            let fmttime = time.format("%a %b %e %T %Y").to_string();
+            let unix_utc: i64 = line[1..].parse()?;
+            let time = NaiveDateTime::from_timestamp_opt(millis, 0).unwrap();
+            let local_time = Local.from_utc_datetime(&time);
+
+            let fmttime = local_time.format("%a %b %e %T %Y").to_string();
 
             let start_line = starting_for_command_line(args.style);
             let time_line = format_time_line(&fmttime, args.style);
@@ -96,6 +99,14 @@ fn format_command_line(line: &str, style: Style) -> String {
     match style {
         Style::Plain => format!("    {}", line),
         Style::Markdown => format!("{}", line),
-        Style::Html => format!("{}", line),
+        Style::Html => {
+            format!("{}", line
+                .replace("&", "&amp;")
+                .replace("<", "&lt;")
+                .replace(">", "&gt;")
+                .replace("\"", "&quot;")
+                .replace("'", "&apos;")
+            )
+        },
     }
 }

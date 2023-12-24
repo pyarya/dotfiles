@@ -71,11 +71,11 @@ fn main() -> Try<()> {
         let og_base_name = og_full_name.file_name().unwrap().to_str().unwrap();
         let new_base_name = new_full_name.file_name().unwrap().to_str().unwrap();
 
-        if args.is_dry_run {
+        if args.is_dry_run && og_full_name != new_full_name {
             println!("{}\"{}\"{} -> {}{:?}{}",
                 tc::Fg(tc::Red), og_base_name, tc::Fg(tc::Reset),
                 tc::Fg(tc::Green), new_base_name, tc::Fg(tc::Reset));
-        } else {
+        } else if !args.is_dry_run {
             if !args.is_silent {
                 println!("{}", new_full_name.to_str().unwrap());
             }
