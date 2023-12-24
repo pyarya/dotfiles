@@ -81,7 +81,7 @@ tmux_check() {
 check_tmux_plugins() {
   local return_code=0
 
-  if [[ -d ~/.configs_pointer/tmux/plugins ]]; then
+  if ! [[ -d ~/.configs_pointer/tmux/plugins ]]; then
     printf "ERR: Missing tmux plugins\n"
     cat <<HELP
     mkdir ~/.configs_pointer/tmux/plugins
