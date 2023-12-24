@@ -44,22 +44,20 @@ if ! command -v xremap &>/dev/null; then
   exit 1
 fi
 
-case "$(echo "$1" | awk '{print tolower($0)}')" in
+declare path sw_type="$1"
+
+case "$(echo "$sw_type" | awk '{print tolower($0)}')" in
   console)
     ln -sf ~/.config/xremap/config_console.yml ~/.config/xremap/config.yml
-    echo "Switching to minimal console remapping"
     ;;
   mac)
     ln -sf ~/.config/xremap/config_mac.yml ~/.config/xremap/config.yml
-    echo "Switching to mac layout :: ALT | SUPER | SPACE"
     ;;
   pc | standard)
     ln -sf ~/.config/xremap/config_standard.yml ~/.config/xremap/config.yml
-    echo "Switching to standard layout :: SUPER | ALT | SPACE"
     ;;
   fn | small | mini)
     ln -sf ~/.config/xremap/config_no_fn.yml ~/.config/xremap/config.yml
-    echo "Switching to no-fn row standard layout :: SUPER | ALT | SPACE"
     ;;
   *)
     if [[ -n "$1" ]]; then
@@ -68,6 +66,23 @@ case "$(echo "$1" | awk '{print tolower($0)}')" in
     fi
     ;;
 esac
+
+if path="$(basename "$(realpath ~/.config/xremap/config.yml)")"; then
+  case "$path" in
+    config_console.yml)
+      echo "Using minimal console remapping";;
+    config_mac.yml)
+      echo "Using mac layout :: ALT | SUPER | SPACE";;
+    config_standard.yml)
+      echo "Using standard layout :: ALT | SUPER | SPACE";;
+    config_no_fn.yml)
+      echo "Using standard no-fn row layout :: ALT | SUPER | SPACE";;
+    *)
+      echo "Using unidentified layout";;
+  esac
+else
+  echo "xremap config path not found"
+fi
 
 sudo /usr/bin/systemctl restart xremap.service
 sleep 2

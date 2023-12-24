@@ -213,7 +213,7 @@ check_xremap_sudoer() {
 
   if ! sudo -l | grep -Eq 'NOPASSWD:[[:space:]]+/usr/bin/systemctl restart xremap.service'; then
     printf "ERR: xremap.service not passwordless for sudoers\n"
-    printf "\t $ please echo \"%wheel ALL=NOPASSWD: /usr/bin/systemctl restart xremap.service\" >> /etc/sudoers.d/xremap\n"
+    printf "\t $ please bash -c 'echo \"%s\" >> /etc/sudoers.d/xremap'\n" '%wheel ALL=NOPASSWD: /usr/bin/systemctl restart xremap.service'
     return_code=1
   fi
 
