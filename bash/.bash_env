@@ -89,6 +89,7 @@ export RIPGREP_CONFIG_PATH=~/.config/ripgrep/config
 
   # Prevent __pycaches__ from forming
 export PYTHONDONTWRITEBYTECODE=1
+export PYTHONPYCACHEPREFIX=1
 
 # Coloring ==========================================================
 # Truecolor support gives full rgb support. This looks something like:
