@@ -17,7 +17,6 @@ _ssh()
 }
 complete -F _ssh ssh rpluto
 
-
 # Don't auto-executing line when leaving editor =====================
 _edit_wo_executing() {
     local editor="${EDITOR:-vi}"
@@ -34,7 +33,7 @@ if [[ "$-" =~ "i" ]]; then
   bind -x '"\C-g":_edit_wo_executing'
 fi
 
-# End up in the same directory as vifm exited in
+# End up in the same directory as vifm exited in ====================
 vifmmv() {
   local dst="$(command vifm --choose-dir - "$@")"
   if [ -z "$dst" ]; then
@@ -44,19 +43,55 @@ vifmmv() {
   cd "$dst"
 }
 
-# Open command script in vim
+# Open command source code ==========================================
+# Only works for scripts and rust executables
+_viw_completions() {
+  COMPREPLY=($(compgen -c "${COMP_WORDS[COMP_CWORD]}"))
+}
+
+complete -F _viw_completions viw
+
 viw() {
-  if [[ -z "$1" ]] || ! which "$1"; then
-    printf "No %s found in path\nAborting...\n" "$1"
-    exit 1
-  elif [[ "$(file "$(which "$1")")" =~ 'ELF.*executable' ]]; then
-    printf "%s is a binary\nAborting...\n" "$1"
-    exit 1
+  if [[ -z "$1" ]] || ! which "$1" &>/dev/null; then
+    printf "No %s found in path\n" "$1"
+    return 1
+  fi
+
+  local path="$(realpath "$(which "$1")")"
+  local f_type="$(file "$path")"
+  local p_2="$(dirname "$(dirname "$path")")"
+  local n_2="$(basename "$p_2")"
+  local p_3="$(dirname "$p_2")"
+
+  # Finds rust source file
+  if [[ $f_type =~ ELF.*executable && $n_2 == target && -r $p_3/Cargo.toml ]]; then
+    path="$(awk -vkey="$1" '
+      /\[\[bin\]\]/ {
+        if (key == name && length(path)) exit;
+        name = ""; path = ""
+      }
+
+      /name =/ { split($0, a, "\""); name = a[2] }
+      /path =/ { split($0, a, "\""); path = a[2] }
+
+      END { if (key == name && length(path)) print path }
+    ' "${p_3}/Cargo.toml")"
+
+    if [[ -z $path ]]; then
+      path="src/main.rs"
+    fi
+
+    path="${p_3}/${path}"
+  fi
+
+  if [[ -r $path ]]; then
+    "$EDITOR" "$path"
   else
-    "$EDITOR" "$(which "$1")"
+    echo "Path isn't readable!"
   fi
 }
 
+# Open the python manpages ==========================================
 manpy() {
   ~/.configs_pointer/bin/man_py.sh $@
 }
