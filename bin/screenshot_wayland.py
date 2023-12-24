@@ -92,15 +92,13 @@ def take_subcommand(args):
         case "light":
             add_drop_shadow(save_path, save_path, 'white', 'black')
         case "dark":
-            add_drop_shadow(save_path, save_path, '#515e6e', 'black')
+            add_drop_shadow(save_path, save_path, '#d3869b', 'black')
 
     if args.clipboard:
         copy_to_clipboard(save_path)
 
-    if args.file is not None and not os.path.isfile(args.file):
+    if args.file is not None:
         shutil.copyfile(save_path, args.file)
-    elif args.file is not None:
-        raise Exception(f"Refusing to overwrite {args.file}")
 
 # Provides a drawing editor for the latest image
 def markup_latest(args):
@@ -162,11 +160,11 @@ take_subcmd.add_argument(
 
 # Different possible screenshot regions
 region = take_subcmd.add_subparsers(dest='region', required=True);
-region.add_parser(
+full = region.add_parser(
     'full', help='Take a screenshot of the entire screen');
 exact = region.add_parser(
     'exact', help="Exact dimensions of screenshot: 'x,y width,height'");
-region.add_parser(
+select = region.add_parser(
     'select', help="Use `slurp` to select a region with your mouse");
 exact.add_argument(
     'dimensions',
@@ -175,9 +173,16 @@ exact.add_argument(
     help="Exact dimensions of screenshot: 'x,y width,height'"
 );
 
-take_subcmd.add_argument(
-    "file", nargs='?',
-    type=Path,
+full.add_argument(
+    "file", nargs='?', type=Path,
+    help="Save the screenshot to this file name"
+);
+exact.add_argument(
+    "file", nargs='?', type=Path,
+    help="Save the screenshot to this file name"
+);
+select.add_argument(
+    "file", nargs='?', type=Path,
     help="Save the screenshot to this file name"
 );
 # Edit ====
@@ -186,7 +191,7 @@ edit_subcmd = subcommands.add_parser(
 edit_subcmd.add_argument(
     '-r', '--resize',
     type=int,
-    metavar="<pixels>",
+    metavar="<percent>",
     help='Resize the latest screenshot instead of taking a new one',
 );
 edit_subcmd.add_argument(
@@ -197,9 +202,9 @@ edit_subcmd.add_argument(
 );
 edit_subcmd.add_argument(
     '-d', '--drop-shadow',
-    type=int,
-    metavar="<pixels>",
-    help='Save the screenshot with a drop shadow of x pixels',
+    action='store',
+    choices=['light', 'dark'],
+    help='Apply a drop shadow with a light/dark background',
 );
 edit_subcmd.add_argument(
     '-e', '--extension',
