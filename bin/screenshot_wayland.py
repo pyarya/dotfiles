@@ -3,10 +3,10 @@
 #
 # Additional dependencies:
 #  - Python's pillow library
-#  - pip install --user pillow-avif-plugin  # For avif support (recommended)
+#  - pip install --user pillow-avif-plugin  # Until PIL merges avif support
 #  - grim
 #  - swappy
-import argparse, os, time, re, shutil
+import argparse, os, time, re, shutil, pillow_avif
 from subprocess import run, Popen, PIPE, DEVNULL
 from PIL import Image
 from PIL.ImageFilter import GaussianBlur
@@ -25,6 +25,8 @@ DS_BG_LIGHT = 'white'
 DS_SHADOW_LIGHT = 'black'
 DS_BG_DARK = '#d3869b'
 DS_SHADOW_DARK = 'black'
+
+EDIT_QUALITY = 50
 
 # Returns the path of the latest screenshot
 def get_latest_sceenshot_path() -> Path:
@@ -127,6 +129,32 @@ def take_subcommand(args):
 
     if args.file is not None:
         shutil.copyfile(save_path, args.file)
+
+# Applies an edit to the latest screenshot
+def edit_subcommand(args):
+    ext = args.extension if args.extension else 'avif'
+    og_path, edit_path = get_edit_path(ext)
+
+    # Drop shadow
+    match args.drop_shadow:
+        case "light":
+            add_drop_shadow(og_path, edit_path, DS_BG_LIGHT, DS_SHADOW_LIGHT)
+        case "dark":
+            add_drop_shadow(og_path, edit_path, DS_BG_DARK, DS_SHADOW_DARK)
+
+    # Resize
+    with Image.open(edit_path if args.drop_shadow else og_path) as img:
+        if args.size:
+            img = img.resize(args.size)
+        elif args.rescale:
+            img = img.reduce(int(1 / (args.rescale / 100)))
+        img.save(edit_path, quality=EDIT_QUALITY, method=6)
+
+    if args.clipboard:
+        copy_to_clipboard(edit_path)
+
+    if args.file is not None:
+        shutil.copyfile(edit_path, args.file)
 
 # Provides a drawing editor for the latest image
 def markup_latest(args):
@@ -290,9 +318,7 @@ elif not os.path.exists(DIR):
 match args.subcommand:
     case "take":
         take_subcommand(args)
-        pass
     case "edit":
-        print("Edit is not yet ready for use")
-        pass
+        edit_subcommand(args)
     case "markup":
         markup_latest(args)
