@@ -172,7 +172,7 @@ check_xremap_etc() {
 
   if ! [[ -e /etc/systemd/system/xremap.service ]]; then
     printf "ERR: Missing service file for xremap\n"
-    printf "\t $ please cp ~/.configs_pointer/systemd/xremap.service /etc/systemd/system/xremap.service\n"
+    printf "\t $ please cp ~/.configs_pointer/systemd/system/xremap.service /etc/systemd/system/xremap.service\n"
     return_code=1
   fi
 
@@ -435,6 +435,39 @@ check_sshdconfig() {
 }
 
 ####################
+# Docker configs
+####################
+docker_checks() {
+  check_for_docker_service
+  check_for_docker_detach_keys
+}
+
+check_for_docker_detach_keys() {
+  local return_code=0
+
+  if ! grep -q 'detachKeys' ~/.docker/config.json; then
+    printf 'ERR: Docker detach keys are not defined. Default is ^p^q\n'
+    printf '\tAdd "detachKeys": "ctrl-q,ctrl-q" to ~/.docker/config.json\n'
+    return_code=1
+  fi
+
+  if ! grep -q 'PermitRootLogin no' /etc/ssh/sshd_config; then
+    printf 'ERR: Root login permitted in /etc/ssh/sshd_config\n'
+    printf '\tSee ./ssh/template.sshd_config for an example\n'
+    return_code=1
+  fi
+
+  if grep -q 'Port 22' /etc/ssh/sshd_config || ! grep -q 'Port' /etc/ssh/sshd_config; then
+    printf 'ERR: Still using port 22 for sshd\n'
+    printf '\tSee ./ssh/template.sshd_config for an example\n'
+    return_code=1
+  fi
+
+  return $return_code
+}
+
+
+####################
 # Rust binaries
 ####################
 russy_checks() {
@@ -522,6 +555,7 @@ if [[ "$(uname -s)" == 'Linux' ]] && [[ "$1" == 'status' || "$1" == 'build' ]]; 
   aerc_checks
   git_checks
   ssh_checks
+  docker_checks
   russy_checks
 else
   print_help
