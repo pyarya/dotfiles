@@ -42,6 +42,24 @@ def get_sceenshot_path() -> Path:
     else:
         return p
 
+# Returns a free path to the last screenshot in DIR
+#
+# Example:
+#   To edit the screenshot `1669235949.png` it'll return `1669235949_edit_0.png`
+#   If `1669235949_edit_0.png` exists it returns `1669235949_edit_1.png`...
+#   Raises IndexError if no screenshot was found in DIR
+def get_edit_path(ext: str) -> (Path, Path):
+    pics = [f for f in os.listdir(DIR) if os.path.isfile(DIR / f)]
+    originals = [p for p in pics if re.fullmatch(ORIGINAL_REGEX, p)]
+    originals.sort()
+
+    latest = re.split(EXTENSION_REGEX, originals[-1])[0]
+    edits = [p for p in pics if re.fullmatch(f"{latest}_edit_[0-9]\.[A-z0-9]+", p)]
+    edits_nums = [re.fullmatch(EDIT_REGEX, e)[3] for e in edits]
+    new_index = max([int(n) for n in edits_nums] + [0]) + 1
+
+    return DIR / originals[-1], DIR / f"{latest}_edit_{new_index}.{ext}"
+
 # Copies the image to the wayland clipboard
 def copy_to_clipboard(pic: Path):
     with open(pic, 'r') as img:
@@ -210,6 +228,11 @@ edit_subcmd.add_argument(
     help='Exact dimensions of screenshot',
 );
 edit_subcmd.add_argument(
+    '-c', '--clipboard',
+    action='store_true',
+    help='Save the edited screenshot to your clipboard',
+);
+edit_subcmd.add_argument(
     '-d', '--drop-shadow',
     action='store',
     choices=['light', 'dark'],
@@ -219,7 +242,11 @@ edit_subcmd.add_argument(
     '-e', '--extension',
     type=int,
     metavar="<ext>",
-    help='Change image extension saved',
+    help='Change image extension and type saved',
+);
+edit_subcmd.add_argument(
+    "file", nargs='?', type=Path,
+    help="Save the screenshot to this file name"
 );
 # Markup ====
 markup_subcmd = subcommands.add_parser(
