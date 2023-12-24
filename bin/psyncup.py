@@ -11,8 +11,8 @@ epilog = (
     """\
 This program reads configuration from a file called """
     + CONFIG_NAME
-    + """,
-which must be in the same directory as the script runs in. For example:
+    + """, which must be
+in the same directory as the script runs in. For example:
 
 {
     "ssh_remote": "emiliko@10.0.0.1",
@@ -71,67 +71,103 @@ group.add_argument(
     action="store_true",
     help="Overwrite local with remote changes",
 )
+group.add_argument(
+    "--init",
+    type=str,
+    metavar="<remote-directory>",
+    action="store",
+    help="Initialized current directory by pulling from remote path",
+)
 
 args = parser.parse_args()
 
+
 # ==== Read in config file ====
-try:
-    with open(CONFIG_NAME, "r") as f:
-        config = json.load(f)
+def get_config():
+    global CONFIG_NAME
 
-    config["ssh_remote"]
-    config["remote_dir"]
+    try:
+        with open(CONFIG_NAME, "r") as f:
+            config = json.load(f)
 
-    # Standardize rsync's handling of tailing /
-    if config["remote_dir"][-1] == "/" and config["remote_dir"] != "/":
-        config["remote_dir"] = config["remote_dir"][:-1]
-except FileNotFoundError:
-    print(f"ERROR: {CONFIG_NAME} file was not found in this directory")
-    print(epilog)
-    exit(1)
-except KeyError as e:
-    print(f"ERROR: {CONFIG_NAME} is missing required key {e}")
-    exit(1)
+        config["ssh_remote"]
+        config["remote_dir"]
+
+        # Standardize rsync's handling of tailing /
+        if config["remote_dir"][-1] == "/" and config["remote_dir"] != "/":
+            config["remote_dir"] = config["remote_dir"][:-1]
+    except FileNotFoundError:
+        print(f"ERROR: {CONFIG_NAME} file was not found in this directory")
+        print(epilog)
+        exit(1)
+    except KeyError as e:
+        print(f"ERROR: {CONFIG_NAME} is missing required key {e}")
+        exit(1)
+
+    return config
+
 
 # ==== Construct an rsync command ====
-rsync_cmd = [
-    "rsync",
-    "--archive",
-    "--human-readable",
-]
+def build_commands(args, config):
+    rsync_cmd = [
+        "rsync",
+        "--archive",
+        "--human-readable",
+    ]
 
-if not args.no_compress:
-    rsync_cmd.append("--compress")
+    if not args.no_compress:
+        rsync_cmd.append("--compress")
 
-if not args.no_delete:
-    rsync_cmd.append("--delete-during")
+    if not args.no_delete:
+        rsync_cmd.append("--delete-during")
 
-if args.dry_run:
-    rsync_cmd.append("--dry-run")
+    if args.dry_run:
+        rsync_cmd.append("--dry-run")
 
-if args.debug:
-    rsync_cmd.append("--info=progress2")
+    if args.debug:
+        rsync_cmd.append("--info=progress2")
 
-if config.get("exclude") is not None:
-    for x in config["exclude"]:
-        rsync_cmd.append(f"--exclude={x}")
+    if config.get("exclude") is not None:
+        for x in config["exclude"]:
+            rsync_cmd.append(f"--exclude={x}")
 
-ssh_cmd = [
-    "ssh",
-    config["ssh_remote"],
-    f"cat {config['remote_dir']}/{CONFIG_NAME}",
-]
+    ssh_cmd = [
+        "ssh",
+        config["ssh_remote"],
+        f"cat {config['remote_dir']}/{CONFIG_NAME}",
+    ]
 
-remote_dir_str = config["ssh_remote"] + ":" + config["remote_dir"] + "/"
+    remote_dir_str = config["ssh_remote"] + ":" + config["remote_dir"] + "/"
 
-if args.debug:
-    print("DEBUG rsync command: ", rsync_cmd)
-    print("DEBUG ssh copy command: ", ssh_cmd)
-    print("DEBUG rsync remote directory path: ", remote_dir_str)
+    if args.debug:
+        print("DEBUG rsync command: ", rsync_cmd)
+        print("DEBUG ssh copy command: ", ssh_cmd)
+        print("DEBUG rsync remote directory path: ", remote_dir_str)
+
+    return rsync_cmd, ssh_cmd, remote_dir_str
 
 
 # ==== Perform command =====
-def run_check():
+def run_init(remote_dir, is_debug=False):
+    rsync_cmd = [
+        "rsync",
+        f"{remote_dir}/{CONFIG_NAME}",
+        ".",
+    ]
+
+    if is_debug:
+        print("DEBUG rsync init cmd: ", rsync_cmd)
+
+    rsync_code = subprocess.call(rsync_cmd)
+
+    if rsync_code != 0:
+        if is_debug:
+            print(f"rsync exited with code {rsync_code}")
+        print(f"Failed to get {CONFIG_NAME} from {remote_dir}")
+        exit(1)
+
+
+def run_check(ssh_cmd, config):
     check = subprocess.Popen(
         ssh_cmd,
         stdin=subprocess.DEVNULL,
@@ -163,7 +199,7 @@ def run_check():
         print("Up to date with remote")
 
 
-def run_up():
+def run_up(rsync_cmd, remote_dir_str, config):
     rsync_cmd.append(os.getcwd() + "/")
     rsync_cmd.append(remote_dir_str)
 
@@ -180,7 +216,7 @@ def run_up():
         exit(1)
 
 
-def run_down():
+def run_down(rsync_cmd, remote_dir_str):
     rsync_cmd.append(remote_dir_str)
     rsync_cmd.append(os.getcwd())
 
@@ -192,12 +228,21 @@ def run_down():
 
 
 if __name__ == "__main__":
+    if args.init:
+        run_init(args.init, args.debug)
+        args.down = True
+
+    config = get_config()
+
     if args.check:
-        run_check()
+        _, ssh_cmd, _ = build_commands(args, config)
+        run_check(ssh_cmd, config)
     elif args.up:
-        run_up()
+        rsync_cmd, _, remote_dir_str = build_commands(args, config)
+        run_up(rsync_cmd, remote_dir_str, config)
     elif args.down:
-        run_down()
+        rsync_cmd, _, remote_dir_str = build_commands(args, config)
+        run_down(rsync_cmd, remote_dir_str)
     else:
         print("Unexpected error")
         exit(2)
