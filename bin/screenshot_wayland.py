@@ -240,7 +240,6 @@ def parse_tar(s: str) -> Path:
     else:
         raise Exception(f"{s} is not a path to a .{{tar,tgz,tar.gz}} file")
 
-
 parser = argparse.ArgumentParser(
     prog="Screenshot Wayland v1.0.0",
     description='Take a screenshot on Sway'
@@ -345,14 +344,16 @@ archive_subcmd = subcommands.add_parser(
 archive_subcmd.add_argument(
     '-e', '--extension',
     type=str,
+    default=DEFAULT_EDIT_EXTENSION,
     metavar="<ext>",
     help='Change image extension and image type backed up',
 );
 archive_subcmd.add_argument(
     '-q', '--quality',
     type=parse_percent,
+    default=DEFAULT_EDIT_QUALITY,
     metavar='<N%>',
-    help='Set quality of new image. [0, 100], higher means bigger file',
+    help='Set quality of backed up images. [0, 100], higher means bigger file',
 );
 archive_subcmd.add_argument(
     'which', metavar='<which>',
