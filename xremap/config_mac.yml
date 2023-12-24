@@ -13,7 +13,7 @@ keymap:
       sleep: l
   - name: Emacs-ish
     application:
-      not: [Alacritty, zathura, org.pwmt.zathura, vimiv]
+      not: [Alacritty, zathura, org.pwmt.zathura, vimiv, xfce4-terminal.Xfce4-terminal]
     remap:
       C-j: left
       C-f: right
