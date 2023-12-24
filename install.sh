@@ -18,6 +18,7 @@ declare -r UNIX_CONFIGS=(\
     mako                         ~/.config/mako
     mpv                          ~/.config/mpv
     chromium/chromium-flags.conf ~/.config/chromium-flags.conf
+    chromium/electron-flags.conf ~/.config/electron-flags.conf
     ripgrep                      ~/.config/ripgrep
     swappy                       ~/.config/swappy
     tmux                         ~/.config/tmux
