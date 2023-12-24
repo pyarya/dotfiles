@@ -123,6 +123,9 @@ nnoremap <leader><leader>= :vertical resize 84<CR>
     " Show full file path
 nnoremap <C-g> 1<C-g>
 
+    " Change cwd to current buffer's
+nnoremap gf :cd %:p:h<CR>
+
 " Editing remaps ========================================
 " Uppercase previous word from Insert mode
 inoremap <C-y> <ESC>vbU`>a
@@ -156,11 +159,11 @@ nnoremap <silent> <leader>ourl :silent call OpenURL()<CR>
 command! Url :silent call OpenURL()
 
     " Create a pretty block comment. Supports 3 types of comments
-nnoremap <leader>opretty :call PrettySectionComment()<CR>
-command! Pretty :call PrettySectionComment('#')
-command! Prettyc :call PrettySectionComment('/*')
+command! Prettypy :call PrettySectionComment('#')
+command! Prettyhtml :call PrettySectionComment("<!--")
 command! Prettyrs :call PrettySectionComment('//')
-command! Prettyjs :call PrettySectionComment('//')
+command! Prettycss :call PrettySectionComment('/*')
+nnoremap <leader>opretty :echom "use :Pretty{rs,py,css}"<cr>
 
     " Open with vifm
 nnoremap <leader>onet :EditVifm getcwd()<CR>

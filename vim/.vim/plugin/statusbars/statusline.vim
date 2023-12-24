@@ -89,7 +89,7 @@ function! SetGlobalPrimaryColor()
     let l:mode = mode()  " Returns vim's current mode
 
     if l:mode ==# 'n'
-        let g:StatlnPrimaryColor = GuiColors(synIDattr(synIDtrans(hlID('String')), 'fg', 'gui'), '#AFAF00')
+        let g:StatlnPrimaryColor = GuiColors(synIDattr(synIDtrans(hlID('String')), 'fg', 'gui'), '#b8bb26')
         let g:mode_str = 'NORMAL'  " Light green
     elseif l:mode ==# 'i'
         let g:StatlnPrimaryColor = GuiColors(synIDattr(synIDtrans(hlID('Function')), 'fg', 'gui'), '#83ADAD')
