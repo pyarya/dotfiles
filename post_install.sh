@@ -145,6 +145,7 @@ xremap_checks() {
   check_xremap_etc
   check_xremap_executable
   check_xremap_systemd
+  check_xremap_sudoer
 }
 
 check_xremap_config() {
@@ -201,6 +202,18 @@ check_xremap_systemd() {
   if ! systemctl is-active --quiet xremap &>/dev/null; then
     printf "ERR: systemd is not running xremap.service\n"
     printf "\t $ systemctl start xremap\n"
+    return_code=1
+  fi
+
+  return $return_code
+}
+
+check_xremap_sudoer() {
+  local return_code=0
+
+  if ! sudo -l | grep -Eq 'NOPASSWD:[[:space:]]+/usr/bin/systemctl restart xremap.service'; then
+    printf "ERR: xremap.service not passwordless for sudoers\n"
+    printf "\t $ please echo \"%wheel ALL=NOPASSWD: /usr/bin/systemctl restart xremap.service\" >> /etc/sudoers.d/xremap\n"
     return_code=1
   fi
 
@@ -300,9 +313,9 @@ check_vimiv_plugin() {
   if ! [[ -e /usr/lib/qt/plugins/imageformats/libqavif.so ]]; then
     printf "ERR: Missing avif support for vimiv\n"
     cat <<HELP
-    $ curl -LO 'https://github.com/novomesk/qt-avif-image-plugin/archive/refs/tags/v0.5.0.tar.gz'
-    $ tar xf qt-avif-image-plugin-0.5.0.tar.gz
-    $ cd qt-avif-image-plugin-0.5.0
+    $ curl -LO 'https://github.com/novomesk/qt-avif-image-plugin/archive/refs/tags/v0.5.1.tar.gz'
+    $ tar xf qt-avif-image-plugin-0.5.1.tar.gz
+    $ cd qt-avif-image-plugin-0.5.1
     $ ./build_libqavif_dynamic.sh
     $ please make install
 HELP

@@ -69,5 +69,5 @@ case "$(echo "$1" | awk '{print tolower($0)}')" in
     ;;
 esac
 
-systemctl restart xremap
+sudo /usr/bin/systemctl restart xremap.service
 sleep 2
