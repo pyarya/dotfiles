@@ -1,46 +1,44 @@
 #!/usr/bin/env bash
-# Look through `upower --dump` to set the battery path variable
-declare -r BATTERY_PATH="$1"
-declare -r WRITE_PATH="$2"
+# Look into /sys/class/power_supply for your battery-name. It's one of the
+# symlinks
+
+declare -r battery_name="$1"
+declare -r write_path="$2"
 
 if [[ $# -ne 2 ]]; then
-  echo "USAGE: $(basename "$0") <battery-path> <csv-path>"
+  cat <<HELP
+log_battery systemd.timer v2.0
+
+USAGE: $(basename "$0") <battery-name> <csv-path>"
+
+EXAMPLES:
+    $(basename "$0") BAT0 /home/emiliko/loggers/battery.csv
+HELP
   exit 1
-elif [[ ! -e "$WRITE_PATH" && -d "$(dirname "$WRITE_PATH")" ]]; then
-  echo "hostname,time,charge,percent,state" > "$WRITE_PATH"
+elif [[ ! -e "$write_path" && -d "$(dirname "$write_path")" ]]; then
+  echo "hostname,time,charge,charge_full,percent,state,energy_rate" > "$write_path"
 fi
 
-declare -r tmp_file="$(mktemp)"
+declare -r $(xargs -0 < "/sys/class/power_supply/${battery_name}/uevent")
 
-upower --dump > "$tmp_file"
-
-declare system_name="$(hostname)"
-declare current_time="$(date -u +"%Y-%m-%d %H:%M:%S UTC")"
-
-upower --dump | awk '
-BEGIN { b = "'"$BATTERY_PATH"'"; t=0 }
-
-t && (match($0, /Device:/) || match($0, /Daemon:/)) {
-  exit
+awk \
+  -v hostname="$(hostname)" \
+  -v time="$(date -u +"%Y-%m-%d %H:%M:%S UTC")" \
+  -v state="$POWER_SUPPLY_STATUS" \
+  -v a="$POWER_SUPPLY_CHARGE_NOW" \
+  -v b="$POWER_SUPPLY_CHARGE_FULL" \
+  -v c="$POWER_SUPPLY_CHARGE_FULL_DESIGN" \
+  -v d="$POWER_SUPPLY_VOLTAGE_NOW" \
+  -v e="$POWER_SUPPLY_CURRENT_NOW" \
+  -v f="$POWER_SUPPLY_VOLTAGE_MIN_DESIGN" \
+'
+BEGIN {
+  printf "%s,%s,", hostname, time
+  printf "%0.4f,", a*f/10**12  # Charge in Wh
+  printf "%0.4f,", b*f/10**12  # Charge when full in Wh
+  printf "%0.2f%%,", a/b*100   # Battery capacity in percent
+  printf "%s,", state
+  # Energy rate in W is always absolute, so use state to determine +/-
+  printf "%0.4f\n", e*d/10**12
 }
-
-match($0, b) { t=1 }
-
-t && match($0, /energy:/) {
-  split($0,a," ")
-  energy = a[2]
-}
-
-t && match($0, /percentage:/) {
-  split($0,a," ")
-  percent = a[2]
-}
-
-t && match($0, /state:/) {
-  split($0,a," ")
-  state = a[2]
-}
-
-END {
-  print "'"${system_name},${current_time},"'"energy","percent","state
-}' >> "$WRITE_PATH"
+' | awk '{print tolower($0)}' >> "$write_path"
