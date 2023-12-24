@@ -237,11 +237,10 @@ print_config_status() {
 print_install_completion_msg() {
   cat <<END
 
-Dotfile installation complete. If you have an internet connection, run
+Dotfile installation complete.
 
-  ./install_packages.sh
-
-to complete the config installation.
+To install packages, run: \`./package_install.sh help\`
+To check additional options, run: \`./post_install.sh help\`
 END
 }
 
@@ -345,5 +344,3 @@ iterate_over_configs() {
 }
 
 main "$@"
-
-# vim: set ft=bash syn=bash sw=2 ff=unix:

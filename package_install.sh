@@ -305,5 +305,3 @@ ask () {
 
 
 main "$@"
-
-# vim: set ft=bash syn=bash sw=2 ff=unix:
