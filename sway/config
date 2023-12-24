@@ -305,7 +305,8 @@ mode "screenshots" {
     # 1. Get screenshot
     bindsym a exec $screenshot_script take select -c $screenshot_tmp && $screenshot_sound
     bindsym f exec $screenshot_script take full -c $screenshot_tmp && $screenshot_sound
-    bindsym m mode "default"; exec $screenshot_script markup
+    bindsym m mode "default"; exec $screenshot_script markup -c $screenshot_tmp && $screenshot_sound
+    bindsym g mode "default"; exec gimp $($screenshot_script markup --show-latest)
 
     # 2. Downsize the screenshot, since 4k is too big
     bindsym 1 exec $screenshot_script edit -c -e png -q '40%' -r '50%' $screenshot_tmp && $screenshot_sound

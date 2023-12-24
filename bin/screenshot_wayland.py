@@ -30,13 +30,6 @@ DS_SHADOW_DARK = 'black'
 DEFAULT_EDIT_QUALITY = 50
 DEFAULT_EDIT_EXTENSION = 'avif'
 
-# Returns the path of the latest screenshot
-def get_latest_sceenshot_path() -> Path:
-    pics = [f for f in os.listdir(DIR) if os.path.isfile(DIR / f)]
-    pngs = [p for p in pics if re.fullmatch("[0-9_]+\.png", p)]
-    pngs.sort()
-    return DIR / pngs[-1]
-
 # Returns a path to an unused screenshot in DIR
 def get_sceenshot_path() -> Path:
     t = time.time()
@@ -48,6 +41,7 @@ def get_sceenshot_path() -> Path:
         return p
 
 # Returns a free path to the last screenshot in DIR
+#   (original_path, new_edit_path)
 #
 # Example:
 #   To edit the screenshot `1669235949.png` it'll return `1669235949_edit_0.png`
@@ -196,16 +190,20 @@ def archive_subcommand(args):
             tar.add(pic, arcname=pic.name)
 
 # Provides a drawing editor for the latest image
-def markup_latest(args):
-    img = get_latest_sceenshot_path()
+def markup_subcommand(args):
+    og_path, edit_path = get_edit_path('png')
 
-    if args.gimp:
-        print("TODO gimp")
-    else:
-        run(["swappy", img]).check_returncode()
+    if args.show_latest:
+        print(og_path)
+        return
+
+    run(["swappy", "-f", og_path, "-o", edit_path]).check_returncode()
 
     if args.clipboard:
-        copy_to_clipboard(img)
+        copy_to_clipboard(edit_path)
+
+    if args.file is not None:
+        shutil.copyfile(edit_path, args.file)
 
 # ===================================================================
 # Parse args
@@ -381,10 +379,15 @@ markup_subcmd.add_argument(
     help='Save the screenshot to your clipboard',
 );
 markup_subcmd.add_argument(
-    '--gimp',
+    '-s', '--show-latest',
     action='store_true',
-    help='Edit via gimp, instead of swappy',
+    help='Show the path to the latest image and exit',
 );
+markup_subcmd.add_argument(
+    "file", nargs='?', type=Path,
+    help="Save the edited screenshot to this file name",
+);
+
 args = parser.parse_args();
 
 # Second layer of parser checks
@@ -405,6 +408,4 @@ match args.subcommand:
     case "archive":
         archive_subcommand(args)
     case "markup":
-        print("Markup is not ready for use yet")
-        exit(1)
-        markup_latest(args)
+        markup_subcommand(args)
