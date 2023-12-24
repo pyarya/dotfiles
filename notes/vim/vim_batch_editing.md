@@ -35,11 +35,15 @@ visual mode
 :21             Goes to line 21. ^ and $ are for the first and last line
 :10,20d         Deletes lines 10 through 20, inclusive on both ends
 :u[ndo]         Undoes the last action
+:mark a         Makes a mark at a. From vim
+:ka             Also makes a mark at a. From ex
+:'a             Go to mark a
 :g/re/p         Globally exectute a command on lines with /re/
 :v/re/p         Inverse of :g. Executes on all lines without /re/
 :3,6co$         Copy lines [3,6] to the end of the document
 :3m6            Move line 3 to line 6
 :z=3            Pretty print lines in [-2,+2]
+:norm! @l       Execute keystrokes, if all else fails
 ```
 
 Several commands can be chained with `|`, similar to `;` in bash
