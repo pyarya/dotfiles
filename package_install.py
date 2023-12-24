@@ -335,11 +335,12 @@ WEB_INSTALLS = [
     },
 ]
 
+
 def extra_installs():
     rustup_cmd = [
-       "bash",
-       "-c",
-       "curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh",
+        "bash",
+        "-c",
+        "curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh",
     ]
 
     tmp_cmds = [
@@ -359,9 +360,7 @@ def extra_installs():
     if not shutil.which("rustc") and prompt_user("rustup"):
         subprocess.call(rustup_cmd)
 
-    has_tmp = os.path.exists(
-        f"{os.environ['HOME']}/.config/tmux/plugins/tpm/tpm"
-    )
+    has_tmp = os.path.exists(f"{os.environ['HOME']}/.config/tmux/plugins/tpm/tpm")
 
     if not has_tmp and prompt_user("tmp, tmux's package manager"):
         success = subprocess.call(tmp_cmds[0]) == 0
@@ -386,14 +385,15 @@ def find_package_manager():
     else:
         raise Exception("Supported package manager not found")
 
+
 def check_installed(pkg, apt):
-    if pkg.get("executable_name") and shutil.which(pkg['executable_name']):
+    if pkg.get("executable_name") and shutil.which(pkg["executable_name"]):
         return "true"
-    elif not pkg.get(apt['name']):
+    elif not pkg.get(apt["name"]):
         return "unavailable"
 
     check_cmd = list(apt["check_installed"])
-    check_cmd.append(pkg[apt['name']])
+    check_cmd.append(pkg[apt["name"]])
 
     check = subprocess.Popen(
         check_cmd,
@@ -408,18 +408,20 @@ def check_installed(pkg, apt):
     else:
         return "false"
 
+
 def prompt_user(pkg_name):
     while True:
         user_in = input(f"Install {pkg_name}? (Y/n) ")
 
-        if user_in == "" or user_in[0].lower() == 'y':
+        if user_in == "" or user_in[0].lower() == "y":
             return True
-        elif user_in[0].lower() == 'n':
+        elif user_in[0].lower() == "n":
             return False
 
+
 def install_package(apt, package):
-    install_cmd = list(apt['install_cmd'])
-    install_cmd.append(package[apt['name']])
+    install_cmd = list(apt["install_cmd"])
+    install_cmd.append(package[apt["name"]])
 
     install = subprocess.call(install_cmd)
 
@@ -430,7 +432,7 @@ def install_packages(apt):
     global PACKAGES
 
     for package in PACKAGES:
-        pkg_name = package['global_name']
+        pkg_name = package["global_name"]
         installed = check_installed(package, apt)
 
         if installed == "unavailable":
@@ -445,20 +447,21 @@ def install_packages(apt):
         else:
             print(f"φ Not installing {pkg_name}")
 
+
 def web_installs():
     global WEB_INSTALLS
 
     for package in WEB_INSTALLS:
-        if not os.path.exists(package['dest']) and prompt_user(package['name']):
+        if not os.path.exists(package["dest"]) and prompt_user(package["name"]):
             subprocess.call(
                 "curl",
                 "--output",
-                package['dest'],
-                package['url'],
+                package["dest"],
+                package["url"],
             )
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     try:
         apt = find_package_manager()
         print(f"Identified `{apt['name']}` as system package manager")
