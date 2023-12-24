@@ -2,6 +2,7 @@
 import argparse
 import re
 import sys
+import os
 from subprocess import Popen
 
 SSH_RE = re.compile(r"(ssh://)?git@([^/]+):([^/]+)/([^/]+)(/[^/]+)?.*")
@@ -43,4 +44,12 @@ git_cmd = ["git", "clone", ssh_url]
 if args.out_name is not None:
     git_cmd.append(args.out_name)
 
+initial_dirs = set(filter(lambda x: os.path.isdir(x), os.listdir()))
+
 Popen(git_cmd).wait()
+
+current_dirs = set(filter(lambda x: os.path.isdir(x), os.listdir()))
+new_dirs = current_dirs - initial_dirs
+
+if len(new_dirs) == 1:
+    print(f"====\nCloned in `{list(new_dirs)[0]}`")
