@@ -283,6 +283,42 @@ check_libavif() {
   return $return_code
 }
 
+####################
+# Aerc
+####################
+aerc_checks() {
+  check_aerc_accounts
+}
+
+check_aerc_accounts() {
+  local return_code=0
+
+  if [[ "$(stat -c "%a" ~/.configs_pointer/aerc/accounts.conf)" != "600" ]]; then
+    printf "ERR: Aerc's accounts.conf is missing permissions 600\n"
+    return_code=1
+  fi
+
+  return $return_code
+}
+
+####################
+# Git
+####################
+git_checks() {
+  check_gitconfig
+}
+
+check_gitconfig() {
+  local return_code=0
+
+  if ! [[ -r ~/.gitconfig ]]; then
+    printf 'ERR: Missing global gitconfig at ~/.gitconfig\n'
+    return_code=1
+  fi
+
+  return $return_code
+}
+
 if [[ "$1" == 'status' && "$(uname -s)" == 'Linux' ]]; then
   configs_pointer_is_setup || exit 1
 
@@ -293,6 +329,8 @@ if [[ "$1" == 'status' && "$(uname -s)" == 'Linux' ]]; then
   fcitx_checks
   av1_checks
   tmux_check
+  aerc_checks
+  git_checks
 else
   print_help
 fi
