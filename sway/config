@@ -294,8 +294,8 @@ exec sudo ~/.configs_pointer/bin/switch_keyboard.sh pc
 bindsym $mod1+i exec ~/.config/sway/toggle_fcitx.sh
   # Mako notifications
 exec mako
-  # Exit sway (logs you out of your Wayland session)
-bindsym $mod2+Escape exec swaynag -t warning -m 'Are you sure you want to exit sway?' -b 'Yes, exit sway' 'swaymsg exit'
+  # Exit sway (hit 3 times repeatedly to force exit)
+bindsym $mod2+Escape exec ~/.config/sway/sway_exit.sh
 
 # Screenshots ====
 bindsym $mod2+6 mode "screenshots"
