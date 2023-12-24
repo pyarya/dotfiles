@@ -57,6 +57,10 @@ viw() {
   fi
 }
 
+manpy() {
+  ~/.configs_pointer/bin/man_py.sh $@
+}
+
 # Ronald's Universal Number Kounter, standardized syntax for unix calculators
 # BSD-style arguments. v for verbose. c/p/b for the corresponding calculator
 # Syntax features:
