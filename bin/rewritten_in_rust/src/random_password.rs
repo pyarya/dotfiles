@@ -1,7 +1,9 @@
 use clap::Parser;
 use rand::{RngCore, rngs::OsRng};
-use std::io::Write;
+use std::fs::{File, OpenOptions};
 use std::process::{Command, Stdio};
+use std::path::PathBuf;
+use std::io::{self, BufReader, BufRead, Write};
 
 #[derive(Parser, Debug)]
 #[command(name = "random_password", author, version = "0.1.0")]
@@ -10,7 +12,10 @@ struct Args {
     /// Copy to clipboard instead of printing to stdout
     #[arg(short = 'c', long = "clipboard")]
     is_clipboard: bool,
-    /// Length of the generated password
+    /// Use a diceware-style passsword, made of words, instead
+    #[arg(short = 'd', long = "dice")]
+    diceware: Option<PathBuf>,
+    /// Length of the generated password. In words with diceware
     #[arg(value_name = "LENGTH")]
     pass_length: u8,
 }
@@ -54,17 +59,37 @@ fn main() {
 
     let mut key = [0_u8; 256];
 
-    loop {
-        OsRng.fill_bytes(&mut key);
-        pass = encode_to_password(&key);
-        trimmed = &pass[..args.pass_length as usize];
+    if args.diceware.is_none() {
+        loop {
+            OsRng.fill_bytes(&mut key);
+            pass = encode_to_password(&key);
+            trimmed = &pass[..args.pass_length as usize];
 
-        let distro = CharDistro::from(trimmed);
-        let is_enough_special = distro.special >= (args.pass_length / 10 + 1) as usize;
+            let distro = CharDistro::from(trimmed);
+            let is_enough_special = distro.special >= (args.pass_length / 10 + 1) as usize;
 
-        if distro.all_nonzero() && is_enough_special && has_two_special(trimmed) {
-            break;
+            if distro.all_nonzero() && is_enough_special && has_two_special(trimmed) {
+                break;
+            }
         }
+    } else if args.diceware.as_ref().unwrap().exists() {
+        let nb_lines = BufReader::new(File::open(args.diceware.as_ref().unwrap())
+            .expect("Unable to open word-list file"))
+            .lines()
+            .count();
+
+        let indices: Vec<u64> = (0..args.pass_length)
+            .map(|_| OsRng.next_u64() % nb_lines as u64)
+            .collect();
+
+        pass = index_lines(args.diceware.as_ref().unwrap(), &indices)
+            .unwrap()
+            .join("8");
+
+        trimmed = &pass;
+    } else {
+        eprintln!("Error: No such file `{:?}`", args.diceware.unwrap());
+        std::process::exit(1);
     }
 
     if args.is_clipboard {
@@ -99,6 +124,24 @@ fn encode_to_password(key: &[u8; 256]) -> String {
     }
 
     pass
+}
+
+fn index_lines(p: &PathBuf, indices: &[u64]) -> io::Result<Vec<String>> {
+    let f = OpenOptions::new()
+        .write(false)
+        .read(true)
+        .create(false)
+        .open(p)?;
+
+    let word_list: Vec<String> = BufReader::new(f).lines()
+        .map(|l| l.expect("Failed to read line in provided words list"))
+        .collect();
+
+    Ok(indices.iter()
+        .map(|i| word_list[*i as usize].clone())
+        .collect())
+
+    //Ok(lines)
 }
 
 fn has_two_special(s: &str) -> bool {
