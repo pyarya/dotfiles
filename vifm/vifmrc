@@ -302,6 +302,7 @@ nnoremap <space>; :fdmvcursor<cr>
 " ===================================================================
 " Directory-local options, see :h vifm-'sort'
 autocmd DirEnter ~/Downloads setlocal sort=-mtime
+autocmd DirEnter /dev/shm setlocal sort=-mtime
 
 " Tmux won't work with sixel at all. Alacritty is currently very unstable with
 " it and flickers a lot. Set $TMUX for blurrier faster version. Quanity on

@@ -361,12 +361,15 @@ mode "mpv_global" {
     bindsym j exec ~/.config/sway/mpv_keys.sh 'j'
     bindsym k exec ~/.config/sway/mpv_keys.sh 'k'
     bindsym l exec ~/.config/sway/mpv_keys.sh 'l'
+    bindsym Left exec ~/.config/sway/mpv_keys.sh 'LEFT'
+    bindsym Right exec ~/.config/sway/mpv_keys.sh 'RIGHT'
     bindsym space exec ~/.config/sway/mpv_keys.sh 'SPACE'
     bindsym bracketleft exec ~/.config/sway/mpv_keys.sh '['
     bindsym bracketright exec ~/.config/sway/mpv_keys.sh ']'
     bindsym minus exec ~/.config/sway/mpv_keys.sh '-'
     bindsym equal exec ~/.config/sway/mpv_keys.sh '='
     bindsym m exec ~/.config/sway/mpv_keys.sh 'm'
+    bindsym A exec ~/.config/sway/mpv_keys.sh 'A'
 
     bindsym return mode "default"
     bindsym Ctrl+k mode "default"
