@@ -19,12 +19,14 @@ alias mkdir='mkdir -p'
 alias bat='bat --paging=never'
 alias tt='/usr/bin/time -f "%MKB, %es"'
 alias colo='colo.sh'
+alias rsync='rsync -h --info=progress2'
 
 # Other
 alias mem='top -l 1 -s 0 | grep PhysMem'
 alias please='sudo -E '
 alias cc="clang -Wall -Wextra -Werror -O2 -std=c99 -pedantic"
 alias lsblkf="lsblk -o name,label,fstype,mountpoint,fsused,size,state"
+alias lsblkfa="lsblk -o name,label,fstype,mountpoints,fsused,size,state"
 alias mr='make run'
 alias ed="ed -p '> :'"
 alias ra='rg --no-ignore -.'
