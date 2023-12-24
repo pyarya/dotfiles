@@ -58,7 +58,7 @@ viw() {
 }
 
 # Ronald's Universal Number Kounter, standardized syntax for unix calculators
-# Use v as the first argument for verbosity/debugging
+# BSD-style arguments. v for verbose. c/p/b for the corresponding calculator
 # Syntax features:
 #   ^ and ** both work for exponentiation
 #   log()  is base 10
@@ -67,14 +67,26 @@ viw() {
 # Careful when changing order or sed might sed itself!
 runk() {
   local -i is_verbose=0
-  if [[ "$1" == v ]]; then
+  local override=""
+
+  if [[ -n "$2" ]]; then
+    if [[ "$1" =~ v ]]; then
+      is_verbose=1
+    fi
+
+    if [[ "$1" =~ c ]]; then
+      override="c"
+    elif [[ "$1" =~ p ]]; then
+      override="p"
+    elif [[ "$1" =~ b ]]; then
+      override="b"
+    fi
     shift 1
-    is_verbose=1
   fi
 
-  local calc_ver="$(echo "$@" | sed \
+  local calc_ver="($(echo "$@" | sed \
     -e 's#log2(\([^)]\+\))#(log(\1)/log(2))#g' \
-  )"
+  ))"
   local py_ver="$(echo "$@" | sed \
     -e 's#\^#**#g' \
     -e 's#\(log([^)]\+)\)#(\1/log(10))#g' \
@@ -87,22 +99,15 @@ runk() {
     -e 's#log2(\([^)]\+\))#(l(\1)/l(2))#g' \
   )"
 
-  if [[ $is_verbose -eq 1 ]]; then
-    if command -v calc &>/dev/null; then
-      printf 'Using calc:  %s\n' "$calc_ver"
-    elif command -v python3 &>/dev/null; then
-      printf 'Using python:  %s\n' "$py_ver"
-    else
-      printf 'Using benchcalc:  %s\n' "$bc_ver"
-    fi
-  fi
-
-  if command -v calc &>/dev/null; then
+  if command -v calc &>/dev/null && [[ -z "$override" ]] || [[ "$override" == c ]]; then
     calc "$calc_ver"
-  elif command -v python3 &>/dev/null; then
+    if [[ $is_verbose -eq 1 ]]; then printf 'Using calc:  %s\n' "$calc_ver"; fi
+  elif command -v python3 &>/dev/null && [[ -z "$override" ]] || [[ "$override" == p ]]; then
     python3 -c "from math import *; print($py_ver)"
+    if [[ $is_verbose -eq 1 ]]; then printf 'Using python:  %s\n' "$py_ver"; fi
   else
     echo "$bc_ver" | bc --mathlib
+    if [[ $is_verbose -eq 1 ]]; then printf 'Using benchcalc:  %s\n' "$bc_ver"; fi
   fi
 }
 
