@@ -9,9 +9,6 @@ modmap:
       Super_l: Alt_l
       Alt_r: Super_r
       Super_r: Alt_r
-  - name: Closer-Esc
-    remap:
-      Control_l: KEY_ESC
 
 keymap:
   - name: disable-sleep
@@ -33,6 +30,7 @@ keymap:
       C-e: end
 
       C-u: { with_mark: Shift-C-Left }
+      C-i: { with_mark: Shift-end }
 
       C-h: [backspace, { set_mark: false}]
       C-d: [delete, { set_mark: false}]
@@ -46,6 +44,7 @@ keymap:
       not: [Alacritty]
     remap:
       Super_l-a: C-a
+      Super_l-Shift-a: Super_l-Shift-a
 
   - name: Browsers
     # Similar-ish to MacOS. We bind to Alt instead of Super, since Ctrl is

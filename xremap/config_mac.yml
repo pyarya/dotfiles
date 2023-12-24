@@ -27,6 +27,7 @@ keymap:
       C-e: end
 
       C-u: { with_mark: Shift-C-Left }
+      C-i: { with_mark: Shift-end }
 
       C-h: [backspace, { set_mark: false}]
       C-d: [delete, { set_mark: false}]

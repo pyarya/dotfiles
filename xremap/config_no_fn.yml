@@ -48,6 +48,7 @@ keymap:
       not: [Alacritty]
     remap:
       Super_l-a: C-a
+      Super_l-Shift-a: Super_l-Shift-a
 
   - name: Browsers
     # Similar-ish to MacOS. We bind to Alt instead of Super, since Ctrl is
@@ -65,6 +66,7 @@ keymap:
       Alt_l-f: Control_r-f
         # Extended emacs for discord and online editors
       C-k: Shift-end
+      C-i: Shift-end
         # Stop getting stuck in tabs without vimium
       Alt_l-j: Control_r-Shift-Tab
       Alt_l-k: Control_r-Tab
