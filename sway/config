@@ -358,6 +358,23 @@ mode "shrink_screenshots" {
     bindsym Escape mode "default"
 }
 
+# Global mpv ====
+bindsym $mod2+m mode "mpv_global"
+
+mode "mpv_global" {
+    bindsym bracketleft exec ~/.config/sway/mpv_keys.sh '['
+    bindsym bracketright exec ~/.config/sway/mpv_keys.sh ']'
+    bindsym j exec ~/.config/sway/mpv_keys.sh 'j'
+    bindsym k exec ~/.config/sway/mpv_keys.sh 'k'
+    bindsym l exec ~/.config/sway/mpv_keys.sh 'l'
+    bindsym minus exec ~/.config/sway/mpv_keys.sh '-'
+    bindsym equal exec ~/.config/sway/mpv_keys.sh '='
+
+    bindsym return mode "default"
+    bindsym Ctrl+k mode "default"
+    bindsym Escape mode "default"
+}
+
 #╔─────────────────────────────────────────────────────────────────────────────╗
 #│ Sτylεs                                                                      |
 #╚─────────────────────────────────────────────────────────────────────────────╝
