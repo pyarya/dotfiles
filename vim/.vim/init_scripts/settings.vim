@@ -139,7 +139,7 @@ command! Light3  :colo base16-atelier-estuary-light | FH
 command! Light4  :colo base16-atelier-plateau-light | FH
 
 " Switch theme to match terminal  ====
-if !has('termguicolors') || system("ps -e | awk '$4 ~ /Xorg|alacritty|sway/ {has_gui = 1} END {print has_gui + 0}'") == "0"
+if !has('termguicolors') || system("ps -e | awk '$4 ~ /Xorg|alacritty|sway/ {has_gui = 1} END {printf \"%d\", has_gui + 0}'") == "0"
     colo default
 elseif executable('colo.sh')
     exec 'colo ' . system('colo.sh --colorscheme')
