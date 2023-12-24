@@ -6,7 +6,7 @@
 #  - pip install --user pillow-avif-plugin  # Until PIL merges avif support
 #  - grim
 #  - swappy
-import argparse, os, time, re, shutil, pillow_avif
+import argparse, os, sys, time, re, shutil, tarfile, tempfile, pillow_avif
 from subprocess import run, Popen, PIPE, DEVNULL
 from PIL import Image
 from PIL.ImageFilter import GaussianBlur
@@ -154,6 +154,41 @@ def edit_subcommand(args):
     if args.file is not None:
         shutil.copyfile(edit_path, args.file)
 
+# Saves `DIR` into a tar file
+def archive_subcommand(args):
+    # Get the list of images to backup
+    all_pics = [f for f in os.listdir(DIR) if os.path.isfile(DIR / f)]
+    pics = [p for p in all_pics if re.fullmatch(ORIGINAL_REGEX, p)]
+
+    if args.which == "all":
+        pics += [p for p in all_pics if re.fullmatch(EDIT_REGEX, p)]
+
+    pics = [Path(p) for p in pics]
+
+    # Write compressed pictures to tmpdir with progress bar
+    TMP_DIR = tempfile.mkdtemp()
+    ext = f'.{args.extension}'
+    count = len(pics)
+
+    sys.stdout.write(
+        f"Compressing {count} images into {ext} @ quality {args.quality}\n")
+    sys.stdout.write(f'Progress: 0/{count}')
+
+    for i, pic in enumerate(pics):
+        with Image.open(DIR/pic) as img:
+            img.save(TMP_DIR/pic.with_suffix(ext),
+                     quality=args.quality, method=6, optimize=True)
+        sys.stdout.write(f'\rProgress: {i+1}/{count}' + ' ' * 40)
+
+    sys.stdout.write('\nDone!\n')
+
+    pics = [TMP_DIR/pic.with_suffix(ext) for pic in pics]
+
+    # Pack into tar file
+    with tarfile.open(args.tar_path, "w:gz") as tar:
+        for pic in pics:
+            tar.add(pic, arcname=pic.name)
+
 # Provides a drawing editor for the latest image
 def markup_latest(args):
     img = get_latest_sceenshot_path()
@@ -196,6 +231,15 @@ def parse_size(s: str) -> (int, int):
         return int(m[1]), int(m[2])
     except:
         raise Exception(f"{s} does not match size regex /[0-9]+[x ][0-9]+/")
+
+def parse_tar(s: str) -> Path:
+    s = s.strip()
+
+    if re.search("\.t(ar|gz|ar\.gz)$", s):
+        return Path(s)
+    else:
+        raise Exception(f"{s} is not a path to a .{{tar,tgz,tar.gz}} file")
+
 
 parser = argparse.ArgumentParser(
     prog="Screenshot Wayland v1.0.0",
@@ -294,6 +338,32 @@ edit_subcmd.add_argument(
     "file", nargs='?', type=Path,
     help="Save the edited screenshot to this file name",
 );
+# Archive ====
+archive_subcmd = subcommands.add_parser(
+    "archive", help="Backup the screenshots directory to a tar file");
+
+archive_subcmd.add_argument(
+    '-e', '--extension',
+    type=str,
+    metavar="<ext>",
+    help='Change image extension and image type backed up',
+);
+archive_subcmd.add_argument(
+    '-q', '--quality',
+    type=parse_percent,
+    metavar='<N%>',
+    help='Set quality of new image. [0, 100], higher means bigger file',
+);
+archive_subcmd.add_argument(
+    'which', metavar='<which>',
+    choices=['all', 'unedited'],
+    help='One of {all,unedited}. Backup only unedited images or all of them',
+);
+archive_subcmd.add_argument(
+    "tar_path", metavar='<tar-path>',
+    type=parse_tar,
+    help="Destination tar file. Should be .{tar,tgz,tar.gz}",
+);
 
 # Markup ====
 markup_subcmd = subcommands.add_parser(
@@ -325,6 +395,8 @@ match args.subcommand:
         take_subcommand(args)
     case "edit":
         edit_subcommand(args)
+    case "archive":
+        archive_subcommand(args)
     case "markup":
         print("Markup is not ready for use yet")
         exit(1)
