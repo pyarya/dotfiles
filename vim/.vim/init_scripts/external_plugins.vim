@@ -25,6 +25,7 @@ Plug 'tpope/vim-eunuch'
     " Movement extension
 "Plug 'justinmk/vim-sneak'
 "Plug 'easymotion/vim-easymotion'
+Plug 'wakatime/vim-wakatime'
 
 " Vim windows ====
     " Tmux-like zoom for windows
