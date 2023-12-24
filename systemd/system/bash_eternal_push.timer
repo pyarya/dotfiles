@@ -1,0 +1,11 @@
+[Unit]
+Description=Pushing bash history
+Requires=bash_eternal_push.service
+
+[Timer]
+Unit=bash_eternal_push.service
+OnCalendar=*-*-* *:00/30
+RandomizedDelaySec=30min
+
+[Install]
+WantedBy=timers.target

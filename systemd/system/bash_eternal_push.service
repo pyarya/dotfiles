@@ -1,0 +1,9 @@
+[Unit]
+Description=Pushing bash history
+Wants=bash_eternal_push.timer
+
+[Service]
+User=root
+Group=root
+Type=oneshot
+ExecStart=/usr/local/bin/bash_eternal_push.sh
