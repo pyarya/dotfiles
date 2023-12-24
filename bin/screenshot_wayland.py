@@ -14,7 +14,8 @@ from pathlib import Path
 from typing import *
 
 # Global constants
-DIR = Path(f"{os.environ['HOME']}/Desktop/screenshots_tmp") # Default
+RELATIVE_DIR = Path("Pictures/screenshots_wayland")  # Default save directory
+DIR = Path.home()/RELATIVE_DIR
 
 DIMENSIONS_REGEX = "([0-9]+),([0-9]+) ([0-9]+)x([0-9]+)"
 EXTENSION_REGEX = "\.([A-z0-9]+)$"
@@ -95,7 +96,7 @@ def add_drop_shadow(img: Path, save: Path, back_color: str, shadow_color: str):
 
         canvas.paste(img, box=(border_width, border_width))
 
-    canvas.save(save)
+    canvas.save(save, optimize=True)
 
 # Uses grim for wayland to take a screenshot. Default to full screen without
 # dims. exact_dims must match a slurp regex
@@ -127,10 +128,7 @@ def take_subcommand(args):
 
 # Applies an edit to the latest screenshot
 def edit_subcommand(args):
-    ext = args.extension if args.extension else DEFAULT_EDIT_EXTENSION
-    quality = args.quality if args.quality is not None else DEFAULT_EDIT_QUALITY
-
-    og_path, edit_path = get_edit_path(ext)
+    og_path, edit_path = get_edit_path(args.extension)
 
     if args.overwrite:
         edit_path = og_path
@@ -148,7 +146,7 @@ def edit_subcommand(args):
             img = img.resize(args.size)
         elif args.rescale:
             img = img.reduce(int(1 / (args.rescale / 100)))
-        img.save(edit_path, quality=quality, method=6)
+        img.save(edit_path, quality=args.quality, method=6, optimize=True)
 
     if args.clipboard:
         copy_to_clipboard(edit_path)
@@ -207,14 +205,14 @@ parser.add_argument(
     '-s', '--screenshot-dir',
     type=parser_dir,
     metavar="<dir>",
-    help='Save and edit directory. Default: ~/Desktop/screenshots_tmp',
+    help=f"Save and edit directory. Default: ~/{RELATIVE_DIR}",
 );
 
 # Subcommands ====
 subcommands = parser.add_subparsers(dest='subcommand', required=True);
 # Take ====
 take_subcmd = subcommands.add_parser(
-    "take", help="Takes a screenshot. (Default is full screen)");
+    "take", help="Takes a screenshot");
 
 take_common = argparse.ArgumentParser(add_help=False);
 take_common.add_argument(
@@ -222,7 +220,6 @@ take_common.add_argument(
     action='store_true',
     help='Save the screenshot to your clipboard',
 );
-
 take_common.add_argument(
     "file", nargs='?', type=Path,
     help="Save the screenshot to this file name"
@@ -276,14 +273,15 @@ edit_subcmd.add_argument(
     help='Apply a drop shadow with a light/dark background',
 );
 edit_subcmd.add_argument(
-    '-e', '--extension',
+    '-e', '--extension', metavar="<ext>",
     type=str,
-    metavar="<ext>",
+    default=DEFAULT_EDIT_EXTENSION,
     help='Change image extension and image type saved',
 );
 edit_subcmd.add_argument(
     '-q', '--quality',
     type=parse_percent,
+    default=DEFAULT_EDIT_QUALITY,
     metavar='<N%>',
     help='Set quality of new image. [0, 100], higher means bigger file',
 );
@@ -294,8 +292,9 @@ edit_subcmd.add_argument(
 );
 edit_subcmd.add_argument(
     "file", nargs='?', type=Path,
-    help="Save the edited screenshot to this file name"
+    help="Save the edited screenshot to this file name",
 );
+
 # Markup ====
 markup_subcmd = subcommands.add_parser(
     "markup", help="Markup the latest screenshot in swappy");
@@ -327,4 +326,6 @@ match args.subcommand:
     case "edit":
         edit_subcommand(args)
     case "markup":
+        print("Markup is not ready for use yet")
+        exit(1)
         markup_latest(args)
