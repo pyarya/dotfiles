@@ -53,6 +53,7 @@ set $screenshot_sound ffplay -nodisp -autoexit -v error ~/.config/sway/screensho
 
 # Duplicate screenshot path, for quick uploads
 set $screenshot_tmp /dev/shm/screenshot_shm.png
+set $screenshot_script ~/.configs_pointer/bin/screenshot_wayland.py
 
 #╔─────────────────────────────────────────────────────────────────────────────╗
 #│ Pαηεs αηd cδηταiηεrs                                                        |
@@ -295,30 +296,28 @@ bindsym $mod2+Escape exec ~/.config/sway/sway_exit.sh
 
 # Screenshots ====
 bindsym $mod2+6 mode "screenshots"
-bindsym $mod2+5 mode "screenshots"; exec ~/.configs_pointer/bin/screenshot_wayland.py take -c select $screenshot_tmp && $screenshot_sound
-bindsym $mod2+4 mode "screenshots"; exec ~/.configs_pointer/bin/screenshot_wayland.py \
-      take -c -d "$(colo.sh -t)" exact "$(~/.config/sway/window_dimensions.py)" $screenshot_tmp && $screenshot_sound
+bindsym $mod2+5 mode "screenshots"; exec $screenshot_script take select -c $screenshot_tmp && $screenshot_sound
+bindsym $mod2+4 mode "screenshots"; exec $screenshot_script take exact "$(~/.config/sway/window_dimensions.py)" && \
+      $screenshot_script edit -c --overwrite -d "$(colo.sh -t)" -e png $screenshot_tmp && $screenshot_sound
 
 mode "screenshots" {
     # Screenshooting in processing "steps"
     # 1. Get screenshot
-    bindsym a exec ~/.configs_pointer/bin/screenshot_wayland.py take -c select \
-          $screenshot_tmp && $screenshot_sound
-    bindsym f exec ~/.configs_pointer/bin/screenshot_wayland.py take -c full \
-          $screenshot_tmp && $screenshot_sound
-    bindsym m mode "default"; exec ~/.configs_pointer/bin/screenshot_wayland.py markup
+    bindsym a exec $screenshot_script take select -c $screenshot_tmp && $screenshot_sound
+    bindsym f exec $screenshot_script take full -c $screenshot_tmp && $screenshot_sound
+    bindsym m mode "default"; exec $screenshot_script markup
 
     # 2. Downsize the screenshot, since 4k is too big
-    bindsym 1 exec ~/.configs_pointer/bin/screenshot_wayland.sh --resize '10%' --clipboard --extension png $screenshot_tmp && $screenshot_sound
-    bindsym 2 exec ~/.configs_pointer/bin/screenshot_wayland.sh --resize '20%' --clipboard --extension png $screenshot_tmp && $screenshot_sound
-    bindsym 3 exec ~/.configs_pointer/bin/screenshot_wayland.sh --resize '30%' --clipboard --extension png $screenshot_tmp && $screenshot_sound
-    bindsym 4 exec ~/.configs_pointer/bin/screenshot_wayland.sh --resize '40%' --clipboard --extension png $screenshot_tmp && $screenshot_sound
-    bindsym 5 exec ~/.configs_pointer/bin/screenshot_wayland.sh --resize '50%' --clipboard --extension png $screenshot_tmp && $screenshot_sound
-    bindsym 6 exec ~/.configs_pointer/bin/screenshot_wayland.sh --resize '60%' --clipboard --extension png $screenshot_tmp && $screenshot_sound
-    bindsym 7 exec ~/.configs_pointer/bin/screenshot_wayland.sh --resize '70%' --clipboard --extension png $screenshot_tmp && $screenshot_sound
-    bindsym 8 exec ~/.configs_pointer/bin/screenshot_wayland.sh --resize '80%' --clipboard --extension png $screenshot_tmp && $screenshot_sound
-    bindsym 9 exec ~/.configs_pointer/bin/screenshot_wayland.sh --resize '90%' --clipboard --extension png $screenshot_tmp && $screenshot_sound
-    bindsym 0 exec ~/.configs_pointer/bin/screenshot_wayland.sh --resize '100%' --clipboard --extension png $screenshot_tmp && $screenshot_sound
+    bindsym 1 exec $screenshot_script edit -c -e png r '10%' $screenshot_tmp && $screenshot_sound
+    bindsym 2 exec $screenshot_script edit -c -e png r '20%' $screenshot_tmp && $screenshot_sound
+    bindsym 3 exec $screenshot_script edit -c -e png r '30%' $screenshot_tmp && $screenshot_sound
+    bindsym 4 exec $screenshot_script edit -c -e png r '40%' $screenshot_tmp && $screenshot_sound
+    bindsym 5 exec $screenshot_script edit -c -e png r '50%' $screenshot_tmp && $screenshot_sound
+    bindsym 6 exec $screenshot_script edit -c -e png r '60%' $screenshot_tmp && $screenshot_sound
+    bindsym 7 exec $screenshot_script edit -c -e png r '70%' $screenshot_tmp && $screenshot_sound
+    bindsym 8 exec $screenshot_script edit -c -e png r '80%' $screenshot_tmp && $screenshot_sound
+    bindsym 9 exec $screenshot_script edit -c -e png r '90%' $screenshot_tmp && $screenshot_sound
+    bindsym 0 exec $screenshot_script edit -c -e png r '100%' $screenshot_tmp && $screenshot_sound
 
     # OR compress image
     bindsym space mode "shrink_screenshots"

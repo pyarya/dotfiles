@@ -118,12 +118,6 @@ def take_subcommand(args):
         case _:
             raise Exception(f"Region '{args.region}' not recognized")
 
-    match args.drop_shadow:
-        case "light":
-            add_drop_shadow(save_path, save_path, DS_BG_LIGHT, DS_SHADOW_LIGHT)
-        case "dark":
-            add_drop_shadow(save_path, save_path, DS_BG_DARK, DS_SHADOW_DARK)
-
     if args.clipboard:
         copy_to_clipboard(save_path)
 
@@ -134,6 +128,9 @@ def take_subcommand(args):
 def edit_subcommand(args):
     ext = args.extension if args.extension else 'avif'
     og_path, edit_path = get_edit_path(ext)
+
+    if args.overwrite:
+        edit_path = og_path
 
     # Drop shadow
     match args.drop_shadow:
@@ -215,17 +212,6 @@ subcommands = parser.add_subparsers(dest='subcommand', required=True);
 # Take ====
 take_subcmd = subcommands.add_parser(
     "take", help="Takes a screenshot. (Default is full screen)");
-take_subcmd.add_argument(
-    '-c', '--clipboard',
-    action='store_true',
-    help='Save the screenshot to your clipboard',
-);
-take_subcmd.add_argument(
-    '-d', '--drop-shadow',
-    action='store',
-    choices=['light', 'dark'],
-    help='Apply a drop shadow to the final image with a light/dark background',
-);
 
 # Different possible screenshot regions
 region = take_subcmd.add_subparsers(dest='region', required=True);
@@ -240,6 +226,22 @@ exact.add_argument(
     type=parse_dimensions,
     metavar="'N,N NxN'",
     help="Exact dimensions of screenshot: 'x,y width,height'"
+);
+
+full.add_argument(
+    '-c', '--clipboard',
+    action='store_true',
+    help='Save the screenshot to your clipboard',
+);
+exact.add_argument(
+    '-c', '--clipboard',
+    action='store_true',
+    help='Save the screenshot to your clipboard',
+);
+select.add_argument(
+    '-c', '--clipboard',
+    action='store_true',
+    help='Save the screenshot to your clipboard',
 );
 
 full.add_argument(
@@ -285,6 +287,11 @@ edit_subcmd.add_argument(
     type=str,
     metavar="<ext>",
     help='Change image extension and image type saved',
+);
+edit_subcmd.add_argument(
+    '--overwrite',
+    action='store_true',
+    help='Overwrite original image with the edited image',
 );
 edit_subcmd.add_argument(
     "file", nargs='?', type=Path,
