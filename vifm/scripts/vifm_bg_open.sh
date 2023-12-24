@@ -29,6 +29,12 @@ open_file() {
     html)
       chromium "$1" &>/dev/null &
       ;;
+    *)
+      if [[ -n "$TMUX" ]] && file "$1" | grep -iq 'ascii'; then
+        tmux new-window -c "#{pane_current_path}"
+        sleep .2  # Let bash login, otherwise command won't get sent
+        tmux send-keys "vi $1" Enter
+      fi
   esac
 }
 
