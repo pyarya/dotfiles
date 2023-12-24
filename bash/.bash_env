@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # PATH extensions ===================================================
     # Cargo's binaries
-export PATH="${HOME}/bin:${HOME}/.cargo/bin:${PATH}"
+export PATH="${HOME}/bin:${HOME}/.cargo/bin:${HOME}/.local/bin:${PATH}"
     # Scripts mostly intended for use with hotkeys
 export PATH="${HOME}/.configs_pointer/bin/hotkey_scripts:${PATH}"
     # Custom scripts
