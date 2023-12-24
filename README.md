@@ -30,15 +30,24 @@ MacOS dotfiles were working on Catalina (10.15) and likely mostly work on newer
 versions as well
 
 As of writing, [EndeavourOS](
-https://endeavouros.com/) is on Linux **6.0.8** and bash is version **5.1.16**
+https://endeavouros.com/) is on Linux **6.0.11** and bash is version **5.1.16**
 
 For Linux, these dotfiles setup [Sway](https://github.com/swaywm/sway) on
 [Wayland](https://wayland.freedesktop.org/), a completely different display
 server from Xorg. [I3](https://i3wm.org/) is similar to Sway for Xorg
 
-I'm increasingly migrating my scripts from bash to python. Many require at least
-**python version 3.10** (match statements) to run properly. EndeavourOS and
-other Arch-based systems keep their python up to date, make sure you do too
+Increasingly, I've been migrating my scripts away from bash, for better control
+flow, libraries, and error handling. Several are written in python. **Python
+version 3.10** (match statements) is the minimum supported version.
+
+Some scripts are being __rewritten in :rocket: Rust :rocket:__! Building them
+them will require a [rust compiler](https://rustup.rs). If one of your machines
+isn't powerful enough to compile these, consider compiling them on another
+system, then simply copy them over:
+
+```bash
+cargo build --release --target=x86_64-unknown-linux-musl
+```
 
 # Keybinding
 
