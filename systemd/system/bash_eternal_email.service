@@ -1,0 +1,9 @@
+[Unit]
+Description=Emailing bash history
+Wants=bash_eternal_email.timer
+
+[Service]
+User=root
+Group=root
+Type=oneshot
+ExecStart=/usr/local/bin/bash_eternal_email.sh

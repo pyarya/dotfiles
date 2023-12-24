@@ -1,0 +1,11 @@
+[Unit]
+Description=Emailing bash history
+Requires=bash_eternal_email.service
+
+[Timer]
+Unit=bash_eternal_email.service
+OnCalendar=Fri *-*-* 22:00:00
+RandomizedDelaySec=30min
+
+[Install]
+WantedBy=timers.target
