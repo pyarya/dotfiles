@@ -1,0 +1,16 @@
+[package]
+name = "config_scripts"
+version = "0.1.0"
+edition = "2021"
+authors = ["Akemi Izuko"]
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[[bin]]
+name = "prettify_bash_history"
+path = "src/prettify_bash_history.rs"
+
+[dependencies]
+clap = { version = "4", features = ["derive"] }
+chrono = "0.4"
+regex = "1"

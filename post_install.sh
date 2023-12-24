@@ -9,6 +9,7 @@ for a more complete explanation
 ARGS:
   help      Print this menu and exit
   status    Checks the status of additional installation steps. May need sudo
+  build     Compiles additonal binaries
 HELP
 }
 
@@ -36,7 +37,6 @@ configs_pointer_is_setup() {
 swayland_checks() {
   check_sway_wallpaper
   check_swaylock_wallpaper
-  check_swaytree_compilation
   check_sway_sounds
 }
 
@@ -408,6 +408,68 @@ check_sshdconfig() {
   return $return_code
 }
 
+####################
+# Rust binaries
+####################
+russy_checks() {
+  check_for_russy_bins
+}
+
+check_for_russy_bins() {
+  local -i return_code=0
+
+  local -a bin_names
+  bin_names=($(awk '/name =/ { split($0, a, "\""); print a[2] }' ~/.configs_pointer/bin/rewritten_in_rust/Cargo.toml))
+
+  if [[ $? -eq 0 ]]; then
+    for (( i = 1; i < "${#bin_names[@]}"; i++ )); do
+      local name="${bin_names[i]}"
+
+      if ! [[ -L "${HOME}/.configs_pointer/bin/${name}" ]] && [[ -e "${HOME}/.configs_pointer/bin/${name}" ]]; then
+        printf 'ERR: Conflicting file with rust binary `%s` in bin\n' "$name"
+        printf '\tRemove the conflicting file and rerun this script with `build`\n'
+        return_code=1
+      elif ! [[ -L "${HOME}/.configs_pointer/bin/${name}" ]]; then
+        printf 'ERR: Missing rust binary `%s` in bin\n' "$name"
+        printf '\tInstall rust and rerun this script with the `build` argument\n'
+        return_code=1
+      fi
+    done
+  fi
+
+  return $return_code
+}
+
+russy_build() {
+  if command -v cargo &>/dev/null; then
+    if cargo build --release --manifest-path="$HOME/.configs_pointer/bin/rewritten_in_rust/Cargo.toml"; then
+      local name
+
+      for exe in $(fd -d1 -tx . ~/.configs_pointer/bin/rewritten_in_rust/target/release); do
+        name="$(basename "$exe")"
+        (
+          cd ~/.configs_pointer/bin || return 1
+
+          if ! [[ -e "$name" ]]; then
+            ln -s "./rewritten_in_rust/target/release/$name" "./$name"
+          elif ! [[ -L "$name" ]]; then
+            printf 'ERR: Failed to link rust binary \`%s\`\n' "$name"
+            printf '\tRemove the conflicting file\n'
+          fi
+        )
+      done
+    else
+      printf 'ERR: Failed to compile rust binaries\n'
+      printf '\tInstall rust to compile additional scripts\n'
+      return 1
+    fi
+  else
+    printf 'ERR: No rust compiler found\n'
+    printf '\tInstall rust to compile additional scripts\n'
+    return 1
+  fi
+}
+
 
 if [[ "$1" == 'status' && "$(uname -s)" == 'Linux' ]]; then
   configs_pointer_is_setup || exit 1
@@ -422,6 +484,9 @@ if [[ "$1" == 'status' && "$(uname -s)" == 'Linux' ]]; then
   aerc_checks
   git_checks
   ssh_checks
+  russy_checks
+elif [[ "$1" == 'build' ]]; then
+  russy_build
 else
   print_help
 fi
