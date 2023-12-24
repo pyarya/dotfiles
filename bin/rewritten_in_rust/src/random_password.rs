@@ -73,7 +73,9 @@ fn main() {
             }
         }
     } else if args.diceware.as_ref().unwrap().exists() {
-        let nb_lines = BufReader::new(File::open(args.diceware.as_ref().unwrap())
+        let wordlist: PathBuf = args.diceware.unwrap();
+
+        let nb_lines = BufReader::new(File::open(&wordlist)
             .expect("Unable to open word-list file"))
             .lines()
             .count();
@@ -82,9 +84,21 @@ fn main() {
             .map(|_| OsRng.next_u64() % nb_lines as u64)
             .collect();
 
-        pass = index_lines(args.diceware.as_ref().unwrap(), &indices)
-            .unwrap()
-            .join("8");
+        pass = index_lines(&wordlist, &indices)
+            .expect("Failed to index wordlist")
+            .join("_");
+
+        pass.push_str("_");
+
+        for _ in 0..args.pass_length {
+            let rand_digit = (OsRng.next_u64() % 10).to_string();
+            pass.push_str(&rand_digit);
+        }
+
+        pass.push_str("!!!");
+
+        // Capitalize first letter
+        pass = pass.chars().next().unwrap().to_uppercase().to_string() + &pass[1..];
 
         trimmed = &pass;
     } else {

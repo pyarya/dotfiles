@@ -18,6 +18,13 @@ parser.add_argument(
     help="HTTP or ssh url to use",
 )
 
+parser.add_argument(
+    "out_name",
+    type=str,
+    nargs="?",
+    help="Name to use for the directory",
+)
+
 args = parser.parse_args()
 
 if m := HTTP_RE.fullmatch(args.url):
@@ -28,7 +35,12 @@ else:
     print(f"Failed to parse URL `{args.url}`", file=sys.stderr)
     exit(1)
 
-if "git.sr.ht" not in args.url and not ssh_url.endswith('.git'):
+if "git.sr.ht" not in args.url and not ssh_url.endswith(".git"):
     ssh_url += ".git"
 
-Popen(["git", "clone", ssh_url]).wait()
+git_cmd = ["git", "clone", ssh_url]
+
+if args.out_name is not None:
+    git_cmd.append(args.out_name)
+
+Popen(git_cmd).wait()
