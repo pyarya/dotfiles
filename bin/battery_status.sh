@@ -24,8 +24,6 @@ upower --dump | awk '
       else
         printf "==== %s ========\n", device[dev]["name"];
 
-      asort(device[dev]);
-
       for (i in device[dev]) {
         is_name  = (tolower(device[dev][i]) ~ /(device|model)/);
         is_label = (device[dev][i] ~ /:/);

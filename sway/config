@@ -244,7 +244,7 @@ output DP-3 scale 2
 
 default_border pixel 2
   # Adjust gamma. More important for external displays. Laptops are usually fine
-exec wlsunset -t 4000 -T 6500 -g 0.9
+exec wlsunset -t 6499 -T 6500 -g 0.9
 
 # Volume controls
 bindsym XF86AudioRaiseVolume exec $volume_command 4 $volume_notify_sound

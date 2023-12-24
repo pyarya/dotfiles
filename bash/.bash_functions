@@ -44,6 +44,19 @@ vifmmv() {
   cd "$dst"
 }
 
+# Open command script in vim
+viw() {
+  if [[ -z "$1" ]] || ! which "$1"; then
+    printf "No %s found in path\nAborting...\n" "$1"
+    exit 1
+  elif [[ "$(file "$(which "$1")")" =~ 'ELF.*executable' ]]; then
+    printf "%s is a binary\nAborting...\n" "$1"
+    exit 1
+  else
+    "$EDITOR" "$(which "$1")"
+  fi
+}
+
 # Better exiting ====================================================
 # Don't exit with background jobs still running. Particularly for Qemu
 function exit () {

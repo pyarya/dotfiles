@@ -270,9 +270,9 @@ command! fdcddir
 
 command! fdeditfiles
     \ :if $TMUX != '' && &columns > 90
-    \ | exe 'edit "'.system('fd -HE ''.git'' -t f . | fzf-tmux -p 90,30').'"'
+    \ | exe '!~/.configs_pointer/vifm/scripts/vifm_bg_open.sh "'.system('fd -HE ''.git'' -t f . | fzf-tmux -p 90,30').'"'
     \ | else
-    \ | exe 'edit "'.term('fd -HE ''.git'' -t f . | fzf 2>/dev/tty').'"'
+    \ | exe '!~/.configs_pointer/vifm/scripts/vifm_bg_open.sh "'.term('fd -HE ''.git'' -t f . | fzf 2>/dev/tty').'"'
     \ | endif
 
 command! fdmvcursor
@@ -328,7 +328,7 @@ fileviewer *[^/] env -uCOLORTERM bat --color always --theme ansi --wrap never --
 
 filetype *.mp4,*.mkv,*.mov,*.webm,*.mp3,*.flac mpv %c
 
-if system('uname') == 'Darwin'
+if system('uname -s') == 'Darwin'
     filetype *.jpg,*.jpeg,*.png,*.icns open -a Preview.app %c:p
     filetype *.pdf open -a 'skim' %c || open %c:p
 else

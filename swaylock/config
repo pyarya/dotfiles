@@ -2,6 +2,9 @@ show-failed-attempts
 image=~/.config/swaylock/default_wallpaper.png
 bs-hl-color=83A598
 
+scaling=fit
+color=000000
+
 indicator-radius=60
 indicator-thickness=20
 
