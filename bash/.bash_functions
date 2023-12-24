@@ -57,7 +57,7 @@ viw() {
   fi
 }
 
-# Ronald's Universal Number Kruncher, standardized syntax for unix calculators
+# Ronald's Universal Number Kounter, standardized syntax for unix calculators
 # Syntax features:
 #   ^ and ** both work for exponentiation
 #   log()  is base 10
