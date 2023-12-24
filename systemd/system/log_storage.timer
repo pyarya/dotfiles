@@ -1,0 +1,11 @@
+[Unit]
+Description=Log the current non-volatile storage
+Requires=log_storage.service
+
+[Timer]
+Unit=log_storage.service
+OnCalendar=*-*-* 0/2:00:00
+RandomizedDelaySec=10m
+
+[Install]
+WantedBy=timers.target
