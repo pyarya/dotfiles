@@ -1,0 +1,12 @@
+[Unit]
+Description = Sends current ip address to uni servers
+Wants = update_a_record.timer
+Wants = network-online.target
+After = network-online.target
+
+[Service]
+Type = oneshot
+ExecStart = /usr/local/bin/set_a_records.sh
+
+[Install]
+WantedBy = multi-user.target

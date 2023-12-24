@@ -1,0 +1,11 @@
+[Unit]
+Description=Updates Cloudflare's A record for mirrorside.mami2.moe
+Requires=update_a_record.service
+
+[Timer]
+Unit=update_a_record.service
+OnCalendar=*-*-* *:00,15,30,45:00
+RandomizedDelaySec=15min
+
+[Install]
+WantedBy=timers.target
