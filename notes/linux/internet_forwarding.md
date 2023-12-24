@@ -159,6 +159,8 @@ nmap -sA 172.16.0.1
  - [IP forwarding](https://bbs.archlinux.org/viewtopic.php?id=245264). Their
    solution was not using the Gateway with DHCP. Gateway is required for static
    IP setups though
+ - [Good IP routing tables
+   article](https://www.baeldung.com/linux/destination-source-routing)
  - [Nmap filtering
    check](https://www.redhat.com/sysadmin/troubleshoot-packet-filters-network)
  - ChatGPT can help a bit, though it's rarely right enough to actually get the
