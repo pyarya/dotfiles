@@ -51,34 +51,6 @@ html_template_top = lambda title, icon : """\
             display: block;
             font-size: 25px;
         }
-        #rikaichan-window {
-            background-color: #222 !important;
-            color: #D4D4D4 !important;
-        }
-        #rikaichan-window .w-kanji {
-            font-size: 30px !important;
-            color: #8EC07C !important;
-        }
-        #rikaichan-window .w-kana {
-            font-size: 25px !important;
-            color: #FABD2F !important;
-        }
-        #rikaichan-window .w-conj {
-            color: #D3869B !important;
-        }
-        #rikaichan-window .w-def {
-            font-size: 20px !important;
-            color: #D4D4D4 !important;
-        }
-        body li.tod {
-            font-size: 18px ;
-        }
-        body li.tod:first-child:nth-last-child(2) {
-            font-size: 22px ;
-        }
-        body li.tod:nth-child(2) {
-            font-size: 16px ;
-        }
     </style>
   </head>
 
@@ -93,6 +65,64 @@ html_template_bottom = lambda title, url : f"""
              >Link to video: {str(title)}</a>
       </p>
   </body>
+""" + """
+  <script>
+    function sleep(ms) {
+      return new Promise(resolve => setTimeout(resolve, ms));
+    }
+
+    let style = document.createElement("style");
+
+    style.textContent= `
+      #rikaikun-shadow {
+        background-color: #222 !important;
+        color: #D4D4D4 !important;
+      }
+      #rikaikun-shadow .w-kanji {
+        font-size: 30px !important;
+        color: #8EC07C !important;
+      }
+      #rikaikun-shadow .w-kana {
+        font-size: 25px !important;
+        color: #FABD2F !important;
+      }
+      #rikaikun-shadow .w-conj {
+        color: #D3869B !important;
+      }
+      #rikaikun-shadow .w-def {
+        font-size: 20px !important;
+        color: #D4D4D4 !important;
+      }
+      body li.tod {
+        font-size: 18px ;
+      }
+      body li.tod:first-child:nth-last-child(2) {
+        font-size: 22px ;
+      }
+      body li.tod:nth-child(2) {
+        font-size: 16px ;
+      }`;
+
+    let loadtimes = [
+      100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100,
+      200, 200, 200, 200, 200, 200, 200, 200, 200, 200, 200, 200,
+      400, 400, 400, 400, 400, 400, 400, 400, 400, 400, 400, 400,
+    ];
+
+    (async function () {
+      for (let i = 0; true; i++) {
+        try {
+          document.querySelector('#rikaichan-window').shadowRoot.appendChild(style);
+          break;
+        } catch {
+          if (i < loadtimes.length)
+            await sleep(loadtimes[i]);
+          else
+            await sleep(2000);
+        }
+      }
+    })()
+  </script>
 </html>
 """
 
