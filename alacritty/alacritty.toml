@@ -1,0 +1,116 @@
+import = ["~/.config/alacritty/themes/base16-gruvbox-dark-pale.toml"]
+live_config_reload = true
+working_directory = "None"
+
+[bell]
+command = "None"
+duration = 0
+
+[colors]
+draw_bold_text_with_bright_colors = false
+
+[colors.cursor]
+cursor = "CellForeground"
+text = "CellBackground"
+
+[colors.search.focused_match]
+background = "CellForeground"
+foreground = "CellBackground"
+
+[colors.search.matches]
+background = "#ffffff"
+foreground = "#000000"
+
+[colors.selection]
+background = "#e69f67"
+text = "#000000"
+
+[cursor]
+blink_interval = 400
+blink_timeout = 0
+thickness = 0.15
+unfocused_hollow = true
+vi_mode_style = "Block"
+
+[cursor.style]
+blinking = "Always"
+shape = "Block"
+
+[font]
+size = 11.5
+
+[font.glyph_offset]
+x = 0
+y = 1
+
+[font.normal]
+family = "MesloLGM Nerd Font"
+
+[font.offset]
+x = 1
+y = 1
+
+[[keyboard.bindings]]
+action = "ToggleViMode"
+key = "LBracket"
+mods = "Control"
+
+[[keyboard.bindings]]
+action = "ToggleViMode"
+key = "I"
+mode = "Vi"
+
+[[keyboard.bindings]]
+action = "SpawnNewInstance"
+key = "N"
+mods = "Alt"
+
+[[keyboard.bindings]]
+chars = "\bk"
+key = "K"
+mods = "Command"
+
+[[keyboard.bindings]]
+chars = "\u0000"
+key = "Space"
+mods = "Control"
+
+[[keyboard.bindings]]
+chars = "+"
+key = "Equals"
+mods = "Control"
+
+[[keyboard.bindings]]
+chars = "-"
+key = "Minus"
+mods = "Control"
+
+[mouse]
+hide_when_typing = true
+
+#[mouse.double_click]
+#threshold = 300
+
+#[mouse.triple_click]
+#threshold = 300
+
+[scrolling]
+history = 10000
+multiplier = 1
+
+[selection]
+save_to_clipboard = true
+
+[shell]
+args = ["--login"]
+program = "/bin/bash"
+
+[window]
+decorations = "None"
+dynamic_title = false
+opacity = 1
+startup_mode = "Windowed"
+
+[window.padding]
+x = 4
+y = 0
