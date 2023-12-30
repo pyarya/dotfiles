@@ -30,7 +30,7 @@ Example:
     colo.sh gruvboxdark
     colo.sh --colorscheme
 
-$(__print_current_colors)
+$(print_current_colors)
 HELP
 }
 
@@ -43,7 +43,7 @@ query_color_scheme() {
 }
 
 query_color_tone() {
-  case "$COLOR_SCHEME" in
+  case "$(query_color_scheme)" in
     base16-gruvbox-dark-pale)  echo 'dark' ;;
     base16-gruvbox-light-hard) echo 'light' ;;
     base16-dracula)            echo 'dark' ;;
@@ -59,8 +59,8 @@ print_current_colors() {
 
 # Updates the color scheme for alacritty. Best with alacritty's live reload
 change_alacritty_colors() {
-  local to_color="$1"
-  local conf_file="$2"
+  local -r to_color="$1"
+  local -r conf_file="$2"
 
   local tmp="$(mktemp)"
   awk \
@@ -83,8 +83,8 @@ change_alacritty_colors() {
 }
 
 change_vimiv_colors() {
-  local to_color="$1"
-  local conf_file="$2"
+  local -r to_color="$1"
+  local -r conf_file="$2"
 
   local tmp="$(mktemp)"
   awk -v c="$to_color" '/^\s*style = /{ $3=c } 1' "$conf_file" > "$tmp"
@@ -93,7 +93,8 @@ change_vimiv_colors() {
 
 # Changes the colors and sets environment variables
 change_color_scheme() {
-  local to_color="$1"
+  local -r to_color="$1"
+
   change_alacritty_colors "$to_color" "$ALACRITTY_CONF"
   change_vimiv_colors "$to_color" "$VIMIV_CONF"
   print_current_colors
@@ -107,10 +108,10 @@ declare -r ALACRITTY_CONF=~/.config/alacritty/alacritty.toml
 declare -r VIMIV_CONF=~/.config/vimiv/vimiv.conf
 
 case "$1" in
-  -t | --tone) __query_color_tone ;;
-  -c | --colorscheme) echo "$COLOR_SCHEME" ;;
-  -q | --query) __print_current_colors ;;
-  -h | --help)  __print_color_help ;;
+  -t | --tone) query_color_tone ;;
+  -c | --colorscheme) echo "$(query_color_scheme)" ;;
+  -q | --query) print_current_colors ;;
+  -h | --help)  print_color_help ;;
   light | gruvboxlight) change_color_scheme "base16-gruvbox-light-hard" ;;
   dracula)              change_color_scheme "base16-dracula" ;;
   github)               change_color_scheme "base16-github" ;;
