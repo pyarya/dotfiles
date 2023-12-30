@@ -25,13 +25,14 @@ $(__print_current_colors)
 HELP
 }
 
+
 # Detect current alacritty color scheme
 declare COLOR_SCHEME
-declare -r ALACRITTY_COLO=~/.config/alacritty/colors.yml
+declare -r ALACRITTY_CONF=~/.config/alacritty/alacritty.toml
 declare -r VIMIV_CONF=~/.config/vimiv/vimiv.conf
 
-if [[ -r "$ALACRITTY_COLO" ]]; then
-  COLOR_SCHEME="$(awk -F '*' '/^colors:/ { print $2 }' "$ALACRITTY_COLO")"
+if [[ -r "$ALACRITTY_CONF" ]]; then
+  COLOR_SCHEME="$(awk -F/ '/^import =/ {print substr($NF, 1, length($NF)-7)}' "$ALACRITTY_CONF")"
 else
   COLOR_SCHEME='base16-gruvbox-dark-pale'
 fi
@@ -63,8 +64,24 @@ __change_colors_to() {
 # Updates the color scheme for alacritty. Best with alacritty's live reload
 __change_alacritty_colors() {
   local tmp="$(mktemp)"
-  awk -v c="$COLOR_SCHEME" '/^colors: /{ $2="*"c } 1' "$ALACRITTY_COLO" > "$tmp"
-  mv -f "$tmp" "$ALACRITTY_COLO"
+  awk \
+    -v c="$COLOR_SCHEME" \
+    '/^import =/ {
+      split($0, a, "/");
+      $0="";
+
+      for (i in a) {
+        if (i != length(a)) {
+          $0 = $0 sprintf("%s/", a[i]);
+        }
+      }
+
+      $0 = $0 c ".toml\"]"
+    } 1' \
+    "$ALACRITTY_CONF" \
+    > "$tmp"
+
+  mv -f "$tmp" "$ALACRITTY_CONF"
 }
 
 __change_vimiv_colors() {
