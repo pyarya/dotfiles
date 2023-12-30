@@ -1,7 +1,16 @@
 #!/usr/bin/env bash
+#
+# This script changes the color scheme for the following apps:
+#  - Alacritty in ~/.configs_pointer/alacritty/alacritty.toml
+#  - Vim (indirectly, vim calls this script to determine its own colors)
+#  - Vimiv in ~/.configs_pointer/vimiv/vimiv.conf
+#  - Vifm (indirectly like vim)
+#  - Tmux (passive)
+#  - Bash (passive)
+#
 # Warning: Many other files in these configs depend on this script. Do not
 # rename it or remove it from ~/.configs_pointer/bin/ unnecessarily
-__print_color_help() {
+print_color_help() {
   cat <<HELP
 Changes the color scheme in vim, vifm, vimiv, bash, tmux, and alacritty
 
@@ -25,20 +34,15 @@ $(__print_current_colors)
 HELP
 }
 
+query_color_scheme() {
+  if [[ -r "$ALACRITTY_CONF" ]]; then
+    echo "$(awk -F/ '/^import =/ {print substr($NF, 1, length($NF)-7)}' "$ALACRITTY_CONF")"
+  else
+    echo 'base16-gruvbox-dark-pale'
+  fi
+}
 
-# Detect current alacritty color scheme
-declare COLOR_SCHEME
-declare -r ALACRITTY_CONF=~/.config/alacritty/alacritty.toml
-declare -r VIMIV_CONF=~/.config/vimiv/vimiv.conf
-
-if [[ -r "$ALACRITTY_CONF" ]]; then
-  COLOR_SCHEME="$(awk -F/ '/^import =/ {print substr($NF, 1, length($NF)-7)}' "$ALACRITTY_CONF")"
-else
-  COLOR_SCHEME='base16-gruvbox-dark-pale'
-fi
-
-# Returns one of "light" or "dark"
-__query_color_tone() {
+query_color_tone() {
   case "$COLOR_SCHEME" in
     base16-gruvbox-dark-pale)  echo 'dark' ;;
     base16-gruvbox-light-hard) echo 'light' ;;
@@ -48,24 +52,19 @@ __query_color_tone() {
   esac
 }
 
-__print_current_colors() {
-  echo "Current color scheme: $COLOR_SCHEME"
-  echo "Current color tone:   $(__query_color_tone)"
-}
-
-# Changes the colors and sets environment variables
-__change_colors_to() {
-  COLOR_SCHEME="$1"
-  __change_alacritty_colors
-  __change_vimiv_colors
-  __print_current_colors
+print_current_colors() {
+  echo "Current color scheme: $(query_color_scheme)"
+  echo "Current color tone:   $(query_color_tone)"
 }
 
 # Updates the color scheme for alacritty. Best with alacritty's live reload
-__change_alacritty_colors() {
+change_alacritty_colors() {
+  local to_color="$1"
+  local conf_file="$2"
+
   local tmp="$(mktemp)"
   awk \
-    -v c="$COLOR_SCHEME" \
+    -v c="$to_color" \
     '/^import =/ {
       split($0, a, "/");
       $0="";
@@ -78,28 +77,43 @@ __change_alacritty_colors() {
 
       $0 = $0 c ".toml\"]"
     } 1' \
-    "$ALACRITTY_CONF" \
-    > "$tmp"
+    "$conf_file" > "$tmp"
 
-  mv -f "$tmp" "$ALACRITTY_CONF"
+  mv -f "$tmp" "$conf_file"
 }
 
-__change_vimiv_colors() {
-  if [[ -w "$VIMIV_CONF" ]]; then
-    local tmp="$(mktemp)"
-    awk -v c="$COLOR_SCHEME" '/^\s*style = /{ $3=c } 1' "$VIMIV_CONF" > "$tmp"
-    mv -f "$tmp" "$VIMIV_CONF"
-  fi
+change_vimiv_colors() {
+  local to_color="$1"
+  local conf_file="$2"
+
+  local tmp="$(mktemp)"
+  awk -v c="$to_color" '/^\s*style = /{ $3=c } 1' "$conf_file" > "$tmp"
+  mv -f "$tmp" "$conf_file"
 }
+
+# Changes the colors and sets environment variables
+change_color_scheme() {
+  local to_color="$1"
+  change_alacritty_colors "$to_color" "$ALACRITTY_CONF"
+  change_vimiv_colors "$to_color" "$VIMIV_CONF"
+  print_current_colors
+}
+
+
+##########
+# Main
+##########
+declare -r ALACRITTY_CONF=~/.config/alacritty/alacritty.toml
+declare -r VIMIV_CONF=~/.config/vimiv/vimiv.conf
 
 case "$1" in
   -t | --tone) __query_color_tone ;;
   -c | --colorscheme) echo "$COLOR_SCHEME" ;;
   -q | --query) __print_current_colors ;;
   -h | --help)  __print_color_help ;;
-  light | gruvboxlight) __change_colors_to "base16-gruvbox-light-hard" ;;
-  dracula)              __change_colors_to "base16-dracula" ;;
-  github)               __change_colors_to "base16-github" ;;
-  dark | gruvboxdark)   __change_colors_to "base16-gruvbox-dark-pale" ;;
-  *) __print_color_help ;;
+  light | gruvboxlight) change_color_scheme "base16-gruvbox-light-hard" ;;
+  dracula)              change_color_scheme "base16-dracula" ;;
+  github)               change_color_scheme "base16-github" ;;
+  dark | gruvboxdark)   change_color_scheme "base16-gruvbox-dark-pale" ;;
+  *) print_color_help ;;
 esac
