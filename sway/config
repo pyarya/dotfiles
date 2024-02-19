@@ -1,4 +1,4 @@
-# Default config for sway
+#Default config for sway
 #
 # Copy this to ~/.config/sway/config and edit it to your liking.
 #
@@ -42,9 +42,8 @@ set $size_up   comma
 set $size_down period
 
 set $term alacritty
-set $menu fuzzel -fmonospace:size=14 -l10 -w40 \
-        -b222222e0 -t8ec07cff -mffaf00ff -s222222ff -Sebdbb2ff -Cffaf00ff
-
+set $menu fuzzel -fmonospace:size=14 -l15 -w42 \
+        -b282a36e0 -tf8f8f2ff -m8be9fdff -s282a36d0 -Sff79c6ff -C44475aff -M8be9fdff
 
 # Sound effects and additional features
 set $volume_command ~/.config/sway/pulse_audio_volume.sh
@@ -170,6 +169,10 @@ mode "gapping" {
 #╔─────────────────────────────────────────────────────────────────────────────╗
 #│ Wδrksραcεs                                                                  |
 #╚─────────────────────────────────────────────────────────────────────────────╝
+#touch gestures
+bindgesture swipe:right workspace prev
+bindgesture swipe:left workspace next
+
 bindsym $mod1+bracketleft workspace prev
 bindsym $mod1+bracketright workspace next
 
@@ -229,11 +232,11 @@ mode "workspace_tuning" {
 #│ Iηρμτ αηd δμτρμτ αdjμsτmεητs                                                |
 #╚─────────────────────────────────────────────────────────────────────────────╝
 # Trackpad more like MacOS
-input 1452:634:bcm5974 {
+input 1739:52928:SYNA2BA6:00_06CB:CEC0_Touchpad {
     tap enabled
     natural_scroll enabled
     accel_profile adaptive
-    pointer_accel 0.36
+    pointer_accel 0.0
 }
 
 output * background ~/.config/sway/secondary_wallpaper.png fill
@@ -249,16 +252,16 @@ default_border pixel 2
 exec wlsunset -t 6499 -T 6500 -g 0.9
 
 # Volume controls
-bindsym XF86AudioRaiseVolume exec $volume_command 4 $volume_change_sound
-bindsym XF86AudioLowerVolume exec $volume_command -4 $volume_change_sound
+bindsym XF86AudioRaiseVolume exec $volume_command 5 $volume_change_sound
+bindsym XF86AudioLowerVolume exec $volume_command -5 $volume_change_sound
 bindsym shift+XF86AudioRaiseVolume exec $volume_command 1 $volume_change_sound
 bindsym shift+XF86AudioLowerVolume exec $volume_command -1 $volume_change_sound
 bindsym XF86AudioMute exec ~/.config/sway/toggle_mute.sh
 
 # External brightness control
   # For laptops
-bindsym XF86MonBrightnessUp   exec light -A 1
-bindsym XF86MonBrightnessDown exec light -U 1
+bindsym XF86MonBrightnessUp   exec light -A 10
+bindsym XF86MonBrightnessDown exec light -U 10
   # For external monitors
 bindsym F4 exec ddcutil setvcp 10 - 4
 bindsym F5 exec ddcutil setvcp 10 + 4
@@ -270,10 +273,8 @@ bindsym Shift+F5 exec ddcutil setvcp 10 + 1
 #╚─────────────────────────────────────────────────────────────────────────────╝
   # Terminal
 bindsym $mod2+Return exec $term
-  # Chromium
-bindsym $mod2+n exec chromium
   # Firefox
-bindsym $mod2+p exec MOZ_ENABLE_WAYLAND=1 firefox --private-window
+bindsym $mod2+n exec MOZ_ENABLE_WAYLAND=1 firefox
   # App launcher, like spotlight
 bindsym $mod1+space exec $menu
   # Reload sway config
@@ -301,6 +302,7 @@ bindsym $mod2+Escape exec ~/.config/sway/sway_exit.sh
 
 # Screenshots ====
 bindsym $mod2+6 mode "screenshots"
+bindsym $mod2+p exec grim -g "$(slurp)" - | wl-copy
 bindsym $mod2+5 mode "screenshots"; exec $screenshot_script take select -c $screenshot_tmp && $screenshot_sound
 bindsym $mod2+4 mode "screenshots"; exec $screenshot_script take exact "$(~/.config/sway/window_dimensions.py)" && \
       $screenshot_script edit -c -q 100 -d "$(colo.sh -t)" -e png --overwrite $screenshot_tmp && $screenshot_sound
@@ -387,25 +389,26 @@ mode "mpv_global" {
 #╚─────────────────────────────────────────────────────────────────────────────╝
 bar {
     position bottom
+#    swaybar_command waybar
 
     binding_mode_indicator yes
 
       # Vertical horizontal
-    gaps 0 10
+    gaps 0 5
 
     mode dock
 
-    status_command while ~/.config/sway/swaybar_status.sh; do sleep 60; done
+    status_command while ~/.config/sway/swaybar_status.sh; do sleep 30; done
 
     colors {
           # Foreground color
-        statusline #e7d6ad
+        statusline #ffffff
         background #22222200
 
           # border background text
-        focused_workspace #F4B36Eff #F4B36Eff #000000
-        inactive_workspace #00000000 #444444 #e7d6ad
-        urgent_workspace #fadb2f #fadb2f #000000
+        focused_workspace #59b6fc #8be9fd #000000
+        inactive_workspace #6272a4 #44475a #ffffff
+        urgent_workspace #9969b8 #9969b8 #000000
 
         #binding_mode #8ec07c #8ec07c #000000
         #binding_mode #8ec07c #d3869b #000000
@@ -413,8 +416,8 @@ bar {
     }
 }
 
-# Colors
-client.focused #F4A66E #F4A66E #000000 #F4A66E #F4A66E
+# Colors | #border #background #text #indicator #child_border
+client.focused #282a36 #8be9fd #000000 #8be9fd #8be9fd
 #client.focused #FFFFFF #FFFFFF #000000 #ffffff #ffffff
 
 #╔─────────────────────────────────────────────────────────────────────────────╗

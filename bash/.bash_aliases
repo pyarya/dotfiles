@@ -34,6 +34,7 @@ alias ee='exit'
 alias ffprobe='ffprobe -hide_banner'
 alias shm='cd /dev/shm'
 alias ip='ip -color'
+alias ssgrim='grim - | wl-copy'
 
 
 # ===================================================================

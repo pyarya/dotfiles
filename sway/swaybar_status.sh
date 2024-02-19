@@ -2,8 +2,8 @@
 battery_charge() {
   if [[ -r /sys/class/power_supply/BAT0/uevent ]]; then
     cat /sys/class/power_supply/BAT0/uevent | awk '
-      /CHARGE_NOW/   { split($0, a, "="); curr = a[2]; n++ }
-      /CHARGE_FULL=/ { split($0, a, "="); full = a[2]; n++ }
+    /POWER_SUPPLY_ENERGY_NOW=/   { split($0, a, "="); curr = a[2]; n++ }
+      /POWER_SUPPLY_ENERGY_FULL=/ { split($0, a, "="); full = a[2]; n++ }
 
       END { if (n == 2) printf "%.1f", curr / full * 100 }
     '
@@ -42,14 +42,32 @@ remaining_ram() {
 ' /proc/meminfo
 }
 
+network_info() {
+  local IP
+  # want to read the output of this command somehow and print it.
+  iw dev wlan0 info | grep -i ssid | awk '{ split($0, a, " "); printf "%s ", a[2] }'
+
+  IP=$(ip a show wlan0 | awk 'match($0, /inet (.*)(\/)/, gp) { print gp[1]}')
+
+  if [[ -z "$IP" ]] then
+    printf "IPV4 unavailable"
+  else
+    printf "%s" "$IP"
+  fi
+
+}
+
+
 ramu="$(remaining_ram)"
 brightness="$(display_brightness)"
 volume="$(get_volume)"
 charge="$(battery_charge)"
 time="$(date +'%d %a %l:%M %p' | awk '{ gsub(/ +/, " "); print }')"
+ssid="$(network_info)"
 
 output=''
 
+[[ -z "$ssid" ]] || output+="${ssid} | "
 [[ -z "$brightness" ]] || output+="${brightness}cd | "
 [[ -z "$volume" ]] || output+="${volume}dB | "
 [[ -z "$charge" ]] || output+="[${charge}%] | "

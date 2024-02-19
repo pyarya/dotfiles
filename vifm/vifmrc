@@ -191,6 +191,8 @@ set sort +size
     " Resolve symlinked paths like cd -P
 set chaselinks
 
+set dotfiles
+
 set tablabel="%t"
 set statusline="%16A   %u:%-g   %s (%d) -> %T"
 

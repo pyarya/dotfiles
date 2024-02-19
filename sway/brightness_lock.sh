@@ -6,8 +6,8 @@ declare light_restore=3
 declare ddc_restore=3
 
 # Levels when dimmed
-declare -ri light_dim=1
-declare -ri ddc_dim=1
+declare -ri light_dim=15
+declare -ri ddc_dim=15
 
 get_brightness() {
   local lvl
