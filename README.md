@@ -1,3 +1,5 @@
+Modified from : (akemi's dotfiles)[https://codeberg.org/akemi/dotfiles]
+
 Hit the ground flying with dotfiles for Unix-like systems including MacOS. These
 contain all sorts of goodies for bash, vim, shell scripts, unix notes, and much
 more!
