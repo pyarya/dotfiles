@@ -4,10 +4,10 @@
 # Fonts
 font:
   normal:
-    family: Menlo  # Default fallback font
+    #family: Menlo  # Default fallback font
     # Alternative monospace fallback fonts
     #family: Monaco
-    #family: Source Code Pro
+    family: Source Code Pro
 
     family: MesloLGM Nerd Font  # Use a Nerd-Font for pretty vim statusline
     #family: NotoSans Mono  # Use a Nerd-Font for pretty vim statusline
