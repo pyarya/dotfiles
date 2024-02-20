@@ -1,11 +1,15 @@
 show-failed-attempts
+ignore-empty-password
+indicator-idle-visible
 image=~/.config/swaylock/lock_img.png
 bs-hl-color=83A598
 
 #scaling=fit
 color=000000
+font="MesloLGMNerdFont"
+font-size=30
 
-indicator-radius=75
+indicator-radius=65
 indicator-thickness=15
 line-color=282A36
 ring-color=BD93F9
