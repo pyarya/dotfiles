@@ -56,8 +56,6 @@ keymap:
     remap:
       Alt_l-w: Control_r-w
       Alt_l-n: C-n
-        # close tabs with ctrl w
-      C-w: Control_l-w
         # For searchbar focusing. L/R to prevent recursion
       Control_l-l: Alt_r-l
       Alt_l-l: Control_r-l
