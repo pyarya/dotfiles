@@ -169,6 +169,7 @@ mode "gapping" {
 #╔─────────────────────────────────────────────────────────────────────────────╗
 #│ Wδrksραcεs                                                                  |
 #╚─────────────────────────────────────────────────────────────────────────────╝
+
 #touch gestures
 bindgesture swipe:right workspace prev
 bindgesture swipe:left workspace next
@@ -394,7 +395,7 @@ bar {
     binding_mode_indicator yes
 
       # Vertical horizontal
-    gaps 0 5
+    gaps 0 0
 
     mode dock
 
@@ -403,7 +404,7 @@ bar {
     colors {
           # Foreground color
         statusline #ffffff
-        background #22222200
+        background #222222BB
 
           # border background text
         focused_workspace #59b6fc #8be9fd #000000
@@ -417,9 +418,22 @@ bar {
 }
 
 # Colors | #border #background #text #indicator #child_border
-client.focused #282a36 #8be9fd #000000 #8be9fd #8be9fd
+client.focused #282a36 #8be9fd77 #000000 #8be9fd #ffffffCC
+client.unfocused #282a36 #222222BB #8be9fd99 #8be9fd #222222BB
 #client.focused #FFFFFF #FFFFFF #000000 #ffffff #ffffff
 
+#no title bar if tabbed or stacked layout has one child
+hide_edge_borders --i3 smart
+
+#titlebar adjustment, horizontal vertical
+titlebar_padding 5 2
+#gaps
+#smart_borders no_gaps
+
+#transparency
+set $opacity 0.985
+for_window [class=".*"] opacity $opacity
+for_window [app_id=".*"] opacity $opacity
 #╔─────────────────────────────────────────────────────────────────────────────╗
 #│ Oτhεr                                                                       |
 #╚─────────────────────────────────────────────────────────────────────────────╝
@@ -432,7 +446,7 @@ bindswitch --reload --locked lid:on exec \
 bindswitch --reload --locked lid:off exec \
     swaymsg output $laptop dpms on
 
-exec swayidle -w timeout 1200 '~/.config/sway/suspend_system.sh'
+#exec swayidle -w timeout 1200 '~/.config/sway/suspend_system.sh'\\
 
 #bindswitch --reload --locked lid:on exec swaymsg output $laptop_screen disable
 

@@ -31,7 +31,7 @@ If you're using systemd, run the following:
 # ln -s ~/.configs_pointer/xremap/config{_console,}.yml
 # mkdir -p /etc/xremap
 # ln -s {~/.configs_pointer,/etc}/xremap/config.yml
-# cp ~/.configs_pointer/systemd/xremap.service /etc/systemd/system/xremap.service
+# cp ~/.configs_pointer/systemd/system/xremap.service /etc/systemd/system/xremap.service
 # cp ~/.cargo/bin/xremap /usr/local/bin/xremap
 # systemctl enable xremap.service
 # systemctl start xremap.service
