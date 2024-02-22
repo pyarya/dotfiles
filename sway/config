@@ -418,8 +418,8 @@ bar {
 }
 
 # Colors | #border #background #text #indicator #child_border
-client.focused #282a36 #8be9fd77 #000000 #8be9fd #ffffffCC
-client.unfocused #282a36 #222222BB #8be9fd99 #8be9fd #222222BB
+client.focused #282a36 #8be9fd77 #f8f8f2 #8be9fd #ffffffCC
+client.unfocused #282a36 #222222BB #f8f8f299 #8be9fd #222222BB
 #client.focused #FFFFFF #FFFFFF #000000 #ffffff #ffffff
 
 #no title bar if tabbed or stacked layout has one child
