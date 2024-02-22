@@ -18,7 +18,7 @@ continuing
 
 ```bash
 bash install.sh install
-bash install_packages.sh install
+bash package_install.py install
 ```
 
 If you're running ArchLinux or EndeavourOS, `post_install.sh` will help guide
