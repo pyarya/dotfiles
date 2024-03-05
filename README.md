@@ -7,7 +7,7 @@ more!
 # Installation
 
 ```bash
-git clone --depth=1 'ssh://git@codeberg.org:22/akemi/dotfiles.git' dotfiles
+git clone --depth=1 'ssh://git@github.com:22/pyarya/dotfiles.git' dotfiles
 cd dotfiles
 bash ./install.sh --help
 ```
