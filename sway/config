@@ -71,7 +71,7 @@ bindsym $mod2+$pane_right move right
 
   # Layout modifiers
 bindsym $mod2+f floating toggle
-bindsym $mod2+s layout stacking
+#bindsym $mod2+s layout stacking
 bindsym $mod2+t layout tabbed
 bindsym $mod2+r layout toggle
 
@@ -189,6 +189,7 @@ bindsym $mod1+6 workspace number 6
 bindsym $mod1+7 workspace number 7
 bindsym $mod1+8 workspace number 8
 bindsym $mod1+9 workspace number 9
+bindsym $mod1+0 workspace number 10
 
 # Advanced workspace tuning ====
 bindsym $mod1+f mode "workspace_tuning"
@@ -205,6 +206,7 @@ mode "workspace_tuning" {
     bindsym 7 move container to workspace number 7
     bindsym 8 move container to workspace number 8
     bindsym 9 move container to workspace number 9
+    bindsym 0 move container to workspace number 10
 
     # Swap containers
     bindsym $mod1+$pane_left mark --add "_swap", focus left, swap container with mark "_swap", focus left, unmark "_swap"
@@ -238,6 +240,7 @@ input 1739:52928:SYNA2BA6:00_06CB:CEC0_Touchpad {
     natural_scroll enabled
     accel_profile adaptive
     pointer_accel 0.0
+    scroll_factor 0.35
 }
 
 output * background ~/.config/sway/secondary_wallpaper.png fill
@@ -247,6 +250,11 @@ output DP-3 background ~/.config/sway/default_wallpaper.png fill
 
 output DP-1 scale 2
 output DP-3 scale 2
+
+output eDP-1 mode 3072x1920@60.000Hz position 0,0
+
+bindsym $mod1+y output eDP-1 mode 3072x1920@120.002Hz position 0,0
+
 
 default_border pixel 2
   # Adjust gamma. More important for external displays. Laptops are usually fine
@@ -298,12 +306,15 @@ exec sudo ~/.configs_pointer/bin/switch_keyboard.sh pc
 bindsym $mod1+i exec ~/.config/sway/toggle_fcitx.sh
   # Mako notifications
 exec mako
+exec ~/.config/sway/batt/battery_notif.sh
   # Exit sway (hit 3 times repeatedly to force exit)
 bindsym $mod2+Escape exec ~/.config/sway/sway_exit.sh
 
 # Screenshots ====
 bindsym $mod2+6 mode "screenshots"
-bindsym $mod2+p exec grim -g "$(slurp)" - | wl-copy
+
+bindsym $mod2+s exec grim -g "$(slurp)" - | wl-copy
+
 bindsym $mod2+5 mode "screenshots"; exec $screenshot_script take select -c $screenshot_tmp && $screenshot_sound
 bindsym $mod2+4 mode "screenshots"; exec $screenshot_script take exact "$(~/.config/sway/window_dimensions.py)" && \
       $screenshot_script edit -c -q 100 -d "$(colo.sh -t)" -e png --overwrite $screenshot_tmp && $screenshot_sound
@@ -407,8 +418,8 @@ bar {
         background #222222BB
 
           # border background text
-        focused_workspace #59b6fc #8be9fd #000000
-        inactive_workspace #6272a4 #44475a #ffffff
+        focused_workspace #59b6fc #8be9fdAA #44475a
+        inactive_workspace #6272a4 #44475a #ffffff77
         urgent_workspace #9969b8 #9969b8 #000000
 
         #binding_mode #8ec07c #8ec07c #000000
@@ -420,6 +431,7 @@ bar {
 # Colors | #border #background #text #indicator #child_border
 client.focused #282a36 #8be9fd77 #f8f8f2 #8be9fd #ffffffCC
 client.unfocused #282a36 #222222BB #f8f8f299 #8be9fd #222222BB
+client.focused_inactive  #282a36 #8be9fd77 #f8f8f2 #8be9fd #ffffffCC
 #client.focused #FFFFFF #FFFFFF #000000 #ffffff #ffffff
 
 #no title bar if tabbed or stacked layout has one child
@@ -434,6 +446,10 @@ titlebar_padding 5 2
 set $opacity 0.985
 for_window [class=".*"] opacity $opacity
 for_window [app_id=".*"] opacity $opacity
+for_window [title="Picture-in-Picture"] floating enable
+for_window [app_id="gnome-*"] floating enable
+for_window [title="Welcome-*"] floating enable
+
 #╔─────────────────────────────────────────────────────────────────────────────╗
 #│ Oτhεr                                                                       |
 #╚─────────────────────────────────────────────────────────────────────────────╝
@@ -441,12 +457,21 @@ for_window [app_id=".*"] opacity $opacity
 set $laptop 'eDP-1'
 set $sleep sleep 3 && swaylock
 
-bindswitch --reload --locked lid:on exec \
+ bindswitch --reload --locked lid:on exec \
     swaymsg output $laptop dpms off && swaylock
-bindswitch --reload --locked lid:off exec \
-    swaymsg output $laptop dpms on
+ bindswitch --reload --locked lid:off exec \
+   swaymsg output $laptop dpms on
 
-#exec swayidle -w timeout 1200 '~/.config/sway/suspend_system.sh'\\
+#exec swayidle -w \
+# timeout 300 'swaylock' \
+#    timeout 900 'swaymsg "output * dpms off"' \
+#        resume  'swaymsg "output * dpms on"'  \
+#    timeout 1200 '~/.config/sway/suspend_system.sh' \
+#    after-resume 'swaymsg "output * enable"' \
+#    before-sleep 'swaylock'
+
+exec swayidle -w timeout 1200 '~/.config/sway/suspend_system.sh' \
+    before-sleep 'swaylock'
 
 #bindswitch --reload --locked lid:on exec swaymsg output $laptop_screen disable
 
