@@ -309,7 +309,7 @@ exec sudo ~/.configs_pointer/bin/switch_keyboard.sh pc
 bindsym $mod1+i exec ~/.config/sway/toggle_fcitx.sh
   # Mako notifications
 exec mako
-exec ~/.config/sway/batt/battery_notif.sh
+# exec ~/.config/sway/batt/battery_notif.sh
   # Exit sway (hit 3 times repeatedly to force exit)
 bindsym $mod2+Escape exec ~/.config/sway/sway_exit.sh
 
