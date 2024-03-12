@@ -112,9 +112,9 @@ case "$1" in
   -c | --colorscheme) echo "$(query_color_scheme)" ;;
   -q | --query) print_current_colors ;;
   -h | --help)  print_color_help ;;
-  light | gruvboxlight) change_color_scheme "base16-gruvbox-light-hard" ;;
-  dracula)              change_color_scheme "base16-dracula" ;;
-  github)               change_color_scheme "base16-github" ;;
-  dark | gruvboxdark)   change_color_scheme "base16-gruvbox-dark-pale" ;;
+  gruvboxlight) change_color_scheme "base16-gruvbox-light-hard" ;;
+  dark | dracula)              change_color_scheme "base16-dracula" ;;
+  light | github)               change_color_scheme "base16-github" ;;
+  gruvboxdark)   change_color_scheme "base16-gruvbox-dark-pale" ;;
   *) print_color_help ;;
 esac

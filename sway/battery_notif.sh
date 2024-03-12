@@ -13,7 +13,18 @@ while [[ 0 -eq 0 ]]; do
 	battery_status="$(cat /sys/class/power_supply/BAT0/status)"
 	battery_charge="$(cat /sys/class/power_supply/BAT0/capacity)"
 
-	if [[ $battery_status == 'Discharging' && $battery_charge -le 85 ]]; then
+	notify-send --icon="$path/battery_low.svg" "current charge:" "${battery_charge}%"
+
+	if [[ $battery_status == 'Charging' && $battery_charge -ge 80 ]] then
+		if [[ $battery_charge -ge 80 ]] then
+			notify-send --icon="$path/battery_full.svg" "Battery charged: 80%" "${battery_charge}%"
+			sleep 600
+		elif [[ $battery_charge -ge 98 ]] then
+			notify-send --icon="$path/battery_full.svg" "Battery Full" "${battery_charge}%"
+			sleep 600
+		fi
+
+	if [[ $battery_status == 'Discharging' && $battery_charge -le 80 ]]; then
 		if   [[ $battery_charge -le 15 ]]; then
 			notify-send --icon="$path/battery_low.svg" --urgency=critical "Battery critical!" "${battery_charge}%"
 			sleep 180

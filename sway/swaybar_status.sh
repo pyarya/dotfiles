@@ -47,10 +47,10 @@ network_info() {
   # want to read the output of this command somehow and print it.
   iw dev wlan0 info | grep -i ssid | awk '{ split($0, a, " "); printf "%s ", a[2] }'
 
-  IP=$(ip a show wlan0 | awk 'match($0, /inet (.*)(\/)/, gp) { print gp[1]}')
+  IP=$(ip a show wlan0 | awk 'match($0, /inet (.*)(\/)/, ip) { print ip[1]}')
 
   if [[ -z "$IP" ]] then
-    printf "IPV4 unavailable"
+    printf "IPV4: N/A"
   else
     printf "%s" "$IP"
   fi
