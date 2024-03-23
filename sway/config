@@ -239,6 +239,7 @@ input 1739:52928:SYNA2BA6:00_06CB:CEC0_Touchpad {
     natural_scroll enabled
     accel_profile flat
     scroll_factor 0.35
+    pointer_accel 0.5
 }
 
 input 5426:148:Razer_Orochi_V2 {
@@ -256,8 +257,7 @@ output DP-3 scale 2
 
 output eDP-1 mode 3072x1920@60.000Hz position 0,0
 
-bindsym Mod1+p output eDP-1 mode 3072x1920@120.002Hz
-## TODO: write a script to switch between 60 and 120Hz
+bindsym Mod1+p exec ~/.config/sway/refreshswap.sh
 
 default_border pixel 2
   # Adjust gamma. More important for external displays. Laptops are usually fine
@@ -466,11 +466,10 @@ set $sleep sleep 3 && swaylock
    swaymsg output $laptop dpms on
 
 exec swayidle -w \
-#    timeout 300 'swaylock' \
-#    timeout 900 'swaymsg "output * dpms off"' \
-#        resume  'swaymsg "output * dpms on"'  \
-     timeout 1200 '~/.config/sway/suspend_system.sh' \
-#    after-resume 'swaymsg "output * enable"' \
+    timeout 800 'swaymsg "output * dpms off"' \
+        resume  'swaymsg "output * dpms on"'  \
+    timeout 900 '~/.config/sway/suspend_system.sh' \
+    after-resume 'swaymsg "output * enable"' \
     before-sleep 'swaylock'
 
 #exec swayidle -w timeout 1200 '~/.config/sway/suspend_system.sh' \

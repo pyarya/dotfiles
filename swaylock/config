@@ -2,32 +2,46 @@ show-failed-attempts
 ignore-empty-password
 indicator-idle-visible
 image=~/.config/swaylock/lock_img.png
-bs-hl-color=83A598
+
+clock
+effect-blur=7x7
+effect-vignette=0.5:0.5:0.5:0.5:0
+indicator
+#remove "screenshot" to use custom image
+screenshot
 
 #scaling=fit
-color=000000
+#color=000000
 font="MesloLGMNerdFont"
-font-size=30
+font-size=40
 
-indicator-radius=65
-indicator-thickness=15
-line-color=282A36
-ring-color=BD93F9
-inside-color=282A36
-key-hl-color=50FA7B
-separator-color=00000000
-text-color=F8F8F2
+datestr=
+timestr=%I:%M %p
+fade-in=0.2
+
+# Ring
+indicator-radius=75
+# line-uses-ring
+line-color=#3b4252
+text-color=#d8dee9
+# inside-color=#2e344098
+# inside-color=#24273a
+inside-ver-color=#5e81ac
+line-ver-color=#5e81ac
+ring-ver-color=#5e81ac98
+ring-color=#24273a
+key-hl-color=#b7bdf8
+separator-color=#4c566a
+layout-text-color=#eceff4
+
 text-caps-lock-color=""
-line-ver-color=BD93F9
-ring-ver-color=BD93F9
-inside-ver-color=282A36
-text-ver-color=8BE9FD
-ring-wrong-color=FF5555
-text-wrong-color=FF5555
-inside-wrong-color=282A36
+text-ver-color=d8dee9
 inside-clear-color=282A36
-text-clear-color=8BE9FD
-ring-clear-color=8BE9FD
-line-clear-color=8BE9FD
-line-wrong-color=282A36
-bs-hl-color=8BE9FD
+text-clear-color=d8dee998
+ring-clear-color=#5e81ac98
+line-clear-color=#5e81ac
+
+inside-wrong-color=282A36
+text-wrong-color=ff555598
+ring-wrong-color=#ff555598
+line-wrong-color=#ff5555
