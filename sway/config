@@ -252,7 +252,7 @@ output eDP-1 background ~/.config/sway/default_wallpaper.png fill
 output DP-1 background ~/.config/sway/default_wallpaper.png fill
 output DP-3 background ~/.config/sway/default_wallpaper.png fill
 
-output DP-1 scale 2
+output eDP-1 scale 2
 output DP-3 scale 2
 
 output eDP-1 mode 3072x1920@60.000Hz position 0,0

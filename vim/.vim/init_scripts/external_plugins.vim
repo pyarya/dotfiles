@@ -84,7 +84,6 @@ Plug 'sheerun/vim-polyglot'
     " LaTeX support
 Plug 'lervag/vimtex'
     " LaTex snippets. Requires python
-Plug 'SirVer/ultisnips', { 'tag': '*3.2' }
 
 call plug#end()
 
