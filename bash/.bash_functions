@@ -44,14 +44,27 @@ vifmmv() {
 }
 
 # Fancy sudo
-_please()
-{
-    local cur prev opts
-    local cur="${COMP_WORDS[COMP_CWORD]}"
-    COMPREPLY=( $(compgen -c "${cur}") )
-    return 0
+# Completion for please =============================================
+_please() {
+    local cur prev words cword
+    _init_completion || return
+
+    # Complete command in first argument position
+    if [ $cword -eq 1 ]; then
+        COMPREPLY=($(compgen -c -- "$cur"))
+        return 0
+    fi
+
+    # Remove first word (please)
+    words=("${words[@]:1}")
+    (( cword-- ))
+
+    # Run the completion for the command after 'please'
+    _command_offset 1
 }
 complete -F _please please
+
+
 
 # Keyboard layout switching =========================================
 sww() {
@@ -282,6 +295,18 @@ function bless () {
 }
 
 # Attach to tmux session ============================================
+
+function _ta() {
+  local cur prev opts
+  COMPREPLY=()
+  cur="${COMP_WORDS[COMP_CWORD]}"
+  prev="${COMP_WORDS[COMP_CWORD-1]}"
+  opts=$(tmux ls | awk 'match($0, /^[^:]*: /) { print substr($0, RSTART, RLENGTH-2) }')
+
+  COMPREPLY+=( $(compgen -W "$opts" -- ${cur}) )
+  return 0
+}
+
 function ta() {
   if [[ -n "$1" ]]; then
     tmux new -As "$1"
@@ -294,6 +319,8 @@ function ta() {
     tmux attach 2>/dev/null || tmux new -As 0
   fi
 }
+
+complete -F _ta ta
 
 # Image magick ======================================================
 function magika() {
