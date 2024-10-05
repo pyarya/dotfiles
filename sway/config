@@ -100,7 +100,7 @@ bindsym $mod2+tab exec ~/.config/sway/cycle_windows.py previous
 bindsym $mod1+ctrl+r exec wtype "asExpectedOfRust"
 
   # Automatic upload image to discord
-bindsym $mod1+ctrl+u exec sudo -u emiliko ~/.configs_pointer/bin/auto_image_upload_discord.sh
+bindsym $mod1+ctrl+u exec sudo -u chopper ~/.configs_pointer/bin/auto_image_upload_discord.sh
   # Paste by typing
 bindsym Mod4+Ctrl+v exec ~/.configs_pointer/bin/wpastetype.py
 
@@ -130,9 +130,11 @@ mode "resize" {
 }
 
 # Gaps ====
+gaps inner 7
+gaps outer 7
 bindsym $mod2+bracketright gaps inner current minus 3
 bindsym $mod2+bracketleft  gaps inner current plus 3
-#bindsym $mod2+equal gaps toggle
+bindsym $mod2+equal gaps toggle
     # Standard outer gapping for 27" screen
 bindsym $mod2+c gaps vertical current set 100, \
                 gaps horizontal current set 200
@@ -257,7 +259,7 @@ output DP-3 scale 2
 
 output eDP-1 mode 3072x1920@60.000Hz position 0,0
 
-bindsym Mod1+p exec ~/.config/sway/refreshswap.sh
+bindsym Mod1+p exec ~/.config/swabottomy/refreshswap.sh
 
 default_border pixel 2
   # Adjust gamma. More important for external displays. Laptops are usually fine
@@ -403,18 +405,15 @@ mode "mpv_global" {
 #│ Sτylεs                                                                      |
 #╚─────────────────────────────────────────────────────────────────────────────╝
 bar {
-    position bottom
-#    swaybar_command waybar
+    # change the bar to waybar, defaults to swaybar
+    swaybar_command waybar
 
+# swaybar configs
     binding_mode_indicator yes
-
-      # Vertical horizontal
-    gaps 0 0
-
+    # Vertical horizontal
+    # gaps 0 0
     mode dock
-
-    status_command while ~/.config/sway/swaybar_status.sh; do sleep 30; done
-
+    #status_command while ~/.config/sway/swaybar_status.sh; do sleep 30; done
     colors {
           # Foreground color
         statusline #ffffff
@@ -432,7 +431,7 @@ bar {
 }
 
 # Colors | #border #background #text #indicator #child_border
-client.focused #282a36 #8be9fd77 #f8f8f2 #8be9fd #ffffffCC
+client.focused #282a36 #8be9fd77 #f8f8f2 #8be9fd #ffffffaa
 client.unfocused #282a36 #222222BB #f8f8f299 #8be9fd #222222BB
 client.focused_inactive  #282a36 #8be9fd77 #f8f8f2 #8be9fd #ffffffCC
 #client.focused #FFFFFF #FFFFFF #000000 #ffffff #ffffff
