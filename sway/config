@@ -42,8 +42,9 @@ set $size_up   comma
 set $size_down period
 
 set $term alacritty
-set $menu fuzzel -fmonospace:size=14 -l15 -w42 \
-        -b282a36e0 -tf8f8f2ff -m8be9fdff -s282a36d0 -Sff79c6ff -C44475aff -M8be9fdff
+set $menu fuzzel
+       # \-fmonospace:size=14 -l15 -w42 \
+       # -b282a36e0 -tf8f8f2ff -m8be9fdff -s282a36d0 -Sff79c6ff -C44475aff -M8be9fdff
 
 # Sound effects and additional features
 set $volume_command ~/.config/sway/pulse_audio_volume.sh
@@ -131,7 +132,6 @@ mode "resize" {
 
 # Gaps ====
 gaps inner 7
-gaps outer 7
 bindsym $mod2+bracketright gaps inner current minus 3
 bindsym $mod2+bracketleft  gaps inner current plus 3
 bindsym $mod2+equal gaps toggle
@@ -298,7 +298,7 @@ bindsym $mod2+q kill
   # Dragging windows
 floating_modifier $mod1 normal
   # Screenlock
-bindsym $mod2+i exec ~/.config/sway/brightness_lock.sh
+bindsym $mod2+i exec ~/.config/fuzzel/scripts/powermenu.sh
   # Scratchpad
 bindsym $mod1+Shift+minus move scratchpad
 bindsym $mod1+minus scratchpad show

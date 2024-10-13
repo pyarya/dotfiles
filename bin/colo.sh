@@ -38,7 +38,7 @@ query_color_scheme() {
   if [[ -r "$ALACRITTY_CONF" ]]; then
     echo "$(awk -F/ '/^import =/ {print substr($NF, 1, length($NF)-7)}' "$ALACRITTY_CONF")"
   else
-    echo 'base16-gruvbox-dark-pale'
+    echo 'base16-dracula'
   fi
 }
 

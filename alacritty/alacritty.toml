@@ -112,5 +112,5 @@ opacity = 1
 startup_mode = "Windowed"
 
 [window.padding]
-x = 4
+x = 0
 y = 0

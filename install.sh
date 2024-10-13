@@ -38,6 +38,8 @@ declare -r UNIX_CONFIGS=(\
     i3          ~/.config/i3
     sway        ~/.config/sway
     swaylock    ~/.config/swaylock
+    waybar      ~/.config/waybar
+    fuzzel      ~/.config/fuzzel
     xremap      ~/.config/xremap
     yofi        ~/.config/yofi
   ) \

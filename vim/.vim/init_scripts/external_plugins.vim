@@ -27,6 +27,9 @@ Plug 'tpope/vim-eunuch'
 "Plug 'easymotion/vim-easymotion'
 Plug 'wakatime/vim-wakatime'
 
+    " Better hex-color highlighting
+Plug 'norcalli/nvim-colorizer.lua'
+
 " Vim windows ====
     " Tmux-like zoom for windows
 Plug 'dhruvasagar/vim-zoom'
