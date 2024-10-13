@@ -1,0 +1,204 @@
+// -*- mode: jsonc -*-
+[{
+    "output": ["eDP-1", "eDP-2"],
+    // "layer": "top", // Waybar at top layer
+    "position": "top", // Waybar position (top|bottom|left|right)
+    // "height": 0, // Waybar height (to be removed for auto height)
+    "width": 1520, // Waybar width
+    "spacing": 4, // Gaps between modules (4px)
+    // Choose the order of the modules
+    "modules-left": [
+        "custom/powermenu",
+        "sway/workspaces",
+        "sway/mode",
+        "sway/scratchpad",
+        "mpris",
+    ],
+    "modules-center": [
+        "sway/window",
+    ],
+    "modules-right": [
+        "network#wifi",
+        "network#dongle",
+        "memory",
+        "wireplumber",
+        "backlight",
+        "clock",
+        "battery",
+        "tray"
+    ],
+    // Modules configuration
+    "custom/powermenu": {
+      "format": " ",
+      "tooltip": false,
+      "on-click": "fuzzel --anchor top-left --x-margin 20"
+    },
+    "sway/workspaces": {
+        "all-outputs": true,
+        "warp-on-scroll": false,
+        "enable-bar-scroll": true,
+        "disable-scroll-wraparound": true,
+        "format": "{icon}",
+        "format-icons": {
+            //change these to icons if you wanna specify
+            "1": "1",
+            "2": "2",
+            "3": "3",
+            "4": "4",
+            "5": "5",
+            "9": "9",
+            "10": "10"
+        }
+    },
+    "sway/window": {
+        "format": "{title}",
+        "max-length": 40,
+        "all-outputs": true
+    },
+    "mpris": {
+ 	"format": "󰎇 {status_icon} {dynamic}",
+        "interval": 1,
+        "dynamic-len": 30,
+	"status-icons": {
+		"playing": "",
+		"paused": "",
+		"stopped": ""
+	},
+	"dynamic-order": ["title", "artist"],
+	"ignored-players": ["firefox"]
+    },
+    "sway/mode": {
+        "format": "{}"
+    },
+    "sway/scratchpad": {
+        "format": "{icon} {count}",
+        "show-empty": false,
+        "format-icons": ["", ""],
+        "tooltip": true,
+        "tooltip-format": "{app}: {title}"
+    },
+    "tray": {
+        "icon-size": 14,
+        "spacing": 10
+    },
+    "load": {
+        "format": " {}"
+    },
+    "clock": {
+        // "timezone": "America/New_York",
+        "format": "{:%I:%M %p}",
+        "tooltip-format": "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>",
+        "format-alt": "{:%B %d}"
+    },
+    "network#wifi": {
+	"interface": "wlan0",
+	"format": "",
+	"format-wifi": "{essid}  ",
+	"format-disconnected": "", //An empty format will hide the module.
+	"tooltip-format": "interface:\t{ifname}\nipv4:\t{ipaddr}/{cidr}\nup:\t{bandwidthUpBytes}\ndown:\t{bandwidthDownBytes}",
+	"max-length": 50
+    },
+    "network#dongle": {
+	"interface": "eth*",
+	"format": "",
+	"format-ethernet": "{ipaddr}  ",
+	"format-disconnected": "", //An empty format will hide the module.
+	"tooltip-format": "interface:\t{ifname}\nipv4:\t{ipaddr}/{cidr}\nup:\t{bandwidthUpBytes}\ndown:\t{bandwidthDownBytes}",
+	"tooltip-format-ethernet": "",
+	"max-length": 50
+    },
+    "memory": {
+        "format": "{used:0.1f}G/{total:0.1f}G"
+    },
+    "backlight": {
+        // "device": "acpi_video1",
+        "format": "{icon} {percent}%",
+        "format-icons": ["", "", "", "", "", "", "", "", ""]
+    },
+    "battery": {
+        "states": {
+            // "good": 95,
+            "warning": 30,
+            "critical": 15
+        },
+        "format": "{icon} {capacity}%",
+        "format-full": "{icon} {capacity}%",
+        "format-charging": "{capacity}%",
+        "format-plugged": " {capacity}%",
+        "format-alt": "{icon} {time}",
+        // "format-good": "", // An empty format will hide the module
+        // "format-full": "",
+        "format-icons": ["", "", "", "", ""]
+    },
+    "wireplumber": {
+        "scroll-step": 5, // %, can be a float
+        "format": "{icon} {volume}%",
+        "format-bluetooth": "{icon} {volume}% ",
+        "format-bluetooth-muted": "x {icon}",
+        "format-muted": "x",
+        "format-icons": {
+            "headphone": "",
+            "hands-free": "",
+            "headset": "",
+            "phone": "",
+            "portable": "",
+            "car": "",
+            "default": ["", "", ""]
+        },
+        "on-click": "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle"
+    }
+},{
+    "output": ["HDMI-A-1"],
+    // "layer": "top", // Waybar at top layer
+    // "position": "bottom", // Waybar position (top|bottom|left|right)
+    "height": 24, // Waybar height (to be removed for auto height)
+    // "width": 1280, // Waybar width
+    "spacing": 4, // Gaps between modules (4px)
+    // Choose the order of the modules
+    "modules-left": [
+        "sway/workspaces",
+        "sway/mode",
+        "sway/scratchpad"
+    ],
+    "modules-center": [
+        "clock"
+    ],
+    "modules-right": [
+        "sway/window"
+    ],
+    "sway/workspaces": {
+        "all-outputs": true,
+        "warp-on-scroll": true,
+        "enable-bar-scroll": true,
+        "format": "{icon}",
+        "format-icons": {
+            "1": "",
+            "2": "",
+            "3": "",
+            "4": "",
+            "5": "",
+            "9": "",
+            "10": ""
+        }
+    },
+    "sway/window": {
+        "format": "{title}",
+        "max-length": 40,
+        "all-outputs": true
+    },
+    "sway/mode": {
+        "format": "{}"
+    },
+    "sway/scratchpad": {
+        "format": "{icon} {count}",
+        "show-empty": false,
+        "format-icons": ["", ""],
+        "tooltip": true,
+        "tooltip-format": "{app}: {title}"
+    },
+    "clock": {
+        // "timezone": "America/New_York",
+        "tooltip-format": "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>",
+        "format-alt": "{:%Y-%m-%d}"
+    }
+}]
