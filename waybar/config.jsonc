@@ -87,8 +87,25 @@
     "clock": {
         // "timezone": "America/New_York",
         "format": "{:%I:%M %p}",
-        "tooltip-format": "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>",
-        "format-alt": "{:%B %d}"
+        "rotate": 0,
+        "on-click-middle": "exec firefox -new-window https://calendar.google.com/calendar/r",
+        "tooltip-format": "<tt>{calendar}</tt>",
+        "calendar": {
+            "mode": "month",
+            "mode-mon-col": 3,
+            "on-scroll": 1,
+            "on-click-right": "mode",
+            "format": {
+                "months": "<span><b>{}</b></span>",
+                "weekdays": "<span><b>{}</b></span>",
+                "today": "<span color='#ff6699'><b>{}</b></span>"
+            }
+        },
+        "actions": {
+            "on-click-right": "mode",
+            "on-click-forward": "tz_up",
+            "on-click-backward": "tz_down",
+        }
     },
     "network#wifi": {
 	"interface": "wlan0",
@@ -113,6 +130,7 @@
     "backlight": {
         // "device": "acpi_video1",
         "format": "{icon} {percent}%",
+        "tooltip": false,
         "format-icons": ["", "", "", "", "", "", "", "", ""]
     },
     "battery": {
@@ -123,7 +141,7 @@
         },
         "format": "{icon} {capacity}%",
         "format-full": "{icon} {capacity}%",
-        "format-charging": "{capacity}%",
+        "format-charging": " {capacity}%",
         "format-plugged": " {capacity}%",
         "format-alt": "{icon} {time}",
         // "format-good": "", // An empty format will hide the module
@@ -134,16 +152,15 @@
         "scroll-step": 5, // %, can be a float
         "format": "{icon} {volume}%",
         "format-bluetooth": "{icon} {volume}% ",
-        "format-bluetooth-muted": "x {icon}",
-        "format-muted": "x",
+        "format-bluetooth-muted": "{icon} 󰂲",
+        "format-muted": " ",
         "format-icons": {
-            "headphone": "",
+            "headphone": " ",
             "hands-free": "",
             "headset": "",
             "phone": "",
-            "portable": "",
             "car": "",
-            "default": ["", "", ""]
+            "default": [" ", " ", " "]
         },
         "on-click": "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle"
     }

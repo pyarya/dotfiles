@@ -420,20 +420,20 @@ bar {
         background #222222BB
 
           # border background text
-        focused_workspace #59b6fc #8be9fdAA #44475a
-        inactive_workspace #6272a4 #44475a #ffffff77
-        urgent_workspace #9969b8 #9969b8 #000000
+        #focused_workspace #59b6fc #8be9fdAA #44475a
+        #inactive_workspace #6272a4 #44475a #ffffff77
+        #urgent_workspace #9969b8 #9969b8 #000000
 
         #binding_mode #8ec07c #8ec07c #000000
         #binding_mode #8ec07c #d3869b #000000
-        binding_mode #fadb2f #fadb2f #000000
+        #binding_mode #fadb2f #fadb2f #000000
     }
 }
 
 # Colors | #border #background #text #indicator #child_border
-client.focused #282a36 #8be9fd77 #f8f8f2 #8be9fd #ffffffaa
-client.unfocused #282a36 #222222BB #f8f8f299 #8be9fd #222222BB
-client.focused_inactive  #282a36 #8be9fd77 #f8f8f2 #8be9fd #ffffffCC
+client.focused #282a36 #8be9fd77 #f8f8f2 #a6e3a1 #6272a4
+client.unfocused #282a36 #222222BB #f8f8f299 #a6e3a1 #222222BB
+client.focused_inactive  #282a36 #8be9fd77 #f8f8f2 #a6e3a1 #ffffffCC
 #client.focused #FFFFFF #FFFFFF #000000 #ffffff #ffffff
 
 #no title bar if tabbed or stacked layout has one child
