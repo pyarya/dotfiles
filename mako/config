@@ -1,9 +1,9 @@
-border-radius=1
+border-radius=5
 border-size=2
 progress-color=over #000000
 default-timeout=5000
 max-visible=4
-anchor=bottom-right
+anchor=top-right
 layer=overlay
 ignore-timeout=1
 
@@ -18,9 +18,6 @@ border-color=#282a36
 
 [urgency=normal]
 border-color=#6272a4
-
-[urgency=high]
-border-color=#ff5555
 
 [category=mpd]
 default-timeout=2000

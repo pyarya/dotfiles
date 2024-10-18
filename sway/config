@@ -1,7 +1,5 @@
 #Default config for sway
-#
 # Copy this to ~/.config/sway/config and edit it to your liking.
-#
 # Read `man 5 sway` for a complete reference.
 
 #╔─────────────────────────────────────────────────────────────────────────────╗
@@ -95,10 +93,7 @@ bindsym $mod1+tab exec ~/.config/sway/cycle_windows.py next
 bindsym $mod2+tab exec ~/.config/sway/cycle_windows.py previous
 
   # Swap focus between the tiling area and the floating area
-#bindsym $mod+space focus mode_toggle
-
-  # Important rust jerk
-bindsym $mod1+ctrl+r exec wtype "asExpectedOfRust"
+bindsym $mod2+space focus mode_toggle
 
   # Automatic upload image to discord
 bindsym $mod1+ctrl+u exec sudo -u chopper ~/.configs_pointer/bin/auto_image_upload_discord.sh
@@ -233,9 +228,9 @@ mode "workspace_tuning" {
 }
 
 #╔─────────────────────────────────────────────────────────────────────────────╗
-#│ Iηρμτ αηd δμτρμτ αdjμsτmεητs                                                |
+#│ Input and Output Adjustments                                                |
 #╚─────────────────────────────────────────────────────────────────────────────╝
-# Trackpad more like MacOS
+#trackpad
 input 1739:52928:SYNA2BA6:00_06CB:CEC0_Touchpad {
     tap enabled
     natural_scroll enabled
@@ -243,23 +238,21 @@ input 1739:52928:SYNA2BA6:00_06CB:CEC0_Touchpad {
     scroll_factor 0.35
     pointer_accel 0.5
 }
-
+#mouse
 input 5426:148:Razer_Orochi_V2 {
     accel_profile flat
     pointer_accel 0.1
 }
 
-output * background ~/.config/sway/secondary_wallpaper.png fill
+output * background ~/.config/sway/default_wallpaper.png fill
 output eDP-1 background ~/.config/sway/default_wallpaper.png fill
-output DP-1 background ~/.config/sway/default_wallpaper.png fill
-output DP-3 background ~/.config/sway/default_wallpaper.png fill
+#output DP-1 background ~/.config/sway/default_wallpaper.png fill
+#output DP-3 background ~/.config/sway/default_wallpaper.png fill
 
 output eDP-1 scale 2
-output DP-3 scale 2
+#output DP-3 scale 2
 
-output eDP-1 mode 3072x1920@60.000Hz position 0,0
-
-bindsym Mod1+p exec ~/.config/swabottomy/refreshswap.sh
+#output eDP-1 mode 3072x1920@60.000Hz position 0,0
 
 default_border pixel 2
   # Adjust gamma. More important for external displays. Laptops are usually fine
@@ -283,6 +276,17 @@ bindsym Shift+F4 exec ddcutil setvcp 10 - 1
 bindsym Shift+F5 exec ddcutil setvcp 10 + 1
 
 #╔─────────────────────────────────────────────────────────────────────────────╗
+#│ startup programs                                                            |
+#╚─────────────────────────────────────────────────────────────────────────────╝
+  # Xremap
+exec sudo ~/.configs_pointer/bin/switch_keyboard.sh pc
+  # Mako notifications
+exec mako
+  # Tailscale
+exec trayscale
+exec ~/.config/sway/batt/battery_notif.sh
+
+#╔─────────────────────────────────────────────────────────────────────────────╗
 #│ Hδτkεy dαεmδη                                                               |
 #╚─────────────────────────────────────────────────────────────────────────────╝
   # Terminal
@@ -297,7 +301,7 @@ bindsym $mod1+ctrl+s reload
 bindsym $mod2+q kill
   # Dragging windows
 floating_modifier $mod1 normal
-  # Screenlock
+  # fuzzel logout dmenu
 bindsym $mod2+i exec ~/.config/fuzzel/scripts/powermenu.sh
   # Scratchpad
 bindsym $mod1+Shift+minus move scratchpad
@@ -305,13 +309,8 @@ bindsym $mod1+minus scratchpad show
   # Warpd - Keyboard-driven mouse
 bindsym Mod4+Control+j exec warpd --hint
 bindsym Mod4+Control+n exec warpd --normal
-  # Xremap
-exec sudo ~/.configs_pointer/bin/switch_keyboard.sh pc
   # IME Module
 bindsym $mod1+i exec ~/.config/sway/toggle_fcitx.sh
-  # Mako notifications
-exec mako
-# exec ~/.config/sway/batt/battery_notif.sh
   # Exit sway (hit 3 times repeatedly to force exit)
 bindsym $mod2+Escape exec ~/.config/sway/sway_exit.sh
 
@@ -409,15 +408,13 @@ bar {
     swaybar_command waybar
 
 # swaybar configs
-    binding_mode_indicator yes
-    # Vertical horizontal
-    # gaps 0 0
-    mode dock
+#    binding_mode_indicator yes
+#    mode dock
     #status_command while ~/.config/sway/swaybar_status.sh; do sleep 30; done
-    colors {
+#    colors {
           # Foreground color
-        statusline #ffffff
-        background #222222BB
+#        statusline #ffffff
+#        background #222222BB
 
           # border background text
         #focused_workspace #59b6fc #8be9fdAA #44475a
@@ -441,71 +438,33 @@ hide_edge_borders --i3 smart
 
 #titlebar adjustment, horizontal vertical
 titlebar_padding 5 2
-#gaps
-#smart_borders no_gaps
 
 #transparency
-set $opacity 0.985
+set $opacity 1
 for_window [class=".*"] opacity $opacity
 for_window [app_id=".*"] opacity $opacity
 for_window [title="Picture-in-Picture"] floating enable
 for_window [app_id="gnome-*"] floating enable
 for_window [title="Welcome-*"] floating enable
+for_window [title="Trayscale"] floating enable
 
 #╔─────────────────────────────────────────────────────────────────────────────╗
-#│ Oτhεr                                                                       |
+#│Sleep settings for laptops  TODO: systemctl suspend?                         |
 #╚─────────────────────────────────────────────────────────────────────────────╝
-# Sleep settings for laptops  TODO: systemctl suspend?
+#
 set $laptop 'eDP-1'
 set $sleep sleep 3 && swaylock
 
- bindswitch --reload --locked lid:on exec \
+bindswitch --reload --locked lid:on exec \
     swaymsg output $laptop dpms off && swaylock
- bindswitch --reload --locked lid:off exec \
+bindswitch --reload --locked lid:off exec \
    swaymsg output $laptop dpms on
 
 exec swayidle -w \
-    timeout 800 'swaymsg "output * dpms off"' \
+    timeout 150 'swaymsg "output * dpms off"' \
         resume  'swaymsg "output * dpms on"'  \
-    timeout 900 '~/.config/sway/suspend_system.sh' \
+    timeout 1200 '~/.config/sway/suspend_system.sh' \
     after-resume 'swaymsg "output * enable"' \
     before-sleep 'swaylock'
 
-#exec swayidle -w timeout 1200 '~/.config/sway/suspend_system.sh' \
-#    before-sleep 'swaylock'
-
-#bindswitch --reload --locked lid:on exec swaymsg output $laptop_screen disable
-
-#bindswitch --reload --locked lid:on exec '[ $(swaymsg -t get_outputs | grep name | wc -l) == 1 ] && ($sleep) || ($notify "Clamshell mode" "Laptop screen off" && swaymsg output $laptop_screen disable)'
-#
-#bindswitch --reload --locked lid:off output $laptop_screen enable
-
 include /etc/sway/config.d/*
-
-#
-# Example configuration:
-#
-#   output HDMI-A-1 resolution 1920x1080 position 1920,0
-#
-# You can get the names of your outputs by running: swaymsg -t get_outputs
-
-#
-#exec swayidle -w \
-#    timeout 101 'swaylock' \
-#    timeout 314 'swaymsg "output * dpms off"' \
-#        resume  'swaymsg "output * dpms on"'  \
-#    timeout 626 'systemctl suspend ' \
-#    before-sleep 'swaylock'
-
-### Idle configuration
-#
-# Example configuration:
-#
-# exec swayidle -w \
-#          timeout 300 'swaylock -f -c 000000' \
-#          timeout 600 'swaymsg "output * dpms off"' resume 'swaymsg "output * dpms on"' \
-#          before-sleep 'swaylock -f -c 000000'
-#
-# This will lock your screen after 300 seconds of inactivity, then turn off
-# your displays after another 300 seconds, and turn your screens back on when
-# resumed. It will also lock your screen before your computer goes to sleep.

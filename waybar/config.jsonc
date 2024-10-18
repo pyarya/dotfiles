@@ -4,7 +4,7 @@
     // "layer": "top", // Waybar at top layer
     "position": "top", // Waybar position (top|bottom|left|right)
     // "height": 0, // Waybar height (to be removed for auto height)
-    "width": 1520, // Waybar width
+    //"width": 1520, // Waybar width
     "spacing": 4, // Gaps between modules (4px)
     // Choose the order of the modules
     "modules-left": [
@@ -108,21 +108,21 @@
         }
     },
     "network#wifi": {
-	"interface": "wlan0",
-	"format": "",
-	"format-wifi": "{essid}  ",
-	"format-disconnected": "", //An empty format will hide the module.
-	"tooltip-format": "interface:\t{ifname}\nipv4:\t{ipaddr}/{cidr}\nup:\t{bandwidthUpBytes}\ndown:\t{bandwidthDownBytes}",
-	"max-length": 50
+        "interface": "wlan0",
+        "format": "",
+        "format-wifi": "{essid}  ",
+        "format-disconnected": "", //An empty format will hide the module.
+        "tooltip-format": "interface:\t{ifname}\nipv4:\t{ipaddr}/{cidr}\nup:\t{bandwidthUpBytes}\ndown:\t{bandwidthDownBytes}",
+        "max-length": 50
     },
     "network#dongle": {
-	"interface": "eth*",
-	"format": "",
-	"format-ethernet": "{ipaddr}  ",
-	"format-disconnected": "", //An empty format will hide the module.
-	"tooltip-format": "interface:\t{ifname}\nipv4:\t{ipaddr}/{cidr}\nup:\t{bandwidthUpBytes}\ndown:\t{bandwidthDownBytes}",
-	"tooltip-format-ethernet": "",
-	"max-length": 50
+        "interface": "eth*",
+        "format": "",
+        "format-ethernet": "{ipaddr}  ",
+        "format-disconnected": "", //An empty format will hide the module.
+        "tooltip-format": "interface:\t{ifname}\nipv4:\t{ipaddr}/{cidr}\nup:\t{bandwidthUpBytes}\ndown:\t{bandwidthDownBytes}",
+        "tooltip-format-ethernet": "",
+        "max-length": 50
     },
     "memory": {
         "format": "{used:0.1f}G/{total:0.1f}G"
@@ -130,7 +130,6 @@
     "backlight": {
         // "device": "acpi_video1",
         "format": "{icon} {percent}%",
-        "tooltip": false,
         "format-icons": ["", "", "", "", "", "", "", "", ""]
     },
     "battery": {

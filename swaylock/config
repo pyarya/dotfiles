@@ -1,7 +1,7 @@
 show-failed-attempts
 ignore-empty-password
 indicator-idle-visible
-image=~/.config/swaylock/lock_img.png
+image=~/.config/swaylock/nft.gif
 
 clock
 effect-blur=7x7
