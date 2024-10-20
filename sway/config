@@ -132,8 +132,8 @@ bindsym $mod2+$pane_right move right
   # Layout modifiers
 bindsym $mod2+f floating toggle
 #bindsym $mod2+s layout stacking
-bindsym $mod2+t layout tabbed
-bindsym $mod2+r layout toggle
+bindsym $mod2+t layout tabbed & exec pkill autotiling-rs
+bindsym $mod2+r layout toggle & exec autotiling-rs
 
   # Binary split container
 bindsym $mod1+b split toggle
@@ -410,14 +410,14 @@ set $opacity 1
 #╔─────────────────────╗
 #│ Autostart Options   │
 #╚─────────────────────╝
-  # Autotiling #TODO:turn this off when in tabbed mode
-exec --no-startup-id autotiling-rs
+  # Autotiling TODO:turn this off when in tabbed mode
+exec_always autotiling-rs
   # Xremap
 exec sudo ~/.configs_pointer/bin/switch_keyboard.sh pc
   # Mako notifications
-exec_always --no-startup-id mako &
+exec_always mako &
   # Tailscale
-exec --no-startup-id trayscale &
+exec trayscale &
 
 #╔──────────╗
 #│ Hotkeys  │
@@ -497,7 +497,7 @@ bar {
 #╔──────────────────────────────────────────────────────────────────────╗
 #│ Window Colours | #border #background #text #indicator #child_border  │
 #╚──────────────────────────────────────────────────────────────────────╝
-    client.focused          #ffc0cb #ffc0cb #ffffff
+    client.focused          #c0c1ff #c0c1ff #ffffff #c0d4ff
     client.unfocused        #2e3440 #1f222d #888888
     client.focused_inactive #2e3440 #1f222d #888888
     client.placeholder      #2e3440 #1f222d #888888
