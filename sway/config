@@ -1,10 +1,9 @@
-#Default config for sway
-# Copy this to ~/.config/sway/config and edit it to your liking.
+# Sway config file located at ~/.config/sway/config
 # Read `man 5 sway` for a complete reference.
 
-#╔─────────────────────────────────────────────────────────────────────────────╗
-#│ Sεττiηg ναriαblεs                                                           |
-#╚─────────────────────────────────────────────────────────────────────────────╝
+#╔────────────────────╗
+#│ Setting Variables  |
+#╚────────────────────╝
 #  Linux      MacOS      Wayland    identifier    code
 #   Alt        Opt      Alt_{L,R}      Mod1       00000008
 # Logo key   Command   Super_{L,R}     Mod4       00000040
@@ -13,7 +12,7 @@
 #    Fn        Fn        XF86Fn
 #
 # Arrow keys are Left|Down|Up|Right
-#
+
 set $mod1 Mod4
 set $mod2 Mod4+Shift
 
@@ -39,23 +38,85 @@ set $space_right d
 set $size_up   comma
 set $size_down period
 
+#╔─────────────────────────────────────╗
+#│ Terminal Emulator and App Launcher  │
+#╚─────────────────────────────────────╝
 set $term alacritty
 set $menu fuzzel
-       # \-fmonospace:size=14 -l15 -w42 \
-       # -b282a36e0 -tf8f8f2ff -m8be9fdff -s282a36d0 -Sff79c6ff -C44475aff -M8be9fdff
 
-# Sound effects and additional features
+#╔──────────────────────╗
+#│ Input Configuration  │
+#╚──────────────────────╝
+# You can get the names of your inputs by running: swaymsg -t get_inputs
+# Read `man 5 sway-input` for more information about this section.
+input 1739:52928:SYNA2BA6:00_06CB:CEC0_Touchpad {
+    tap enabled
+    natural_scroll enabled
+    accel_profile flat
+    scroll_factor 0.35
+    pointer_accel 0.5
+}
+input 5426:148:Razer_Orochi_V2 {
+    accel_profile flat
+    pointer_accel 0.1
+}
+
+#╔───────────────────────╗
+#│ Output Configuration  │
+#╚───────────────────────╝
+# You can get the names of your outputs by running: swaymsg -t get_outputs
+# Read `man 5 sway-output` for more information about this section.
+output * adaptive_sync on
+output * background ~/.config/sway/default_wallpaper.png fill
+output DP-1 background ~/.config/sway/secondary_wallpaper.png fill
+
+output eDP-1 scale 2
+output DP-1 scale 1
+
+#refresh rate for laptop
+#output eDP-1 mode 3072x1920@60.000Hz position 0,0
+#output eDP-1 mode 3072x1920@120.002Hz position 0,0
+
+# Adjust gamma, important for external displays. Laptops are usually fine
+exec wlsunset -t 6499 -T 6500 -g 0.9
+
+#╔─────────────────────────────────╗
+#│ Volume, Brightness, Media keys  │
+#╚─────────────────────────────────╝
+bindsym XF86AudioRaiseVolume exec $volume_command 5 $volume_change_sound
+bindsym XF86AudioLowerVolume exec $volume_command -5 $volume_change_sound
+bindsym XF86AudioMute exec ~/.config/sway/toggle_mute.sh
+
+# External brightness control
+  # For laptops
+bindsym XF86MonBrightnessUp   exec light -A 10
+bindsym XF86MonBrightnessDown exec light -U 10
+  # For external monitors
+bindsym F4 exec ddcutil setvcp 10 - 4
+bindsym F5 exec ddcutil setvcp 10 + 4
+bindsym Shift+F4 exec ddcutil setvcp 10 - 1
+bindsym Shift+F5 exec ddcutil setvcp 10 + 1
+
+#╔───────╗
+#│ Misc  │
+#╚───────╝
+  # Sound effects and additional features
 set $volume_command ~/.config/sway/pulse_audio_volume.sh
 set $volume_change_sound  ~/.config/sway/volume_change_sound.mp3
 set $screenshot_sound ffplay -nodisp -autoexit -v error ~/.config/sway/screenshot_sound.mp3
 
-# Duplicate screenshot path, for quick uploads
+  # Duplicate screenshot path, for quick uploads
 set $screenshot_tmp /dev/shm/screenshot_shm.png
 set $screenshot_script ~/.configs_pointer/bin/screenshot_wayland.py
 
-#╔─────────────────────────────────────────────────────────────────────────────╗
-#│ Pαηεs αηd cδηταiηεrs                                                        |
-#╚─────────────────────────────────────────────────────────────────────────────╝
+  # Automatic upload image to discord
+bindsym $mod1+ctrl+u exec sudo -u chopper ~/.configs_pointer/bin/auto_image_upload_discord.sh
+  # Paste by typing
+bindsym Mod4+Ctrl+v exec ~/.configs_pointer/bin/wpastetype.py
+
+#╔───────────────────────╗
+#│ Panes and Containers  │
+#╚───────────────────────╝
   # Move focus
 bindsym $mod1+$pane_left  focus left
 bindsym $mod1+$pane_down  focus down
@@ -95,78 +156,9 @@ bindsym $mod2+tab exec ~/.config/sway/cycle_windows.py previous
   # Swap focus between the tiling area and the floating area
 bindsym $mod2+space focus mode_toggle
 
-  # Automatic upload image to discord
-bindsym $mod1+ctrl+u exec sudo -u chopper ~/.configs_pointer/bin/auto_image_upload_discord.sh
-  # Paste by typing
-bindsym Mod4+Ctrl+v exec ~/.configs_pointer/bin/wpastetype.py
-
-# rEsize containers ====
-bindsym $mod1+e mode "resize"
-
-mode "resize" {
-    # Horizontal, shift for fine adjust
-    bindsym $size_up         resize grow   width  16px
-    bindsym $size_down       resize shrink width  16px
-    bindsym $size_up+Shift   resize grow   width  4px
-    bindsym $size_down+Shift resize shrink width  4px
-
-    # Vertical, shift for fine adjust
-    bindsym $mod1+$size_down       resize shrink height 16px
-    bindsym $mod1+$size_up         resize grow   height 16px
-    bindsym $mod1+$size_down+Shift resize shrink height 4px
-    bindsym $mod1+$size_up+Shift   resize grow   height 4px
-
-    # Escaping
-    bindsym $mod1+f mode "workspace_tuning"
-
-    bindsym Shift+end mode "default"
-    bindsym Ctrl+k mode "default"
-    bindsym Ctrl+bracketleft mode "default"
-    bindsym Escape mode "default"
-}
-
-# Gaps ====
-gaps inner 7
-bindsym $mod2+bracketright gaps inner current minus 3
-bindsym $mod2+bracketleft  gaps inner current plus 3
-bindsym $mod2+equal gaps toggle
-    # Standard outer gapping for 27" screen
-bindsym $mod2+c gaps vertical current set 100, \
-                gaps horizontal current set 200
-    # Same as above, shifted left slightly
-bindsym $mod2+g gaps vertical current set 100, \
-                gaps left current set 150, \
-                gaps right current set 250
-
-bindsym $mod1+g mode "gapping"
-mode "gapping" {
-    # General resize
-    bindsym $mod2+bracketright gaps inner current minus 3
-    bindsym $mod2+bracketleft  gaps inner current plus 3
-
-    # Horizontal
-    bindsym       q gaps left  current minus 2
-    bindsym       w gaps left  current plus  2
-    bindsym       e gaps right current plus  2
-    bindsym       r gaps right current minus 2
-
-    # Vertical
-    bindsym $mod1+q gaps top    current minus 2
-    bindsym $mod1+w gaps top    current plus  2
-    bindsym $mod1+e gaps bottom current plus  2
-    bindsym $mod1+r gaps bottom current minus 2
-
-    # Escaping
-    bindsym Shift+end mode "default"
-    bindsym Ctrl+k mode "default"
-    bindsym Ctrl+bracketleft mode "default"
-    bindsym Escape mode "default"
-}
-
-#╔─────────────────────────────────────────────────────────────────────────────╗
-#│ Wδrksραcεs                                                                  |
-#╚─────────────────────────────────────────────────────────────────────────────╝
-
+#╔─────────────╗
+#│ Workspaces  │
+#╚─────────────╝
 #touch gestures
 bindgesture swipe:right workspace prev
 bindgesture swipe:left workspace next
@@ -188,11 +180,25 @@ bindsym $mod1+8 workspace number 8
 bindsym $mod1+9 workspace number 9
 bindsym $mod1+0 workspace number 10
 
+# Gaps
+bindsym $mod2+bracketright gaps inner current minus 5
+bindsym $mod2+bracketleft  gaps inner current plus 5
+bindsym $mod2+equal gaps inner all toggle 5
+
+# Standard outer gapping for 27" screen
+bindsym $mod2+c gaps vertical current set 100, \
+                gaps horizontal current set 200
+
 # Advanced workspace tuning ====
 bindsym $mod1+f mode "workspace_tuning"
 
+#╔────────────────────────────────────────────────────────────╗
+#│ Custom Modes for Screenshots, Workspace Tuning, MPV, etc.  │
+#╚────────────────────────────────────────────────────────────╝
+#╔────────────────────────╗
+#│ Workspace Tuning Mode  │
+#╚────────────────────────╝
 mode "workspace_tuning" {
-
       # Move focused container to workspace
     bindsym 1 move container to workspace number 1
     bindsym 2 move container to workspace number 2
@@ -227,102 +233,68 @@ mode "workspace_tuning" {
     bindsym Escape mode "default"
 }
 
-#╔─────────────────────────────────────────────────────────────────────────────╗
-#│ Input and Output Adjustments                                                |
-#╚─────────────────────────────────────────────────────────────────────────────╝
-#trackpad
-input 1739:52928:SYNA2BA6:00_06CB:CEC0_Touchpad {
-    tap enabled
-    natural_scroll enabled
-    accel_profile flat
-    scroll_factor 0.35
-    pointer_accel 0.5
+#╔──────────────╗
+#│ Resize Mode  │
+#╚──────────────╝
+bindsym $mod1+e mode "resize"
+mode "resize" {
+    # Horizontal, shift for fine adjust
+    bindsym $size_up         resize grow   width  16px
+    bindsym $size_down       resize shrink width  16px
+    bindsym $size_up+Shift   resize grow   width  4px
+    bindsym $size_down+Shift resize shrink width  4px
+
+    # Vertical, shift for fine adjust
+    bindsym $mod1+$size_down       resize shrink height 16px
+    bindsym $mod1+$size_up         resize grow   height 16px
+    bindsym $mod1+$size_down+Shift resize shrink height 4px
+    bindsym $mod1+$size_up+Shift   resize grow   height 4px
+
+    # Escaping
+    bindsym $mod1+f mode "workspace_tuning"
+
+    bindsym Shift+end mode "default"
+    bindsym Ctrl+k mode "default"
+    bindsym Ctrl+bracketleft mode "default"
+    bindsym Escape mode "default"
 }
-#mouse
-input 5426:148:Razer_Orochi_V2 {
-    accel_profile flat
-    pointer_accel 0.1
+
+#╔───────────────╗
+#│ Gapping Mode  │
+#╚───────────────╝
+bindsym $mod1+g mode "gapping"
+mode "gapping" {
+    # General resize
+    bindsym $mod2+bracketright gaps inner current minus 3
+    bindsym $mod2+bracketleft  gaps inner current plus 3
+
+    # Horizontal
+    bindsym       q gaps left  current minus 2
+    bindsym       w gaps left  current plus  2
+    bindsym       e gaps right current plus  2
+    bindsym       r gaps right current minus 2
+
+    # Vertical
+    bindsym $mod1+q gaps top    current minus 2
+    bindsym $mod1+w gaps top    current plus  2
+    bindsym $mod1+e gaps bottom current plus  2
+    bindsym $mod1+r gaps bottom current minus 2
+
+    # Escaping
+    bindsym Shift+end mode "default"
+    bindsym Ctrl+k mode "default"
+    bindsym Ctrl+bracketleft mode "default"
+    bindsym Escape mode "default"
 }
 
-output * background ~/.config/sway/default_wallpaper.png fill
-output eDP-1 background ~/.config/sway/default_wallpaper.png fill
-#output DP-1 background ~/.config/sway/default_wallpaper.png fill
-#output DP-3 background ~/.config/sway/default_wallpaper.png fill
-
-output eDP-1 scale 2
-#output DP-3 scale 2
-
-#output eDP-1 mode 3072x1920@60.000Hz position 0,0
-
-default_border pixel 2
-  # Adjust gamma. More important for external displays. Laptops are usually fine
-exec wlsunset -t 6499 -T 6500 -g 0.9
-
-# Volume controls
-bindsym XF86AudioRaiseVolume exec $volume_command 5 $volume_change_sound
-bindsym XF86AudioLowerVolume exec $volume_command -5 $volume_change_sound
-bindsym shift+XF86AudioRaiseVolume exec $volume_command 1 $volume_change_sound
-bindsym shift+XF86AudioLowerVolume exec $volume_command -1 $volume_change_sound
-bindsym XF86AudioMute exec ~/.config/sway/toggle_mute.sh
-
-# External brightness control
-  # For laptops
-bindsym XF86MonBrightnessUp   exec light -A 10
-bindsym XF86MonBrightnessDown exec light -U 10
-  # For external monitors
-bindsym F4 exec ddcutil setvcp 10 - 4
-bindsym F5 exec ddcutil setvcp 10 + 4
-bindsym Shift+F4 exec ddcutil setvcp 10 - 1
-bindsym Shift+F5 exec ddcutil setvcp 10 + 1
-
-#╔─────────────────────────────────────────────────────────────────────────────╗
-#│ startup programs                                                            |
-#╚─────────────────────────────────────────────────────────────────────────────╝
-  # Xremap
-exec sudo ~/.configs_pointer/bin/switch_keyboard.sh pc
-  # Mako notifications
-exec mako
-  # Tailscale
-exec trayscale
-exec ~/.config/sway/batt/battery_notif.sh
-
-#╔─────────────────────────────────────────────────────────────────────────────╗
-#│ Hδτkεy dαεmδη                                                               |
-#╚─────────────────────────────────────────────────────────────────────────────╝
-  # Terminal
-bindsym $mod2+Return exec $term
-  # Firefox
-bindsym $mod2+n exec MOZ_ENABLE_WAYLAND=1 firefox
-  # App launcher, like spotlight
-bindsym $mod1+space exec $menu
-  # Reload sway config
-bindsym $mod1+ctrl+s reload
-  # Close window
-bindsym $mod2+q kill
-  # Dragging windows
-floating_modifier $mod1 normal
-  # fuzzel logout dmenu
-bindsym $mod2+i exec ~/.config/fuzzel/scripts/powermenu.sh
-  # Scratchpad
-bindsym $mod1+Shift+minus move scratchpad
-bindsym $mod1+minus scratchpad show
-  # Warpd - Keyboard-driven mouse
-bindsym Mod4+Control+j exec warpd --hint
-bindsym Mod4+Control+n exec warpd --normal
-  # IME Module
-bindsym $mod1+i exec ~/.config/sway/toggle_fcitx.sh
-  # Exit sway (hit 3 times repeatedly to force exit)
-bindsym $mod2+Escape exec ~/.config/sway/sway_exit.sh
-
-# Screenshots ====
+#╔──────────────────╗
+#│ Screenshot Mode  │
+#╚──────────────────╝
 bindsym $mod2+6 mode "screenshots"
-
 bindsym $mod2+s exec grim -g "$(slurp)" - | wl-copy
-
 bindsym $mod2+5 mode "screenshots"; exec $screenshot_script take select -c $screenshot_tmp && $screenshot_sound
 bindsym $mod2+4 mode "screenshots"; exec $screenshot_script take exact "$(~/.config/sway/window_dimensions.py)" && \
       $screenshot_script edit -c -q 100 -d "$(colo.sh -t)" -e png --overwrite $screenshot_tmp && $screenshot_sound
-
 mode "screenshots" {
     # Screenshooting in processing "steps"
     # 1. Get screenshot
@@ -377,9 +349,10 @@ mode "shrink_screenshots" {
     bindsym Escape mode "default"
 }
 
-# Global mpv ====
+#╔───────────────────────────────╗
+#│ Mode for MPV global controls  │
+#╚───────────────────────────────╝
 bindsym $mod2+m mode "mpv_global"
-
 mode "mpv_global" {
     bindsym j exec ~/.config/sway/mpv_keys.sh 'j'
     bindsym k exec ~/.config/sway/mpv_keys.sh 'k'
@@ -400,14 +373,108 @@ mode "mpv_global" {
     bindsym Escape mode "default"
 }
 
-#╔─────────────────────────────────────────────────────────────────────────────╗
-#│ Sτylεs                                                                      |
-#╚─────────────────────────────────────────────────────────────────────────────╝
+#╔────────────────────────────────────────────────╗
+#│ Window Float, Transparency and Sticky Options  │
+#╚────────────────────────────────────────────────╝
+#swaymsg -t get_tree | grep app_id
+    for_window [title="Picture-in-Picture"]   floating enable
+    for_window [app_id="gnome-*"]             floating enable
+    for_window [title="Welcome-*"]            floating enable
+    for_window [title="Trayscale"]            floating enable
+    for_window [app_id="pop-up"]              floating enable
+    for_window [app_id="bubble"]              floating enable
+    for_window [app_id="task_dialog"]         floating enable
+    for_window [app_id="Preferences"]         floating enable
+    for_window [app_id="dialog"]              floating enable
+    for_window [app_id="menu"]                floating enable
+    for_window [app_id="Organizer"]           floating enable
+    for_window [app_id="About"]               floating enable
+    for_window [app_id="toolbox"]             floating enable
+    for_window [app_id="page-info"]           floating enable
+    for_window [app_id="mpv"]                 floating enable
+    for_window [app_id="mpv"]                 resize set height 540
+    for_window [app_id="mpv"]                 resize set width 960
+    for_window [app_id="Nautilus"]            floating enable
+    for_window [app_id="Nautilus"]            resize set height 540
+    for_window [app_id="Nautilus"]            resize set width 960
+    for_window [app_id="spotify"]             floating enable
+    for_window [app_id="spotify"]             resize set height 540
+    for_window [app_id="spotify"]             resize set width 960
+    for_window [app_id="spotify"]             urgent deny
+    for_window [app_id="spotify"]             urgent disable
+
+set $opacity 1
+    for_window [class=".*"] opacity $opacity
+    for_window [app_id=".*"] opacity $opacity
+
+#╔─────────────────────╗
+#│ Autostart Options   │
+#╚─────────────────────╝
+  # Autotiling #TODO:turn this off when in tabbed mode
+exec --no-startup-id autotiling-rs
+  # Xremap
+exec sudo ~/.configs_pointer/bin/switch_keyboard.sh pc
+  # Mako notifications
+exec_always --no-startup-id mako &
+  # Tailscale
+exec --no-startup-id trayscale &
+
+#╔──────────╗
+#│ Hotkeys  │
+#╚──────────╝
+  # Terminal
+bindsym $mod2+Return exec $term
+  # Firefox
+bindsym $mod2+n exec MOZ_ENABLE_WAYLAND=1 firefox
+  # App launcher, like spotlight
+bindsym $mod1+space exec $menu
+  # Reload sway config
+bindsym $mod1+ctrl+s reload
+  # Close window
+bindsym $mod2+q kill
+  # Dragging windows
+floating_modifier $mod1 normal
+  # fuzzel logout dmenu
+bindsym $mod2+i exec ~/.config/fuzzel/scripts/powermenu.sh
+  # Scratchpad
+bindsym $mod1+Shift+minus move scratchpad
+bindsym $mod1+minus scratchpad show
+  # Warpd - Keyboard-driven mouse
+bindsym Mod4+Control+j exec warpd --hint
+bindsym Mod4+Control+n exec warpd --normal
+  # IME Module
+bindsym $mod1+i exec ~/.config/sway/toggle_fcitx.sh
+  # Exit sway (hit 3 times repeatedly to force exit)
+bindsym $mod2+Escape exec ~/.config/sway/sway_exit.sh
+
+#╔────────────────────────────────╗
+#│ Styling, Colours, Bar, Themes  │
+#╚────────────────────────────────╝
+
+default_border pixel 3
+default_floating_border pixel 3
+gaps inner  5
+gaps outer  0
+smart_borders on
+hide_edge_borders --i3 smart
+
+#titlebar adjustment, horizontal vertical
+titlebar_padding 5 2
+
+#╔────────────╗
+#│ GTK Theme  │
+#╚────────────╝
+set $gnome-schema org.gnome.desktop.interface
+exec_always {
+   gsettings set $gnome-schema gtk-theme 'Adwaita'
+   gsettings set $gnome-schema icon-theme 'Adwaita'
+}
+
 bar {
-    # change the bar to waybar, defaults to swaybar
+    #change the bar to waybar, defaults to swaybar
     swaybar_command waybar
 
-# swaybar configs
+    #swaybar configs
 #    binding_mode_indicator yes
 #    mode dock
     #status_command while ~/.config/sway/swaybar_status.sh; do sleep 30; done
@@ -424,34 +491,22 @@ bar {
         #binding_mode #8ec07c #8ec07c #000000
         #binding_mode #8ec07c #d3869b #000000
         #binding_mode #fadb2f #fadb2f #000000
-    }
+    #}
 }
 
-# Colors | #border #background #text #indicator #child_border
-client.focused #282a36 #8be9fd77 #f8f8f2 #a6e3a1 #6272a4
-client.unfocused #282a36 #222222BB #f8f8f299 #a6e3a1 #222222BB
-client.focused_inactive  #282a36 #8be9fd77 #f8f8f2 #a6e3a1 #ffffffCC
-#client.focused #FFFFFF #FFFFFF #000000 #ffffff #ffffff
+#╔──────────────────────────────────────────────────────────────────────╗
+#│ Window Colours | #border #background #text #indicator #child_border  │
+#╚──────────────────────────────────────────────────────────────────────╝
+    client.focused          #ffc0cb #ffc0cb #ffffff
+    client.unfocused        #2e3440 #1f222d #888888
+    client.focused_inactive #2e3440 #1f222d #888888
+    client.placeholder      #2e3440 #1f222d #888888
+    client.urgent           #D08770 #D08770 #ffffff
+    client.background       #242424
 
-#no title bar if tabbed or stacked layout has one child
-hide_edge_borders --i3 smart
-
-#titlebar adjustment, horizontal vertical
-titlebar_padding 5 2
-
-#transparency
-set $opacity 1
-for_window [class=".*"] opacity $opacity
-for_window [app_id=".*"] opacity $opacity
-for_window [title="Picture-in-Picture"] floating enable
-for_window [app_id="gnome-*"] floating enable
-for_window [title="Welcome-*"] floating enable
-for_window [title="Trayscale"] floating enable
-
-#╔─────────────────────────────────────────────────────────────────────────────╗
-#│Sleep settings for laptops  TODO: systemctl suspend?                         |
-#╚─────────────────────────────────────────────────────────────────────────────╝
-#
+#╔──────────────────────────────────────────────╗
+#│ Idle Configuration TODO:systemctl suspend!?  │
+#╚──────────────────────────────────────────────╝
 set $laptop 'eDP-1'
 set $sleep sleep 3 && swaylock
 
@@ -461,7 +516,7 @@ bindswitch --reload --locked lid:off exec \
    swaymsg output $laptop dpms on
 
 exec swayidle -w \
-    timeout 150 'swaymsg "output * dpms off"' \
+    timeout 800 'swaymsg "output * dpms off"' \
         resume  'swaymsg "output * dpms on"'  \
     timeout 1200 '~/.config/sway/suspend_system.sh' \
     after-resume 'swaymsg "output * enable"' \
