@@ -410,12 +410,17 @@ set $opacity 1
 #╔─────────────────────╗
 #│ Autostart Options   │
 #╚─────────────────────╝
-  # Autotiling TODO:turn this off when in tabbed mode
-exec_always autotiling-rs
+  # Polkit ~ for authentication dialogs
+exec_always /usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1
   # Xremap
 exec sudo ~/.configs_pointer/bin/switch_keyboard.sh pc
+
+  # Autotiling TODO:turn this off when in tabbed mode
+exec_always autotiling-rs
+
   # Mako notifications
 exec_always mako
+
   # Tailscale
 exec trayscale
 
