@@ -53,12 +53,12 @@ input 1739:52928:SYNA2BA6:00_06CB:CEC0_Touchpad {
     tap enabled
     natural_scroll enabled
     accel_profile flat
-    scroll_factor 0.35
+    scroll_factor 0.15
     pointer_accel 0.5
 }
-input 5426:148:Razer_Orochi_V2 {
+input type:pointer {
     accel_profile flat
-    pointer_accel 0.1
+    pointer_accel -0.6
 }
 
 #╔───────────────────────╗
@@ -402,6 +402,7 @@ mode "mpv_global" {
     for_window [app_id="spotify"]             resize set width 960
     for_window [app_id="spotify"]             urgent deny
     for_window [app_id="spotify"]             urgent disable
+    for_window [title="MPLAB X IDE*"]         fullscreen enable
 
 set $opacity 1
     for_window [class=".*"] opacity $opacity
@@ -471,8 +472,8 @@ titlebar_padding 5 2
 #╚────────────╝
 set $gnome-schema org.gnome.desktop.interface
 exec_always {
-   gsettings set $gnome-schema gtk-theme 'Adwaita'
-   gsettings set $gnome-schema icon-theme 'Adwaita'
+   #gsettings set $gnome-schema gtk-theme 'Adwaita'
+   #gsettings set $gnome-schema icon-theme 'WhiteSur'
 }
 
 bar {
