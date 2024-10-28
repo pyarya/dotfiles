@@ -85,7 +85,7 @@ exec wlsunset -t 6499 -T 6500 -g 0.9
 #╚─────────────────────────────────╝
 bindsym XF86AudioRaiseVolume exec $volume_command 5 $volume_change_sound
 bindsym XF86AudioLowerVolume exec $volume_command -5 $volume_change_sound
-bindsym XF86AudioMute exec ~/.config/sway/toggle_mute.sh
+bindsym XF86AudioMute exec wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle
 
 # External brightness control
   # For laptops
@@ -132,8 +132,10 @@ bindsym $mod2+$pane_right move right
   # Layout modifiers
 bindsym $mod2+f floating toggle
 #bindsym $mod2+s layout stacking
-bindsym $mod2+t layout tabbed
-bindsym $mod2+r layout toggle
+bindsym $mod2+t layout tabbed\\
+; exec pkill autotiling-rs;
+bindsym $mod2+r layout toggle\\
+; exec pkill autotiling-rs
 
   # Binary split container
 bindsym $mod1+b split toggle
@@ -142,8 +144,10 @@ bindsym $mod1+m fullscreen
 
   # Switch container layout   Stacking|Tabbed|Rotate-bsp
 bindsym $mod1+s layout stacking
-bindsym $mod1+t layout tabbed; exec pkill autotiling-rs;
-bindsym $mod1+r layout toggle split; exec autotiling-rs
+bindsym $mod1+t layout tabbed\\
+; exec pkill autotiling-rs;
+bindsym $mod1+r layout toggle split\\
+; exec autotiling-rs
 
   # Traverse window tree
 bindsym $mod1+u focus parent
