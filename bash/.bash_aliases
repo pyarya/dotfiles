@@ -32,7 +32,6 @@ alias ed="ed -p '> :'"
 alias ra='rg --no-ignore -.'
 alias ee='exit'
 alias ffprobe='ffprobe -hide_banner'
-alias shm='cd /dev/shm'
 alias ip='ip -color'
 alias ssgrim='grim - | wl-copy'
 alias switchkeys='sudo systemctl stop xremap.service'
@@ -61,6 +60,8 @@ fi
 # ===================================================================
 alias cd..='cd ..'
 alias safe='cd ~/safe'
+alias shm='cd /dev/shm'
+alias dots='cd ~/dotfiles'
 
 # Avoid symlink paths
 alias cd='cd -P'
