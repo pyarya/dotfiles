@@ -85,7 +85,8 @@ exec wlsunset -t 6499 -T 6500 -g 0.9
 #╚─────────────────────────────────╝
 bindsym XF86AudioRaiseVolume exec $volume_command 5 $volume_change_sound
 bindsym XF86AudioLowerVolume exec $volume_command -5 $volume_change_sound
-bindsym XF86AudioMute exec wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle
+bindsym XF86AudioMute exec wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle \\
+&& notify-send "mute"
 
 # External brightness control
   # For laptops
@@ -295,7 +296,7 @@ mode "gapping" {
 #│ Screenshot Mode  │
 #╚──────────────────╝
 bindsym $mod2+6 mode "screenshots"
-bindsym $mod2+s exec grim -g "$(slurp)" - | wl-copy
+bindsym $mod2+s exec grim -g "$(slurp)" - | tee /dev/shm/screenshot_shm.png | wl-copy
 bindsym $mod2+5 mode "screenshots"; exec $screenshot_script take select -c $screenshot_tmp && $screenshot_sound
 bindsym $mod2+4 mode "screenshots"; exec $screenshot_script take exact "$(~/.config/sway/window_dimensions.py)" && \
       $screenshot_script edit -c -q 100 -d "$(colo.sh -t)" -e png --overwrite $screenshot_tmp && $screenshot_sound
@@ -407,6 +408,7 @@ mode "mpv_global" {
     for_window [app_id="spotify"]             urgent deny
     for_window [app_id="spotify"]             urgent disable
     for_window [title="MPLAB X IDE*"]         fullscreen enable
+    for_window [app_id="com.saivert.pwvucontrol"] floating enable
 
 set $opacity 1
     for_window [class=".*"] opacity $opacity
