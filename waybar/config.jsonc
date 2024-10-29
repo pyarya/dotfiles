@@ -21,7 +21,7 @@
         "network#wifi",
         "network#dongle",
         "memory",
-        "wireplumber",
+        "pulseaudio",
         "backlight",
         "clock",
         "battery",
@@ -56,16 +56,16 @@
         "all-outputs": true
     },
     "mpris": {
- 	"format": "󰎇 {status_icon} {dynamic}",
+        "format": "󰎇 {status_icon} {dynamic}",
         "interval": 1,
         "dynamic-len": 30,
-	"status-icons": {
-		"playing": "",
-		"paused": "",
-		"stopped": ""
-	},
-	"dynamic-order": ["title", "artist"],
-	"ignored-players": ["firefox"]
+        "status-icons": {
+            "playing": "",
+            "paused": "",
+            "stopped": ""
+        },
+        "dynamic-order": ["title", "artist"],
+        "ignored-players": ["firefox"]
     },
     "sway/mode": {
         "format": "{}"
@@ -147,9 +147,9 @@
         // "format-full": "",
         "format-icons": ["", "", "", "", ""]
     },
-    "wireplumber": {
+    "pulseaudio": {
         "scroll-step": 5, // %, can be a float
-        "format": "{icon} {volume}%",
+        "format": "{icon}{volume}%",
         "format-bluetooth": "{icon} {volume}% ",
         "format-bluetooth-muted": "{icon} 󰂲",
         "format-muted": " ",
@@ -159,9 +159,9 @@
             "headset": "",
             "phone": "",
             "car": "",
-            "default": [" ", " ", " "]
+            "default": [" ", " ", "  "]
         },
-        "on-click": "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle"
+        "on-click": "pwvucontrol"
     }
 },{
     "output": ["HDMI-A-1"],
