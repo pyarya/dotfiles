@@ -120,7 +120,7 @@ button:hover {
 #clock,
 #battery,
 #backlight,
-#wireplumber,
+#pulseaudio,
 #tray,
 #mpris,
 #memory {
@@ -173,7 +173,7 @@ label:focus {
     background-color: @black;
 }
 
-#wireplumber.muted {
+#pulseaudio.muted {
     background-color: @alert;
     color: @rosewater;
 }
