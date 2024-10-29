@@ -296,7 +296,9 @@ mode "gapping" {
 #│ Screenshot Mode  │
 #╚──────────────────╝
 bindsym $mod2+6 mode "screenshots"
-bindsym $mod2+s exec grim -g "$(slurp)" - | tee /dev/shm/screenshot_shm.png | wl-copy
+
+#screenshot with area selection, copies to clipboard and also saves to file
+bindsym $mod2+s exec grim -g "$(slurp)" - | tee $screenshot_tmp | wl-copy
 bindsym $mod2+5 mode "screenshots"; exec $screenshot_script take select -c $screenshot_tmp && $screenshot_sound
 bindsym $mod2+4 mode "screenshots"; exec $screenshot_script take exact "$(~/.config/sway/window_dimensions.py)" && \
       $screenshot_script edit -c -q 100 -d "$(colo.sh -t)" -e png --overwrite $screenshot_tmp && $screenshot_sound
