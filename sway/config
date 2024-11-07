@@ -54,11 +54,7 @@ input 1739:52928:SYNA2BA6:00_06CB:CEC0_Touchpad {
     natural_scroll enabled
     accel_profile flat
     scroll_factor 0.15
-    pointer_accel 0.5
-}
-input type:pointer {
-    accel_profile flat
-    pointer_accel -0.6
+    pointer_accel 0.15
 }
 
 #╔───────────────────────╗
@@ -133,10 +129,8 @@ bindsym $mod2+$pane_right move right
   # Layout modifiers
 bindsym $mod2+f floating toggle
 #bindsym $mod2+s layout stacking
-bindsym $mod2+t layout tabbed\\
-; exec pkill autotiling-rs;
-bindsym $mod2+r layout toggle\\
-; exec pkill autotiling-rs
+bindsym $mod2+t layout tabbed ; exec pkill autotiling-rs;
+bindsym $mod2+r layout toggle split ; exec autotiling-rs
 
   # Binary split container
 bindsym $mod1+b split toggle
@@ -145,10 +139,8 @@ bindsym $mod1+m fullscreen
 
   # Switch container layout   Stacking|Tabbed|Rotate-bsp
 bindsym $mod1+s layout stacking
-bindsym $mod1+t layout tabbed\\
-; exec pkill autotiling-rs;
-bindsym $mod1+r layout toggle split\\
-; exec autotiling-rs
+bindsym $mod1+t layout tabbed ; exec pkill autotiling-rs;
+bindsym $mod1+r layout toggle split; exec autotiling-rs
 
   # Traverse window tree
 bindsym $mod1+u focus parent
