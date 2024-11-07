@@ -31,6 +31,8 @@ noremap L $
 " Move by lines
 nnoremap j gj
 nnoremap k gk
+nnoremap <C-E> 5<C-E>
+nnoremap <C-Y> 5<C-Y>
 
 " Repeat last f/F/t/T motion forward
 nnoremap , ;
