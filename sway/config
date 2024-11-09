@@ -55,8 +55,15 @@ input 1739:52928:SYNA2BA6:00_06CB:CEC0_Touchpad {
     accel_profile flat
     scroll_factor 0.15
     pointer_accel 0.15
+    dwt enabled
 }
 
+input 5426:148:Razer_Orochi_V2_Mouse {
+    natural_scroll enabled
+    accel_profile flat
+    scroll_factor 0.15
+    pointer_accel -1
+}
 #╔───────────────────────╗
 #│ Output Configuration  │
 #╚───────────────────────╝
@@ -81,8 +88,7 @@ exec wlsunset -t 6499 -T 6500 -g 0.9
 #╚─────────────────────────────────╝
 bindsym XF86AudioRaiseVolume exec $volume_command 5 $volume_change_sound
 bindsym XF86AudioLowerVolume exec $volume_command -5 $volume_change_sound
-bindsym XF86AudioMute exec wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle \\
-&& notify-send "mute"
+bindsym XF86AudioMute exec wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle
 
 # External brightness control
   # For laptops
