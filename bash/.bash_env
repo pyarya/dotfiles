@@ -87,6 +87,9 @@ export RIPGREP_CONFIG_PATH=~/.config/ripgrep/config
 export PYTHONDONTWRITEBYTECODE=1
 export PYTHONPYCACHEPREFIX=1
 
+  # terminal
+export TERM=xterm-256color
+
 # Coloring ==========================================================
 # Truecolor support gives full rgb support. This looks something like:
 # \033[${bg};2;${red};${green};${blue};${special}m]
