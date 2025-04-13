@@ -73,11 +73,11 @@ alias cdb='cd $OLDPWD' # Go back a directory. Works with symlinks
 # Listing aliases
 # ===================================================================
 # List Long - List files in acending order of size
-alias ll='listlong'
 alias ls='listlong --ll-ls'
 
-# Additional listing options with exa
-if command -v exa &> /dev/null; then
+# Additional listing options with eza
+if command -v eza &> /dev/null; then
+  alias ll='eza --all --long --icons=always --tree --level=2'
     # Tree List Long - Recursively print a tree view
   alias tll='listlong --ll-tree'
     # Git List Long - Recursively print a tree view following .gitignore
