@@ -423,10 +423,10 @@ exec_always /usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1
 exec sudo ~/.configs_pointer/bin/switch_keyboard.sh pc
 
   # Autotiling TODO:turn this off when in tabbed mode
-exec_always autotiling-rs
+ # exec_always autotiling-rs
 
-  # Mako notifications
-exec_always mako
+  # notifications
+exec_always swaync
 
   # Tailscale
 exec trayscale

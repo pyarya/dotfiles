@@ -77,9 +77,9 @@ alias ls='listlong --ll-ls'
 
 # Additional listing options with eza
 if command -v eza &> /dev/null; then
-  alias ll='eza --all --long --icons=always --tree --level=2'
+  alias ll='eza --all --long --icons=always -s=size'
     # Tree List Long - Recursively print a tree view
-  alias tll='listlong --ll-tree'
+  alias tll='eza --all --long --icons=always -s=size -T -l=2'
     # Git List Long - Recursively print a tree view following .gitignore
   alias gll='listlong --ll-git-tree'
     # Directories List Long - List the directory hierarchy
