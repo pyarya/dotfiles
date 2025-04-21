@@ -21,10 +21,12 @@ Flags:
   -h, --help         Print this message and exit
 
 Available colors:
-  gruvboxdark  - Default dark medium contrast
-  gruvboxlight  - Light medium contrast
-  dracula - High contrast dark
-  github  - High contrast white
+  gruvboxdark  - dark medium contrast
+  gruvboxlight  - light medium contrast
+  dracula - high contrast dark
+  github  - high contrast white
+  everforestdark  - dark low contrast
+  everforestlight  - light contrast
 
 Example:
     colo.sh gruvboxdark
@@ -48,6 +50,8 @@ query_color_tone() {
     base16-gruvbox-light-hard) echo 'light' ;;
     base16-dracula)            echo 'dark' ;;
     base16-github)             echo 'light' ;;
+    everforest-dark)            echo 'dark' ;;
+    everforest-light)            echo 'light' ;;
     *) echo 'dark' ;;
   esac
 }
@@ -112,9 +116,11 @@ case "$1" in
   -c | --colorscheme) echo "$(query_color_scheme)" ;;
   -q | --query) print_current_colors ;;
   -h | --help)  print_color_help ;;
-  gruvboxlight) change_color_scheme "base16-gruvbox-light-hard" ;;
+  dark | everforestdark)              change_color_scheme "everforest-dark" ;;
+  light | everforestlight)               change_color_scheme "everforest-light" ;;
+  dark | gruvboxdark)   change_color_scheme "base16-gruvbox-dark-pale" ;;
+  light | gruvboxlight) change_color_scheme "base16-gruvbox-light-hard" ;;
   dark | dracula)              change_color_scheme "base16-dracula" ;;
   light | github)               change_color_scheme "base16-github" ;;
-  gruvboxdark)   change_color_scheme "base16-gruvbox-dark-pale" ;;
   *) print_color_help ;;
 esac
