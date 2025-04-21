@@ -115,6 +115,6 @@ y = 0
 [general]
 live_config_reload = true
 working_directory = "None"
-import = ["~/.config/alacritty/themes/base16-dracula.toml"]
+import = ["~/.config/alacritty/themes/everforest-dark.toml"]
 
 [terminal]
